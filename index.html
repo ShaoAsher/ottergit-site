@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>水懒 Git · 会帮你盯仓库的 macOS Git 客户端</title>
+<meta name="description" content="水懒 Git（OtterGit）：macOS 桌面 Git 客户端。历史泳道、双栏 diff、冲突解决；小懒 AI 一句话提交推送。克制、纸感、不喧哗。" />
+<meta property="og:title" content="水懒 Git · macOS Git 客户端" />
+<meta property="og:description" content="会帮你盯仓库的水懒。历史泳道、双栏 diff、小懒 AI 一句话提交推送。" />
+<meta property="og:image" content="assets/shots/hero.png" />
+<link rel="icon" type="image/png" href="assets/otter_logo_clear.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* 对齐 App theme.dart light */
+    --page: #f5f5f4;
+    --sidebar: #efefed;
+    --card: #ffffff;
+    --ink: #23231f;
+    --ink-2: #5f5e5a;
+    --muted: #888780;
+    --accent: #185fa5;
+    --accent-bright: #378add;
+    --accent-soft: rgba(24, 95, 165, 0.10);
+    --accent-soft-2: rgba(24, 95, 165, 0.16);
+    --line: rgba(0, 0, 0, 0.08);
+    --line-strong: rgba(0, 0, 0, 0.12);
+    --shadow: 0 28px 64px -32px rgba(24, 40, 60, 0.45);
+    --shadow-sm: 0 14px 36px -20px rgba(24, 40, 60, 0.28);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --font-display: "Outfit", "PingFang SC", "Noto Sans SC", sans-serif;
+    --font-body: "Source Sans 3", "PingFang SC", "Noto Sans SC", sans-serif;
+    --ease: cubic-bezier(0.22, 0.9, 0.3, 1);
+    --max: 1140px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    color: var(--ink);
+    background-color: var(--page);
+    background-image:
+      radial-gradient(1000px 520px at 8% -8%, rgba(24, 95, 165, 0.11), transparent 58%),
+      radial-gradient(780px 420px at 96% 4%, rgba(55, 138, 221, 0.08), transparent 52%),
+      linear-gradient(180deg, #f7f7f6 0%, var(--page) 28%, #efefed 100%);
+    background-attachment: fixed;
+    font-size: 17px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    opacity: 0.35;
+    background-image:
+      linear-gradient(rgba(0,0,0,0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,0,0,0.028) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.55), transparent 72%);
+  }
+  img, video { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  .wrap { width: min(var(--max), calc(100% - 48px)); margin: 0 auto; position: relative; z-index: 1; }
+
+  /* nav */
+  .nav {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(16px) saturate(1.15);
+    background: rgba(245, 245, 244, 0.78);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    height: 64px; display: flex; align-items: center; gap: 20px;
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--font-display); font-weight: 700; font-size: 19px;
+    letter-spacing: -0.02em;
+  }
+  .brand img { width: 28px; height: 28px; border-radius: 50%; }
+  .nav-links {
+    margin-left: auto; display: flex; align-items: center; gap: 22px;
+    font-size: 15px; font-weight: 500; color: var(--ink-2);
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 22px; border-radius: var(--radius-sm);
+    font-family: var(--font-display); font-weight: 650; font-size: 15px;
+    border: 1px solid transparent;
+    transition: transform .35s var(--ease), background .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+  }
+  .btn-primary {
+    background: var(--accent); color: #f7fbff;
+    box-shadow: 0 12px 28px -14px rgba(24, 95, 165, 0.85);
+  }
+  .btn-primary:hover { background: #144e8a; transform: translateY(-2px); color: #fff; }
+  .btn-ghost {
+    background: rgba(255,255,255,0.72); border-color: var(--line-strong); color: var(--ink);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+  .btn-nav { padding: 8px 16px; font-size: 14px; }
+
+  /* hero — one composition */
+  .hero {
+    position: relative;
+    padding: 40px 0 64px;
+    overflow: hidden;
+  }
+  .hero-copy {
+    position: relative; z-index: 2;
+    max-width: 36rem;
+    margin-bottom: 28px;
+  }
+  .brand-mark {
+    font-family: var(--font-display);
+    font-size: clamp(44px, 7.2vw, 76px);
+    font-weight: 800;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .brand-mark span {
+    display: inline-flex; align-items: center; gap: 14px;
+  }
+  .brand-mark img {
+    width: clamp(42px, 6vw, 62px); height: auto; border-radius: 50%;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    line-height: 1.3;
+    color: var(--ink-2);
+  }
+  .hero-sub {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 34em;
+  }
+  .hero-cta { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-meta {
+    margin-top: 14px;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .hero-stage {
+    position: relative;
+    border-radius: calc(var(--radius) + 2px);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background: var(--sidebar);
+    border: 1px solid var(--line-strong);
+  }
+  .hero-stage img {
+    width: 100%; height: auto;
+    display: block;
+  }
+  .hero-stage::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 70%, rgba(35, 35, 31, 0.04));
+    pointer-events: none;
+  }
+
+  /* sections */
+  section { padding: 92px 0; position: relative; z-index: 1; }
+  .sec-kicker {
+    font-family: var(--font-display);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 750; letter-spacing: -0.03em; line-height: 1.15;
+  }
+  .sec-sub { margin-top: 10px; color: var(--ink-2); max-width: 40em; }
+
+  .feat-row {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+  .feat {
+    padding: 28px 22px 28px 0;
+    border-bottom: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  .feat:nth-child(3n) { border-right: none; padding-right: 0; }
+  .feat:nth-child(n+4) { border-bottom: none; }
+  .feat-num {
+    font-family: var(--font-display);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .feat h3 {
+    font-family: var(--font-display);
+    font-size: 19px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .feat p { margin-top: 8px; font-size: 15px; color: var(--ink-2); line-height: 1.55; }
+
+  .shots {
+    background: linear-gradient(180deg, rgba(255,255,255,0.45) 0%, rgba(239,239,237,0.55) 100%);
+    border-block: 1px solid var(--line);
+  }
+  .shot-main {
+    margin-top: 32px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
+    background: var(--card);
+  }
+  .shot-main img { width: 100%; }
+  .shot-cap {
+    padding: 14px 18px;
+    border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; gap: 12px; align-items: baseline;
+    font-size: 14px; color: var(--ink-2);
+    background: rgba(255,255,255,0.65);
+  }
+  .shot-cap em {
+    font-style: normal;
+    font-family: var(--font-display);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .shot-grid {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .shot-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--card);
+    box-shadow: var(--shadow-sm);
+  }
+  .shot-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    background: var(--sidebar);
+  }
+
+  .ai {
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 48px;
+    align-items: center;
+  }
+  .chips { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    padding: 7px 12px; border-radius: 8px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 650;
+    font-family: var(--font-display);
+  }
+  .ai-steps { margin-top: 24px; display: grid; gap: 0; border-top: 1px solid var(--line-strong); }
+  .ai-steps div {
+    display: grid; grid-template-columns: 72px 1fr; gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .ai-steps b {
+    font-family: var(--font-display); color: var(--accent);
+    font-size: 14px; letter-spacing: 0.04em;
+  }
+  .ai-steps span { color: var(--ink-2); font-size: 15px; }
+  .ai-visual {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
+    background: var(--card);
+  }
+  .ai-visual img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: min(72vh, 720px);
+    object-fit: contain;
+    object-position: top center;
+    background: var(--sidebar);
+  }
+
+  .promo-block {
+    margin-top: 28px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    box-shadow: var(--shadow);
+    background: #1a1a1c;
+  }
+  .promo-block video { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+
+  .dl {
+    border-radius: calc(var(--radius) + 4px);
+    padding: 48px 44px;
+    background:
+      radial-gradient(600px 280px at 90% 10%, rgba(55, 138, 221, 0.35), transparent 60%),
+      linear-gradient(135deg, #123a66 0%, #185fa5 55%, #2a74b8 100%);
+    color: #eef6fc;
+    box-shadow: var(--shadow);
+  }
+  .dl .sec-kicker { color: rgba(238, 246, 252, 0.65); }
+  .dl h2 { color: #fff; }
+  .dl p { margin-top: 10px; color: rgba(238, 246, 252, 0.78); max-width: 36em; }
+  .dl-actions { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn-on-dark {
+    background: #fff; color: #144e8a;
+  }
+  .btn-on-dark:hover { background: #eaf3fb; color: #0f3d6c; transform: translateY(-2px); }
+  .btn-on-dark-ghost {
+    background: transparent; border-color: rgba(255,255,255,0.35); color: #fff;
+  }
+  .btn-on-dark-ghost:hover { border-color: #fff; transform: translateY(-2px); }
+
+  footer {
+    padding: 36px 0 52px;
+    border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 14px;
+    position: relative; z-index: 1;
+  }
+  .foot {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 16px;
+  }
+  .foot .brand { font-size: 16px; color: var(--ink); }
+  .foot-links { margin-left: auto; display: flex; gap: 18px; }
+  .foot-links a:hover { color: var(--accent); }
+
+  .reveal {
+    opacity: 0; transform: translateY(18px);
+    transition: opacity .75s var(--ease), transform .75s var(--ease);
+  }
+  .reveal.in { opacity: 1; transform: none; }
+  .hero-copy, .hero-stage {
+    opacity: 0; transform: translateY(18px);
+    animation: rise .85s var(--ease) forwards;
+  }
+  .hero-stage { animation-delay: .14s; }
+  @keyframes rise {
+    to { opacity: 1; transform: none; }
+  }
+
+  @media (max-width: 900px) {
+    .feat-row { grid-template-columns: 1fr; }
+    .feat { border-right: none; padding-right: 0; }
+    .feat:nth-child(n+4) { border-bottom: 1px solid var(--line); }
+    .feat:last-child { border-bottom: none; }
+    .shot-grid, .ai { grid-template-columns: 1fr; }
+    .ai-visual img { max-height: none; }
+    .nav-links a:not(.btn) { display: none; }
+    .dl { padding: 36px 24px; }
+    .hero { padding-top: 28px; }
+    .hero-stage { animation: rise .85s var(--ease) forwards; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .hero-copy, .hero-stage {
+      opacity: 1; transform: none; animation: none; transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a class="brand" href="#top"><img src="assets/otter_logo_clear.png" alt="" />水懒 Git</a>
+    <nav class="nav-links" aria-label="站内导航">
+      <a href="#features">功能</a>
+      <a href="#shots">界面</a>
+      <a href="#ai">小懒</a>
+      <a href="#promo">影片</a>
+      <a class="btn btn-primary btn-nav" href="#download">下载</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="brand-mark"><span><img src="assets/otter_logo_clear.png" alt="" />水懒 Git</span></p>
+        <h1>会帮你盯仓库的 macOS Git 客户端</h1>
+        <p class="hero-sub">历史泳道、双栏 diff、冲突解决；小懒 AI 听懂「提交推送」，一步步帮你做完。</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="https://github.com/ShaoAsher/ottergit-site/releases/latest" target="_blank" rel="noopener">下载最新版</a>
+          <a class="btn btn-ghost" href="#promo">看 30 秒介绍</a>
+        </div>
+        <p class="hero-meta">macOS · Apple Silicon · Flutter · 免费</p>
+      </div>
+      <div class="hero-stage">
+        <img src="assets/shots/hero.png" alt="水懒 Git 主界面：历史、双栏 diff 与右侧小懒 AI" width="1920" height="1204" />
+      </div>
+    </div>
+  </section>
+
+  <section id="features">
+    <div class="wrap">
+      <p class="sec-kicker reveal">Features</p>
+      <h2 class="reveal">日常 Git，都在工具栏一排</h2>
+      <p class="sec-sub reveal">提交、拉取、推送、获取、分支、合并、暂存——远程三键走同一条管道，状态一眼可见。</p>
+      <div class="feat-row">
+        <article class="feat reveal">
+          <p class="feat-num">01</p>
+          <h3>历史泳道</h3>
+          <p>分支脉络铺开，检出 / 合并 / 修复补丁右键即达。</p>
+        </article>
+        <article class="feat reveal">
+          <p class="feat-num">02</p>
+          <h3>双栏 diff</h3>
+          <p>左右行号逐行对照，增删底色直接见底；图片也能并排预览。</p>
+        </article>
+        <article class="feat reveal">
+          <p class="feat-num">03</p>
+          <h3>冲突不用怕</h3>
+          <p>逐块取舍、三方对照；无争议块自动解决，剩下的才问你。</p>
+        </article>
+        <article class="feat reveal">
+          <p class="feat-num">04</p>
+          <h3>仓库集合</h3>
+          <p>多仓书签记忆，打开 / 新建 / Finder 一处管理。</p>
+        </article>
+        <article class="feat reveal">
+          <p class="feat-num">05</p>
+          <h3>小懒 AI</h3>
+          <p>「提交推送」一句话：拆步骤、写说明、推送前再确认。</p>
+        </article>
+        <article class="feat reveal">
+          <p class="feat-num">06</p>
+          <h3>菜单栏托盘</h3>
+          <p>常驻状态项，浮窗一览分支远程差，不必先打开主窗。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="shots" class="shots">
+    <div class="wrap">
+      <p class="sec-kicker reveal">Interface</p>
+      <h2 class="reveal">看两眼，就知道顺不顺手</h2>
+      <p class="sec-sub reveal">真实产品界面：全景工作台、差异对照、仓库集合与偏好设置。</p>
+      <figure class="shot-main reveal">
+        <img src="assets/shots/overview.png" alt="全景：历史列表、侧栏仓库分支、右侧小懒" width="1920" height="1200" />
+        <figcaption class="shot-cap"><span>历史 · 分支 · 暂存 · 远程，一屏尽览</span><em>全景</em></figcaption>
+      </figure>
+      <div class="shot-grid">
+        <figure class="shot-card reveal">
+          <img src="assets/shots/diff.png" alt="双栏 diff：源文件与变更并排" width="1760" height="1120" />
+          <figcaption class="shot-cap"><span>双栏对照，逐行看清改动</span><em>差异</em></figcaption>
+        </figure>
+        <figure class="shot-card reveal">
+          <img src="assets/shots/repos.png" alt="仓库集合对话框" width="1480" height="1000" />
+          <figcaption class="shot-cap"><span>多仓书签与 Finder 联动</span><em>仓库</em></figcaption>
+        </figure>
+      </div>
+      <figure class="shot-main reveal" style="margin-top:18px">
+        <img src="assets/shots/settings.png" alt="偏好设置：外观、语言与主题" width="1480" height="1000" />
+        <figcaption class="shot-cap"><span>外观、语言、小懒与 Git 工具</span><em>设置</em></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section id="ai">
+    <div class="wrap ai">
+      <div class="reveal">
+        <p class="sec-kicker">Copilot</p>
+        <h2>小懒 AI</h2>
+        <p class="sec-sub">提交推送，一句话到位。拆步骤、写说明、推送前过安全链。</p>
+        <div class="chips">
+          <span class="chip">一句话提交</span>
+          <span class="chip">撰写提交说明</span>
+          <span class="chip">安全推送确认</span>
+        </div>
+        <div class="ai-steps">
+          <div><b>意图</b><span>听懂「提交推送」，自己拟流程</span></div>
+          <div><b>执行</b><span>专用 Git 工具逐步执行，每步常驻可见</span></div>
+          <div><b>确认</b><span>推送前过安全链，关键动作再问你一次</span></div>
+        </div>
+      </div>
+      <figure class="ai-visual reveal">
+        <img src="assets/shots/ai.png" alt="小懒侧栏：提交流程步骤与对话" width="640" height="1239" />
+      </figure>
+    </div>
+  </section>
+
+  <section id="promo">
+    <div class="wrap">
+      <p class="sec-kicker reveal">Film</p>
+      <h2 class="reveal">三十秒看懂水懒</h2>
+      <p class="sec-sub reveal">全景、差异、小懒、仓库与设置——安静、干净、留白多。</p>
+      <div class="promo-block reveal">
+        <video controls playsinline preload="metadata" poster="assets/shots/hero.png" aria-label="水懒 Git 宣传视频">
+          <source src="assets/ottergit-promo.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="wrap">
+      <div class="dl reveal">
+        <p class="sec-kicker">Download</p>
+        <h2>带一只水懒回家</h2>
+        <p>系统要求：macOS（Apple Silicon）。安装包已完成 Developer ID 签名并通过 Apple 公证。</p>
+        <div class="dl-actions">
+          <a class="btn btn-on-dark" href="https://github.com/ShaoAsher/ottergit-site/releases/latest" target="_blank" rel="noopener">下载最新 Release</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="#top"><img src="assets/otter_logo_clear.png" alt="" width="22" height="22" />水懒 Git</a>
+    <nav class="foot-links" aria-label="相关链接">
+      <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest" target="_blank" rel="noopener">下载 Release</a>
+    </nav>
+    <p>© 2026 水懒 Git · OtterGit · Asher_Shao</p>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var els = document.querySelectorAll(".reveal");
+    if (reduced || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -36px 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+</body>
+</html>
