@@ -1,904 +1,1202 @@
 <!doctype html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>水懒 Git · 会帮你盯仓库的 macOS Git 客户端</title>
-<meta name="description" content="水懒 Git（OtterGit）是 macOS 上的 Git 客户端：提交历史、双栏 diff、冲突逐块解决，小懒能听「提交推送」并把步骤跑完。" />
-<meta name="theme-color" content="#F7F5F0" />
-<meta property="og:title" content="水懒 Git · macOS Git 客户端" />
-<meta property="og:description" content="打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小懒来跑。" />
-<meta property="og:image" content="assets/shots/hero.png" />
-<meta property="og:type" content="website" />
-<link rel="icon" type="image/png" href="assets/otter_logo_clear.png" />
-<link rel="preload" as="image" href="assets/shots/hero.webp" type="image/webp" />
-<style>
-  /* ============ tokens ============ */
-  :root {
-    /* paper */
-    --paper:        #f7f5f0;
-    --paper-2:      #fbfaf7;
-    --surface:      #ffffff;
-    --line:         #e3dfd7;
-    --line-2:       #d6d0c3;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>水懒 Git · 会帮你盯仓库的 macOS Git 客户端</title>
+  <meta name="description" content="水懒 Git（OtterGit）是 macOS 上的 Git 客户端：提交历史、双栏 diff、冲突逐块解决，小懒能听「提交推送」并把步骤跑完。" />
+  <meta name="theme-color" content="#F7F5F0" />
+  <meta property="og:title" content="水懒 Git · macOS Git 客户端" />
+  <meta property="og:description" content="打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小懒来跑。" />
+  <meta property="og:image" content="assets/shots/hero.png" />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/png" href="assets/otter_logo_clear.png" />
+  <link rel="preload" as="image" href="assets/shots/hero.webp" type="image/webp" />
+  <style>
+    /* ============ tokens ============ */
+    :root {
+      /* paper */
+      --paper: #f7f5f0;
+      --paper-2: #fbfaf7;
+      --surface: #ffffff;
+      --line: #e3dfd7;
+      --line-2: #d6d0c3;
 
-    /* ink */
-    --ink:          #1a1917;
-    --ink-2:        #46433c;
-    --muted:        #6e6a62;
+      /* ink */
+      --ink: #1a1917;
+      --ink-2: #46433c;
+      --muted: #6e6a62;
 
-    /* blue — 取自 App 主色与墨蓝 */
-    --blue:         #1a5382;
-    --blue-soft:    rgba(26, 83, 130, 0.08);
-    --blue-deep:    #1b3a52;
-    --blue-deeper:  #142e42;
+      /* blue — 取自 App 主色与墨蓝 */
+      --blue: #1a5382;
+      --blue-soft: rgba(26, 83, 130, 0.08);
+      --blue-deep: #1b3a52;
+      --blue-deeper: #142e42;
 
-    /* type */
-    --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
-    --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      /* type */
+      --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+      --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-    --t-hero:  clamp(2.55rem, 6.1vw, 4.5rem);
-    --t-h2:    clamp(1.85rem, 3.3vw, 2.75rem);
-    --t-h3:    1.1875rem;
-    --t-lead:  clamp(1.0625rem, 1.15vw, 1.1875rem);
-    --t-body:  1.0625rem;
-    --t-sm:    0.9375rem;
-    --t-xs:    0.8125rem;
-    --t-label: 0.6875rem;
+      --t-hero: clamp(2.55rem, 6.1vw, 4.5rem);
+      --t-h2: clamp(1.85rem, 3.3vw, 2.75rem);
+      --t-h3: 1.1875rem;
+      --t-lead: clamp(1.0625rem, 1.15vw, 1.1875rem);
+      --t-body: 1.0625rem;
+      --t-sm: 0.9375rem;
+      --t-xs: 0.8125rem;
+      --t-label: 0.6875rem;
 
-    /* space */
-    --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
-    --s5: 24px; --s6: 32px; --s7: 48px; --s8: 64px;
-    --s9: 96px; --s10: 128px;
+      /* space */
+      --s1: 4px;
+      --s2: 8px;
+      --s3: 12px;
+      --s4: 16px;
+      --s5: 24px;
+      --s6: 32px;
+      --s7: 48px;
+      --s8: 64px;
+      --s9: 96px;
+      --s10: 128px;
 
-    --r-sm: 6px; --r-md: 10px; --r-lg: 16px;
+      --r-sm: 6px;
+      --r-md: 10px;
+      --r-lg: 16px;
 
-    --max: 1160px;
-    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-    --dur: 560ms;
-  }
-  @media (min-width: 1024px) {
-    :root { --s9: 120px; --s10: 160px; }
-  }
-
-  /* ============ base ============ */
-  *, *::before, *::after { box-sizing: border-box; }
-  * { margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
-
-  body {
-    font-family: var(--sans);
-    font-size: var(--t-body);
-    line-height: 1.78;
-    color: var(--ink);
-    background-color: var(--paper);
-    background-image:
-      radial-gradient(1200px 620px at 50% -14%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 62%),
-      radial-gradient(900px 500px at 92% 2%, rgba(26, 83, 130, 0.045), rgba(26, 83, 130, 0) 60%);
-    background-repeat: no-repeat;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    overflow-x: hidden;
-  }
-  /* 纸纹：极淡噪点 */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.5;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
-  }
-
-  img, video { display: block; max-width: 100%; height: auto; }
-  a { color: inherit; text-decoration: none; }
-
-  :focus-visible {
-    outline: 2px solid var(--blue);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  ::selection { background: rgba(26, 83, 130, 0.16); }
-
-  .wrap {
-    position: relative;
-    z-index: 1;
-    width: min(100% - 2.5rem, var(--max));
-    margin-inline: auto;
-  }
-
-  /* ============ type helpers ============ */
-  .label {
-    font-family: var(--sans);
-    font-size: var(--t-label);
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--blue);
-  }
-  .label.plain {
-    text-transform: none;
-    letter-spacing: 0.08em;
-    font-size: var(--t-xs);
-    color: var(--muted);
-  }
-  h1, h2 {
-    font-family: var(--serif);
-    font-weight: 600;
-    letter-spacing: 0.005em;
-    line-height: 1.34;
-    color: var(--ink);
-  }
-  h2 { font-size: var(--t-h2); line-height: 1.38; }
-  .lede {
-    font-size: var(--t-lead);
-    line-height: 1.85;
-    color: var(--ink-2);
-    max-width: 34em;
-  }
-
-  /* ============ nav ============ */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: rgba(247, 245, 240, 0.72);
-    -webkit-backdrop-filter: saturate(1.6) blur(14px);
-    backdrop-filter: saturate(1.6) blur(14px);
-    border-bottom: 1px solid transparent;
-    transition: border-color 300ms var(--ease), background 300ms var(--ease);
-  }
-  .nav.stuck {
-    border-bottom-color: var(--line);
-    background: rgba(247, 245, 240, 0.88);
-  }
-  .nav-inner {
-    display: flex;
-    align-items: center;
-    gap: var(--s5);
-    height: 68px;
-  }
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    font-family: var(--serif);
-    font-size: 1.0625rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-  }
-  .brand img {
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    background: var(--surface);
-  }
-  .brand i {
-    font-family: var(--sans);
-    font-style: normal;
-    font-size: var(--t-label);
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    color: var(--muted);
-    padding-left: 10px;
-    margin-left: 2px;
-    border-left: 1px solid var(--line-2);
-  }
-  .nav-links {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: var(--s5);
-    font-size: var(--t-sm);
-    color: var(--ink-2);
-  }
-  .nav-links > a:not(.btn) {
-    position: relative;
-    padding-block: 6px;
-    transition: color 220ms var(--ease);
-  }
-  .nav-links > a:not(.btn)::after {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; bottom: 0;
-    height: 1px;
-    background: currentColor;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 320ms var(--ease);
-  }
-  .nav-links > a:not(.btn):hover { color: var(--blue); }
-  .nav-links > a:not(.btn):hover::after { transform: scaleX(1); }
-
-  /* ============ buttons ============ */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--s2);
-    padding: 13px 24px;
-    min-height: 46px;
-    border: 1px solid transparent;
-    border-radius: var(--r-sm);
-    font-family: var(--sans);
-    font-size: var(--t-sm);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background 240ms var(--ease), color 240ms var(--ease),
-                border-color 240ms var(--ease), transform 240ms var(--ease);
-  }
-  .btn svg { flex: none; }
-  .btn-primary {
-    background: var(--blue);
-    color: #f6fafd;
-    box-shadow: 0 1px 2px rgba(20, 46, 66, 0.18), 0 10px 24px -12px rgba(26, 83, 130, 0.55);
-  }
-  .btn-primary:hover { background: #14456d; transform: translateY(-1px); }
-  .btn-ghost {
-    background: transparent;
-    border-color: var(--line-2);
-    color: var(--ink);
-  }
-  .btn-ghost:hover { border-color: var(--blue); color: var(--blue); background: rgba(255,255,255,.6); }
-  .btn-sm { padding: 9px 16px; min-height: 38px; font-size: var(--t-xs); }
-  .btn-light {
-    background: #fbfaf7;
-    color: var(--blue-deeper);
-    box-shadow: 0 1px 0 rgba(255,255,255,.4), 0 12px 28px -14px rgba(0,0,0,.4);
-  }
-  .btn-light:hover { background: #fff; transform: translateY(-1px); }
-  .btn-outline-light {
-    border-color: rgba(251, 250, 247, 0.34);
-    color: #f0f4f7;
-  }
-  .btn-outline-light:hover { border-color: rgba(251, 250, 247, 0.75); background: rgba(255,255,255,.06); }
-
-  /* ============ hero ============ */
-  .hero {
-    padding-top: var(--s7);
-    padding-bottom: var(--s8);
-    position: relative;
-  }
-  .hero-copy { max-width: 42rem; }
-  .hero .label { display: block; margin-bottom: var(--s5); }
-  h1 {
-    font-size: var(--t-hero);
-    line-height: 1.22;
-    letter-spacing: 0.01em;
-  }
-  h1 .mk {
-    position: relative;
-    white-space: nowrap;
-  }
-  h1 .mk::after {
-    content: "";
-    position: absolute;
-    left: 0.02em; right: 0.02em;
-    bottom: 0.06em;
-    height: 0.055em;
-    background: var(--blue);
-    opacity: 0.28;
-    border-radius: 1px;
-  }
-  .hero .lede { margin-top: var(--s5); }
-  .hero-actions {
-    margin-top: var(--s6);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s3);
-  }
-  .hero-meta {
-    margin-top: var(--s4);
-    font-size: var(--t-xs);
-    color: var(--muted);
-    letter-spacing: 0.04em;
-  }
-  .hero-meta span + span::before {
-    content: "·";
-    margin: 0 0.6em;
-    color: var(--line-2);
-  }
-
-  .stage {
-    margin-top: var(--s7);
-    position: relative;
-  }
-  .stage::before {
-    /* 窗下柔和投影盘 */
-    content: "";
-    position: absolute;
-    left: 8%; right: 8%;
-    bottom: -4%;
-    height: 42%;
-    background: radial-gradient(ellipse at center, rgba(27, 58, 82, 0.16), rgba(27, 58, 82, 0) 68%);
-    filter: blur(18px);
-    pointer-events: none;
-  }
-  .window {
-    position: relative;
-    filter: drop-shadow(0 26px 52px rgba(27, 58, 82, 0.17));
-  }
-  .window img { width: 100%; }
-
-  /* ============ section shell ============ */
-  section { position: relative; z-index: 1; }
-  .section { padding-block: var(--s9); }
-  .section-head {
-    border-top: 1px solid var(--line);
-    padding-top: var(--s5);
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--s3) var(--s5);
-  }
-  .section-head .num {
-    font-family: var(--mono);
-    font-size: var(--t-xs);
-    letter-spacing: 0.1em;
-    color: var(--muted);
-  }
-  .section-head .label { color: var(--blue); }
-  .section-head h2 { flex: 1 1 100%; margin-top: var(--s2); }
-  .section-head .aside {
-    margin-left: auto;
-    font-size: var(--t-xs);
-    color: var(--muted);
-    letter-spacing: 0.04em;
-  }
-
-  /* ============ features ============ */
-  .feats {
-    margin-top: var(--s7);
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--line);
-  }
-  .feat {
-    padding: var(--s6) var(--s5) var(--s6) 0;
-    border-bottom: 1px solid var(--line);
-    border-right: 1px solid var(--line);
-  }
-  .feat:nth-child(3n) { border-right: 0; padding-right: 0; }
-  .feat:nth-child(3n+1) { padding-left: 0; }
-  .feat:not(:nth-child(3n+1)) { padding-left: var(--s5); }
-  .feat:nth-child(n+4) { border-bottom: 0; }
-  .feat .n {
-    font-family: var(--mono);
-    font-size: var(--t-xs);
-    letter-spacing: 0.12em;
-    color: var(--blue);
-    display: block;
-    margin-bottom: var(--s3);
-  }
-  .feat h3 {
-    font-family: var(--serif);
-    font-size: var(--t-h3);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-  }
-  .feat p {
-    margin-top: var(--s2);
-    font-size: var(--t-sm);
-    line-height: 1.72;
-    color: var(--ink-2);
-  }
-
-  /* ============ figure / caption ============ */
-  figure { margin: 0; }
-  .shot {
-    margin-top: var(--s7);
-  }
-  .shot-frame {
-    border-radius: var(--r-md);
-    overflow: hidden;
-    background: var(--surface);
-    box-shadow: 0 1px 1px rgba(27,58,82,.05), 0 22px 48px -26px rgba(27,58,82,.42);
-    outline: 1px solid var(--line);
-    outline-offset: -1px;
-  }
-  .shot-frame img { width: 100%; }
-  figcaption {
-    margin-top: var(--s4);
-    padding-left: var(--s4);
-    border-left: 2px solid var(--line-2);
-    font-size: var(--t-xs);
-    line-height: 1.7;
-    color: var(--muted);
-    letter-spacing: 0.03em;
-  }
-  figcaption b {
-    display: block;
-    font-family: var(--sans);
-    font-size: var(--t-label);
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--blue);
-    margin-bottom: 2px;
-  }
-
-  /* ============ split layout ============ */
-  .split {
-    display: grid;
-    gap: var(--s7);
-    align-items: start;
-  }
-  .split-copy { min-width: 0; }
-  .split-copy .lede { margin-top: var(--s5); }
-  .steps {
-    margin-top: var(--s6);
-    border-top: 1px solid var(--line);
-  }
-  .steps li {
-    list-style: none;
-    display: grid;
-    grid-template-columns: 4.5rem 1fr;
-    gap: var(--s4);
-    padding: var(--s4) 0;
-    border-bottom: 1px solid var(--line);
-    font-size: var(--t-sm);
-    line-height: 1.7;
-    color: var(--ink-2);
-  }
-  .steps b {
-    font-family: var(--mono);
-    font-size: var(--t-xs);
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--blue);
-    padding-top: 2px;
-  }
-  .chips {
-    margin-top: var(--s5);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s2);
-  }
-  .chip {
-    font-size: var(--t-xs);
-    letter-spacing: 0.03em;
-    color: var(--blue);
-    background: var(--blue-soft);
-    border: 1px solid rgba(26, 83, 130, 0.12);
-    border-radius: 999px;
-    padding: 5px 12px;
-  }
-  .split-visual {
-    border-radius: var(--r-md);
-    overflow: hidden;
-    background: var(--surface);
-    outline: 1px solid var(--line);
-    outline-offset: -1px;
-    box-shadow: 0 20px 44px -28px rgba(27, 58, 82, 0.45);
-  }
-  .split-visual img {
-    width: 100%;
-    /* 底部淡出，暗示对话还在往下走 */
-    -webkit-mask-image: linear-gradient(180deg, #000 88%, rgba(0, 0, 0, 0) 100%);
-    mask-image: linear-gradient(180deg, #000 88%, rgba(0, 0, 0, 0) 100%);
-  }
-  /* ============ film ============ */
-  .film {
-    border-radius: var(--r-md);
-    overflow: hidden;
-    background: var(--blue-deeper);
-    box-shadow: 0 24px 56px -30px rgba(20, 46, 66, 0.6);
-    outline: 1px solid rgba(20, 46, 66, 0.12);
-    outline-offset: -1px;
-  }
-  .film video {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    background: var(--blue-deeper);
-  }
-
-  /* ============ download ============ */
-  .dl {
-    position: relative;
-    overflow: hidden;
-    border-radius: var(--r-lg);
-    background:
-      radial-gradient(760px 340px at 88% -10%, rgba(88, 150, 197, 0.32), rgba(88, 150, 197, 0) 62%),
-      linear-gradient(168deg, #22475f 0%, var(--blue-deep) 52%, var(--blue-deeper) 100%);
-    color: #eef4f8;
-    padding: var(--s7) var(--s6);
-    box-shadow: 0 32px 64px -40px rgba(20, 46, 66, 0.85);
-  }
-  .dl::after {
-    content: "";
-    position: absolute;
-    right: -8%; top: -40%;
-    width: 46%; aspect-ratio: 1;
-    border-radius: 50%;
-    border: 1px solid rgba(238, 244, 248, 0.12);
-    box-shadow: 0 0 0 44px rgba(238, 244, 248, 0.04);
-    pointer-events: none;
-  }
-  .dl .label { color: rgba(238, 244, 248, 0.66); position: relative; }
-  .dl h2 { color: #fdfefe; margin-top: var(--s4); position: relative; }
-  .dl p {
-    margin-top: var(--s4);
-    color: rgba(238, 244, 248, 0.76);
-    max-width: 32em;
-    font-size: var(--t-sm);
-    line-height: 1.8;
-    position: relative;
-  }
-  .dl-actions {
-    margin-top: var(--s6);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s3);
-    position: relative;
-  }
-  .dl-note {
-    margin-top: var(--s5);
-    font-size: var(--t-xs);
-    color: rgba(238, 244, 248, 0.64);
-    letter-spacing: 0.04em;
-    position: relative;
-  }
-
-  /* ============ footer ============ */
-  footer {
-    position: relative;
-    z-index: 1;
-    margin-top: var(--s8);
-    padding-block: var(--s6) var(--s7);
-    border-top: 1px solid var(--line);
-    font-size: var(--t-xs);
-    color: var(--muted);
-  }
-  .foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--s4) var(--s5);
-  }
-  .foot .brand { font-size: var(--t-sm); color: var(--ink); }
-  .foot .brand img { width: 24px; height: 24px; }
-  .foot-links {
-    margin-left: auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s5);
-  }
-  .foot-links a { transition: color 220ms var(--ease); }
-  .foot-links a:hover { color: var(--blue); }
-  .foot-copy { flex-basis: 100%; letter-spacing: 0.03em; }
-
-  /* ============ motion ============ */
-  .rise {
-    opacity: 0;
-    transform: translateY(18px);
-    transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-  }
-  .rise.in { opacity: 1; transform: none; }
-  .rise[data-d="1"] { transition-delay: 80ms; }
-  .rise[data-d="2"] { transition-delay: 160ms; }
-  .rise[data-d="3"] { transition-delay: 240ms; }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
+      --max: 1160px;
+      --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+      --dur: 560ms;
     }
-    .rise { opacity: 1; transform: none; }
-  }
 
-  /* ============ responsive ============ */
-  @media (min-width: 900px) {
-    .split { grid-template-columns: minmax(0, 1fr) 340px; gap: var(--s8); }
-    .dl { padding: var(--s8) var(--s7); }
-  }
-  @media (max-width: 899px) {
-    .feats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .feat:nth-child(3n) { border-right: 1px solid var(--line); padding-right: var(--s5); }
-    .feat:nth-child(2n) { border-right: 0; padding-right: 0; }
-    .feat:nth-child(2n+1) { padding-left: 0; }
-    .feat:nth-child(n+4) { border-bottom: 1px solid var(--line); }
-    .feat:nth-last-child(-n+2) { border-bottom: 0; }
-    .split-visual { max-width: 420px; margin-inline: auto; }
-  }
-  @media (max-width: 719px) {
-    .nav-inner { height: 60px; }
-    .nav-links > a:not(.btn):not(.keep) { display: none; }
-    .brand i { display: none; }
-    .feats { grid-template-columns: 1fr; }
-    .feat, .feat:nth-child(3n), .feat:nth-child(2n) {
-      border-right: 0;
-      padding-left: 0;
-      padding-right: 0;
+    @media (min-width: 1024px) {
+      :root {
+        --s9: 120px;
+        --s10: 160px;
+      }
+    }
+
+    /* ============ base ============ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: var(--sans);
+      font-size: var(--t-body);
+      line-height: 1.78;
+      color: var(--ink);
+      background-color: var(--paper);
+      background-image:
+        radial-gradient(1200px 620px at 50% -14%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 62%),
+        radial-gradient(900px 500px at 92% 2%, rgba(26, 83, 130, 0.045), rgba(26, 83, 130, 0) 60%);
+      background-repeat: no-repeat;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    /* 纸纹：极淡噪点 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.5;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    }
+
+    img,
+    video {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--blue);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    ::selection {
+      background: rgba(26, 83, 130, 0.16);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(100% - 2.5rem, var(--max));
+      margin-inline: auto;
+    }
+
+    /* ============ type helpers ============ */
+    .label {
+      font-family: var(--sans);
+      font-size: var(--t-label);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue);
+    }
+
+    .label.plain {
+      text-transform: none;
+      letter-spacing: 0.08em;
+      font-size: var(--t-xs);
+      color: var(--muted);
+    }
+
+    h1,
+    h2 {
+      font-family: var(--serif);
+      font-weight: 600;
+      letter-spacing: 0.005em;
+      line-height: 1.34;
+      color: var(--ink);
+    }
+
+    h2 {
+      font-size: var(--t-h2);
+      line-height: 1.38;
+    }
+
+    .lede {
+      font-size: var(--t-lead);
+      line-height: 1.85;
+      color: var(--ink-2);
+      max-width: 34em;
+    }
+
+    /* ============ nav ============ */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(247, 245, 240, 0.72);
+      -webkit-backdrop-filter: saturate(1.6) blur(14px);
+      backdrop-filter: saturate(1.6) blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 300ms var(--ease), background 300ms var(--ease);
+    }
+
+    .nav.stuck {
+      border-bottom-color: var(--line);
+      background: rgba(247, 245, 240, 0.88);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+      height: 68px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--serif);
+      font-size: 1.0625rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .brand img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--surface);
+    }
+
+    .brand i {
+      font-family: var(--sans);
+      font-style: normal;
+      font-size: var(--t-label);
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      padding-left: 10px;
+      margin-left: 2px;
+      border-left: 1px solid var(--line-2);
+    }
+
+    .nav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+      font-size: var(--t-sm);
+      color: var(--ink-2);
+    }
+
+    .nav-links>a:not(.btn) {
+      position: relative;
+      padding-block: 6px;
+      transition: color 220ms var(--ease);
+    }
+
+    .nav-links>a:not(.btn)::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: currentColor;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 320ms var(--ease);
+    }
+
+    .nav-links>a:not(.btn):hover {
+      color: var(--blue);
+    }
+
+    .nav-links>a:not(.btn):hover::after {
+      transform: scaleX(1);
+    }
+
+    /* ============ buttons ============ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--s2);
+      padding: 13px 24px;
+      min-height: 46px;
+      border: 1px solid transparent;
+      border-radius: var(--r-sm);
+      font-family: var(--sans);
+      font-size: var(--t-sm);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 240ms var(--ease), color 240ms var(--ease),
+        border-color 240ms var(--ease), transform 240ms var(--ease);
+    }
+
+    .btn svg {
+      flex: none;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      color: #f6fafd;
+      box-shadow: 0 1px 2px rgba(20, 46, 66, 0.18), 0 10px 24px -12px rgba(26, 83, 130, 0.55);
+    }
+
+    .btn-primary:hover {
+      background: #14456d;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border-color: var(--line-2);
+      color: var(--ink);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: rgba(255, 255, 255, .6);
+    }
+
+    .btn-sm {
+      padding: 9px 16px;
+      min-height: 38px;
+      font-size: var(--t-xs);
+    }
+
+    .btn-light {
+      background: #fbfaf7;
+      color: var(--blue-deeper);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .4), 0 12px 28px -14px rgba(0, 0, 0, .4);
+    }
+
+    .btn-light:hover {
+      background: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-light {
+      border-color: rgba(251, 250, 247, 0.34);
+      color: #f0f4f7;
+    }
+
+    .btn-outline-light:hover {
+      border-color: rgba(251, 250, 247, 0.75);
+      background: rgba(255, 255, 255, .06);
+    }
+
+    /* ============ hero ============ */
+    .hero {
+      padding-top: var(--s7);
+      padding-bottom: var(--s8);
+      position: relative;
+    }
+
+    .hero-copy {
+      max-width: 42rem;
+    }
+
+    .hero .label {
+      display: block;
+      margin-bottom: var(--s5);
+    }
+
+    h1 {
+      font-size: var(--t-hero);
+      line-height: 1.22;
+      letter-spacing: 0.01em;
+    }
+
+    h1 .mk {
+      position: relative;
+      white-space: nowrap;
+    }
+
+    h1 .mk::after {
+      content: "";
+      position: absolute;
+      left: 0.02em;
+      right: 0.02em;
+      bottom: 0.06em;
+      height: 0.055em;
+      background: var(--blue);
+      opacity: 0.28;
+      border-radius: 1px;
+    }
+
+    .hero .lede {
+      margin-top: var(--s5);
+    }
+
+    .hero-actions {
+      margin-top: var(--s6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3);
+    }
+
+    .hero-meta {
+      margin-top: var(--s4);
+      font-size: var(--t-xs);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-meta span+span::before {
+      content: "·";
+      margin: 0 0.6em;
+      color: var(--line-2);
+    }
+
+    .stage {
+      margin-top: var(--s7);
+      position: relative;
+    }
+
+    .stage::before {
+      /* 窗下柔和投影盘 */
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: -4%;
+      height: 42%;
+      background: radial-gradient(ellipse at center, rgba(27, 58, 82, 0.16), rgba(27, 58, 82, 0) 68%);
+      filter: blur(18px);
+      pointer-events: none;
+    }
+
+    .window {
+      position: relative;
+      filter: drop-shadow(0 26px 52px rgba(27, 58, 82, 0.17));
+    }
+
+    .window img {
+      width: 100%;
+    }
+
+    /* ============ section shell ============ */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section {
+      padding-block: var(--s9);
+    }
+
+    .section-head {
+      border-top: 1px solid var(--line);
+      padding-top: var(--s5);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--s3) var(--s5);
+    }
+
+    .section-head .num {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .section-head .label {
+      color: var(--blue);
+    }
+
+    .section-head h2 {
+      flex: 1 1 100%;
+      margin-top: var(--s2);
+    }
+
+    .section-head .aside {
+      margin-left: auto;
+      font-size: var(--t-xs);
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ============ features ============ */
+    .feats {
+      margin-top: var(--s7);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+    }
+
+    .feat {
+      padding: var(--s6) var(--s5) var(--s6) 0;
       border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
     }
-    .feat:last-child { border-bottom: 0; }
-    .hero { padding-top: var(--s6); }
-    .steps li { grid-template-columns: 3.6rem 1fr; }
-    figcaption { font-size: 0.75rem; }
-  }
-</style>
+
+    .feat:nth-child(3n) {
+      border-right: 0;
+      padding-right: 0;
+    }
+
+    .feat:nth-child(3n+1) {
+      padding-left: 0;
+    }
+
+    .feat:not(:nth-child(3n+1)) {
+      padding-left: var(--s5);
+    }
+
+    .feat:nth-child(n+4) {
+      border-bottom: 0;
+    }
+
+    .feat .n {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      letter-spacing: 0.12em;
+      color: var(--blue);
+      display: block;
+      margin-bottom: var(--s3);
+    }
+
+    .feat h3 {
+      font-family: var(--serif);
+      font-size: var(--t-h3);
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .feat p {
+      margin-top: var(--s2);
+      font-size: var(--t-sm);
+      line-height: 1.72;
+      color: var(--ink-2);
+    }
+
+    /* ============ figure / caption ============ */
+    figure {
+      margin: 0;
+    }
+
+    .shot {
+      margin-top: var(--s7);
+    }
+
+    .shot-frame {
+      border-radius: var(--r-md);
+      overflow: hidden;
+      background: var(--surface);
+      box-shadow: 0 1px 1px rgba(27, 58, 82, .05), 0 22px 48px -26px rgba(27, 58, 82, .42);
+      outline: 1px solid var(--line);
+      outline-offset: -1px;
+    }
+
+    .shot-frame img {
+      width: 100%;
+    }
+
+    figcaption {
+      margin-top: var(--s4);
+      padding-left: var(--s4);
+      border-left: 2px solid var(--line-2);
+      font-size: var(--t-xs);
+      line-height: 1.7;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    figcaption b {
+      display: block;
+      font-family: var(--sans);
+      font-size: var(--t-label);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 2px;
+    }
+
+    /* ============ split layout ============ */
+    .split {
+      display: grid;
+      gap: var(--s7);
+      align-items: start;
+    }
+
+    .split-copy {
+      min-width: 0;
+    }
+
+    .split-copy .lede {
+      margin-top: var(--s5);
+    }
+
+    .steps {
+      margin-top: var(--s6);
+      border-top: 1px solid var(--line);
+    }
+
+    .steps li {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 4.5rem 1fr;
+      gap: var(--s4);
+      padding: var(--s4) 0;
+      border-bottom: 1px solid var(--line);
+      font-size: var(--t-sm);
+      line-height: 1.7;
+      color: var(--ink-2);
+    }
+
+    .steps b {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      padding-top: 2px;
+    }
+
+    .chips {
+      margin-top: var(--s5);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2);
+    }
+
+    .chip {
+      font-size: var(--t-xs);
+      letter-spacing: 0.03em;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid rgba(26, 83, 130, 0.12);
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+
+    .split-visual {
+      border-radius: var(--r-md);
+      overflow: hidden;
+      background: var(--surface);
+      outline: 1px solid var(--line);
+      outline-offset: -1px;
+      box-shadow: 0 20px 44px -28px rgba(27, 58, 82, 0.45);
+    }
+
+    .split-visual img {
+      width: 100%;
+      /* 底部淡出，暗示对话还在往下走 */
+      -webkit-mask-image: linear-gradient(180deg, #000 88%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(180deg, #000 88%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    /* ============ film ============ */
+    .film {
+      border-radius: var(--r-md);
+      overflow: hidden;
+      background: var(--blue-deeper);
+      box-shadow: 0 24px 56px -30px rgba(20, 46, 66, 0.6);
+      outline: 1px solid rgba(20, 46, 66, 0.12);
+      outline-offset: -1px;
+    }
+
+    .film video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: var(--blue-deeper);
+    }
+
+    /* ============ download ============ */
+    .dl {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--r-lg);
+      background:
+        radial-gradient(760px 340px at 88% -10%, rgba(88, 150, 197, 0.32), rgba(88, 150, 197, 0) 62%),
+        linear-gradient(168deg, #22475f 0%, var(--blue-deep) 52%, var(--blue-deeper) 100%);
+      color: #eef4f8;
+      padding: var(--s7) var(--s6);
+      box-shadow: 0 32px 64px -40px rgba(20, 46, 66, 0.85);
+    }
+
+    .dl::after {
+      content: "";
+      position: absolute;
+      right: -8%;
+      top: -40%;
+      width: 46%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 1px solid rgba(238, 244, 248, 0.12);
+      box-shadow: 0 0 0 44px rgba(238, 244, 248, 0.04);
+      pointer-events: none;
+    }
+
+    .dl .label {
+      color: rgba(238, 244, 248, 0.66);
+      position: relative;
+    }
+
+    .dl h2 {
+      color: #fdfefe;
+      margin-top: var(--s4);
+      position: relative;
+    }
+
+    .dl p {
+      margin-top: var(--s4);
+      color: rgba(238, 244, 248, 0.76);
+      max-width: 32em;
+      font-size: var(--t-sm);
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .dl-actions {
+      margin-top: var(--s6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s3);
+      position: relative;
+    }
+
+    .dl-note {
+      margin-top: var(--s5);
+      font-size: var(--t-xs);
+      color: rgba(238, 244, 248, 0.64);
+      letter-spacing: 0.04em;
+      position: relative;
+    }
+
+    /* ============ footer ============ */
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: var(--s8);
+      padding-block: var(--s6) var(--s7);
+      border-top: 1px solid var(--line);
+      font-size: var(--t-xs);
+      color: var(--muted);
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--s4) var(--s5);
+    }
+
+    .foot .brand {
+      font-size: var(--t-sm);
+      color: var(--ink);
+    }
+
+    .foot .brand img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .foot-links {
+      margin-left: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s5);
+    }
+
+    .foot-links a {
+      transition: color 220ms var(--ease);
+    }
+
+    .foot-links a:hover {
+      color: var(--blue);
+    }
+
+    .foot-copy {
+      flex-basis: 100%;
+      letter-spacing: 0.03em;
+    }
+
+    /* ============ motion ============ */
+    .rise {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+
+    .rise.in {
+      opacity: 1;
+      transform: none;
+    }
+
+    .rise[data-d="1"] {
+      transition-delay: 80ms;
+    }
+
+    .rise[data-d="2"] {
+      transition-delay: 160ms;
+    }
+
+    .rise[data-d="3"] {
+      transition-delay: 240ms;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .rise {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ============ responsive ============ */
+    @media (min-width: 900px) {
+      .split {
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: var(--s8);
+      }
+
+      .dl {
+        padding: var(--s8) var(--s7);
+      }
+    }
+
+    @media (max-width: 899px) {
+      .feats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .feat:nth-child(3n) {
+        border-right: 1px solid var(--line);
+        padding-right: var(--s5);
+      }
+
+      .feat:nth-child(2n) {
+        border-right: 0;
+        padding-right: 0;
+      }
+
+      .feat:nth-child(2n+1) {
+        padding-left: 0;
+      }
+
+      .feat:nth-child(n+4) {
+        border-bottom: 1px solid var(--line);
+      }
+
+      .feat:nth-last-child(-n+2) {
+        border-bottom: 0;
+      }
+
+      .split-visual {
+        max-width: 420px;
+        margin-inline: auto;
+      }
+    }
+
+    @media (max-width: 719px) {
+      .nav-inner {
+        height: 60px;
+      }
+
+      .nav-links>a:not(.btn):not(.keep) {
+        display: none;
+      }
+
+      .brand i {
+        display: none;
+      }
+
+      .feats {
+        grid-template-columns: 1fr;
+      }
+
+      .feat,
+      .feat:nth-child(3n),
+      .feat:nth-child(2n) {
+        border-right: 0;
+        padding-left: 0;
+        padding-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .feat:last-child {
+        border-bottom: 0;
+      }
+
+      .hero {
+        padding-top: var(--s6);
+      }
+
+      .steps li {
+        grid-template-columns: 3.6rem 1fr;
+      }
+
+      figcaption {
+        font-size: 0.75rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<header class="nav" id="nav">
-  <div class="wrap nav-inner">
-    <a class="brand" href="#top" aria-label="水懒 Git 首页">
-      <img src="assets/otter_logo_clear.png" alt="" width="30" height="30" />
-      水懒 Git <i>OTTERGIT</i>
-    </a>
-    <nav class="nav-links" aria-label="站内导航">
-      <a href="#features">功能</a>
-      <a href="#diff">差异</a>
-      <a href="#copilot">小懒</a>
-      <a href="#film">视频</a>
-      <a class="btn btn-primary btn-sm keep" href="#download">下载</a>
-    </nav>
-  </div>
-</header>
-
-<main id="top">
-
-  <!-- ========== hero ========== -->
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap">
-      <div class="hero-copy">
-        <p class="label plain">macOS · Git 客户端</p>
-        <h1 id="hero-title">会帮你<span class="mk">盯仓库</span>的<br />Git 客户端</h1>
-        <p class="lede">打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小懒来跑。</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg" target="_blank" rel="noopener">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            下载最新版
-          </a>
-          <a class="btn btn-ghost" href="#film">看 30 秒介绍</a>
-        </div>
-        <p class="hero-meta"><span>Apple Silicon</span><span>免费</span><span>已签名并公证</span></p>
-      </div>
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="水懒 Git 首页">
+        <img src="assets/otter_logo_clear.png" alt="" width="30" height="30" />
+        水懒 Git <i>OTTERGIT</i>
+      </a>
+      <nav class="nav-links" aria-label="站内导航">
+        <a href="#features">功能</a>
+        <a href="#diff">差异</a>
+        <a href="#copilot">小懒</a>
+        <a href="#film">视频</a>
+        <a class="btn btn-primary btn-sm keep" href="#download">下载</a>
+      </nav>
     </div>
+  </header>
 
-    <div class="wrap stage">
-      <div class="window">
-        <picture>
-          <source srcset="assets/shots/hero.webp" type="image/webp" />
-          <img src="assets/shots/hero.png" width="2400" height="1506"
-               alt="水懒 Git 主窗口：左侧仓库与分支，中间历史列表与双栏 diff，右侧小懒 AI 对话" />
-        </picture>
-      </div>
-    </div>
-  </section>
+  <main id="top">
 
-  <!-- ========== features ========== -->
-  <section class="section" id="features" aria-labelledby="features-title">
-    <div class="wrap">
-      <div class="section-head rise">
-        <span class="num">01</span>
-        <span class="label">Features</span>
-        <h2 id="features-title">每天要用的几个动作，都在顶栏</h2>
-      </div>
-
-      <div class="feats">
-        <article class="feat rise">
-          <span class="n">01</span>
-          <h3>历史泳道</h3>
-          <p>分支线画在左边，右键就能检出、合并、打补丁。</p>
-        </article>
-        <article class="feat rise" data-d="1">
-          <span class="n">02</span>
-          <h3>双栏 diff</h3>
-          <p>行号对齐，改了哪几行一眼看到；图片也能并排比。</p>
-        </article>
-        <article class="feat rise" data-d="2">
-          <span class="n">03</span>
-          <h3>冲突化解</h3>
-          <p>有争议的块留给你选，没争议的直接过。</p>
-        </article>
-        <article class="feat rise">
-          <span class="n">04</span>
-          <h3>仓库集合</h3>
-          <p>常开的几个仓库存成书签，双击就进去。</p>
-        </article>
-        <article class="feat rise" data-d="1">
-          <span class="n">05</span>
-          <h3>小懒</h3>
-          <p>说一句「提交推送」，它拆步骤、写说明，推送前问一声。</p>
-        </article>
-        <article class="feat rise" data-d="2">
-          <span class="n">06</span>
-          <h3>菜单栏托盘</h3>
-          <p>不打开主窗口，也能看到当前分支差几个提交。</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== diff ========== -->
-  <section class="section" id="diff" aria-labelledby="diff-title">
-    <div class="wrap">
-      <div class="section-head rise">
-        <span class="num">02</span>
-        <span class="label">Diff</span>
-        <span class="aside">原文件 · 变更文件</span>
-        <h2 id="diff-title">左边原文件，右边改后的</h2>
-      </div>
-      <p class="lede rise" style="margin-top: var(--s5);">
-        行号对齐，加的行标绿，删掉的标灰。可以整块暂存，也可以只挑一块。
-      </p>
-
-      <figure class="shot rise">
-        <div class="shot-frame">
-          <picture>
-            <source srcset="assets/shots/diff.webp" type="image/webp" />
-            <img src="assets/shots/diff.png" width="1560" height="952" loading="lazy" decoding="async"
-                 alt="双栏 diff 视图：左侧提交信息与变更文件清单，右侧原文件与变更文件逐行对照，新增行带浅绿底色" />
-          </picture>
-        </div>
-        <figcaption>
-          <b>双栏 diff</b>
-          提交信息、+&#8722; 行数和文件清单都在上面。绿色是加的行，灰色是删掉的块。
-        </figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- ========== copilot ========== -->
-  <section class="section" id="copilot" aria-labelledby="copilot-title">
-    <div class="wrap">
-      <div class="section-head rise">
-        <span class="num">03</span>
-        <span class="label">Copilot</span>
-        <span class="aside">小懒</span>
-        <h2 id="copilot-title">说一句「提交推送」</h2>
-      </div>
-
-      <div class="split" style="margin-top: var(--s7);">
-        <div class="split-copy rise">
-          <p class="lede">
-            它先把步骤列出来：暂存、写说明、提交、推送。做完一步勾一步，中途可以叫停。
-          </p>
-          <div class="chips">
-            <span class="chip">一句话</span>
-            <span class="chip">自动写说明</span>
-            <span class="chip">推送前确认</span>
+    <!-- ========== hero ========== -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="hero-copy">
+          <p class="label plain">macOS · Git 客户端</p>
+          <h1 id="hero-title">会帮你<span class="mk">盯仓库</span>的<br />Git 客户端</h1>
+          <p class="lede">打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小懒来跑。</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary"
+              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
+              target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              下载最新版
+            </a>
+            <a class="btn btn-ghost" href="#film">看 30 秒介绍</a>
           </div>
-          <ol class="steps">
-            <li><b>意图</b><span>你说一句，它自己排顺序，不用一条条点。</span></li>
-            <li><b>执行</b><span>每一步都写在对话里，做没做一眼能看到。</span></li>
-            <li><b>确认</b><span>推送前会问一次；也可以设成不再问。</span></li>
-          </ol>
+          <p class="hero-meta"><span>Apple Silicon</span><span>免费</span><span>已签名并公证</span></p>
+        </div>
+      </div>
+
+      <div class="wrap stage">
+        <div class="window">
+          <picture>
+            <source srcset="assets/shots/hero.webp" type="image/webp" />
+            <img src="assets/shots/hero.png" width="2400" height="1506"
+              alt="水懒 Git 主窗口：左侧仓库与分支，中间历史列表与双栏 diff，右侧小懒 AI 对话" />
+          </picture>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== features ========== -->
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="wrap">
+        <div class="section-head rise">
+          <span class="num">01</span>
+          <span class="label">Features</span>
+          <h2 id="features-title">每天要用的几个动作，都在顶栏</h2>
         </div>
 
-        <figure class="split-visual rise" data-d="1">
-          <picture>
-            <source srcset="assets/shots/ai.webp" type="image/webp" />
-            <img src="assets/shots/ai.png" width="760" height="1113" loading="lazy" decoding="async"
-                 alt="小懒侧栏：用户说「提交推送」，小懒列出暂存、写说明、提交、推送四步并逐步完成" />
-          </picture>
+        <div class="feats">
+          <article class="feat rise">
+            <span class="n">01</span>
+            <h3>历史泳道</h3>
+            <p>分支线画在左边，右键就能检出、合并、打补丁。</p>
+          </article>
+          <article class="feat rise" data-d="1">
+            <span class="n">02</span>
+            <h3>双栏 diff</h3>
+            <p>行号对齐，改了哪几行一眼看到；图片也能并排比。</p>
+          </article>
+          <article class="feat rise" data-d="2">
+            <span class="n">03</span>
+            <h3>冲突化解</h3>
+            <p>有争议的块留给你选，没争议的直接过。</p>
+          </article>
+          <article class="feat rise">
+            <span class="n">04</span>
+            <h3>仓库集合</h3>
+            <p>常开的几个仓库存成书签，双击就进去。</p>
+          </article>
+          <article class="feat rise" data-d="1">
+            <span class="n">05</span>
+            <h3>小懒</h3>
+            <p>说一句「提交推送」，它拆步骤、写说明，推送前问一声。</p>
+          </article>
+          <article class="feat rise" data-d="2">
+            <span class="n">06</span>
+            <h3>菜单栏托盘</h3>
+            <p>不打开主窗口，也能看到当前分支差几个提交。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== diff ========== -->
+    <section class="section" id="diff" aria-labelledby="diff-title">
+      <div class="wrap">
+        <div class="section-head rise">
+          <span class="num">02</span>
+          <span class="label">Diff</span>
+          <span class="aside">原文件 · 变更文件</span>
+          <h2 id="diff-title">左边原文件，右边改后的</h2>
+        </div>
+        <p class="lede rise" style="margin-top: var(--s5);">
+          行号对齐，加的行标绿，删掉的标灰。可以整块暂存，也可以只挑一块。
+        </p>
+
+        <figure class="shot rise">
+          <div class="shot-frame">
+            <picture>
+              <source srcset="assets/shots/diff.webp" type="image/webp" />
+              <img src="assets/shots/diff.png" width="1560" height="952" loading="lazy" decoding="async"
+                alt="双栏 diff 视图：左侧提交信息与变更文件清单，右侧原文件与变更文件逐行对照，新增行带浅绿底色" />
+            </picture>
+          </div>
+          <figcaption>
+            <b>双栏 diff</b>
+            提交信息、+&#8722; 行数和文件清单都在上面。绿色是加的行，灰色是删掉的块。
+          </figcaption>
         </figure>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ========== detail ========== -->
-  <section class="section" id="detail" aria-labelledby="detail-title">
-    <div class="wrap">
-      <div class="section-head rise">
-        <span class="num">04</span>
-        <span class="label">Detail</span>
-        <span class="aside">设置</span>
-        <h2 id="detail-title">语言、主题、模型，都在设置里</h2>
-      </div>
-      <p class="lede rise" style="margin-top: var(--s5);">
-        自动刷新的间隔能改；小懒用哪个模型、能碰什么、跑多快，也在这一页。
-      </p>
-
-      <figure class="shot rise">
-        <div class="shot-frame">
-          <picture>
-            <source srcset="assets/shots/settings.webp" type="image/webp" />
-            <img src="assets/shots/settings.png" width="2000" height="1255" loading="lazy" decoding="async"
-                 alt="水懒 Git 设置窗口：左侧分类导航，右侧是小懒的模型管理、对话偏好与生成速率" />
-          </picture>
+    <!-- ========== copilot ========== -->
+    <section class="section" id="copilot" aria-labelledby="copilot-title">
+      <div class="wrap">
+        <div class="section-head rise">
+          <span class="num">03</span>
+          <span class="label">Copilot</span>
+          <span class="aside">小懒</span>
+          <h2 id="copilot-title">说一句「提交推送」</h2>
         </div>
-        <figcaption>
-          <b>设置</b>
-          左边选分类，右边改，不用翻配置文件。
-        </figcaption>
-      </figure>
-    </div>
-  </section>
 
-  <!-- ========== film ========== -->
-  <section class="section" id="film" aria-labelledby="film-title">
-    <div class="wrap">
-      <div class="section-head rise">
-        <span class="num">05</span>
-        <span class="label">Film</span>
-        <span class="aside">约 44 秒</span>
-        <h2 id="film-title">四十多秒，没配音</h2>
-      </div>
-      <p class="lede rise" style="margin-top: var(--s5);">
-        就是把这个软件从头点一遍。
-      </p>
+        <div class="split" style="margin-top: var(--s7);">
+          <div class="split-copy rise">
+            <p class="lede">
+              它先把步骤列出来：暂存、写说明、提交、推送。做完一步勾一步，中途可以叫停。
+            </p>
+            <div class="chips">
+              <span class="chip">一句话</span>
+              <span class="chip">自动写说明</span>
+              <span class="chip">推送前确认</span>
+            </div>
+            <ol class="steps">
+              <li><b>意图</b><span>你说一句，它自己排顺序，不用一条条点。</span></li>
+              <li><b>执行</b><span>每一步都写在对话里，做没做一眼能看到。</span></li>
+              <li><b>确认</b><span>推送前会问一次；也可以设成不再问。</span></li>
+            </ol>
+          </div>
 
-      <div class="film rise" style="margin-top: var(--s6);">
-        <video controls playsinline preload="none" poster="assets/shots/hero.webp"
-               aria-label="水懒 Git 产品演示视频">
-          <source src="assets/ottergit-promo.mp4" type="video/mp4" />
-          你的浏览器不支持内嵌视频，可<a href="assets/ottergit-promo.mp4">直接下载观看</a>。
-        </video>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== download ========== -->
-  <section class="section" id="download" aria-labelledby="dl-title">
-    <div class="wrap">
-      <div class="dl rise">
-        <p class="label">Download</p>
-        <h2 id="dl-title">装一个试试</h2>
-        <p>支持 Apple Silicon。dmg 拖进 Applications 就能用，已签名、已公证，第一次打开不会拦你。</p>
-        <div class="dl-actions">
-          <a class="btn btn-light" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg" target="_blank" rel="noopener">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            下载最新 Release
-          </a>
-          <a class="btn btn-outline-light" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">看更新记录</a>
+          <figure class="split-visual rise" data-d="1">
+            <picture>
+              <source srcset="assets/shots/ai.webp" type="image/webp" />
+              <img src="assets/shots/ai.png" width="760" height="1113" loading="lazy" decoding="async"
+                alt="小懒侧栏：用户说「提交推送」，小懒列出暂存、写说明、提交、推送四步并逐步完成" />
+            </picture>
+          </figure>
         </div>
-        <p class="dl-note">免费 · 新版本发在 Releases</p>
       </div>
+    </section>
+
+    <!-- ========== detail ========== -->
+    <section class="section" id="detail" aria-labelledby="detail-title">
+      <div class="wrap">
+        <div class="section-head rise">
+          <span class="num">04</span>
+          <span class="label">Detail</span>
+          <span class="aside">设置</span>
+          <h2 id="detail-title">语言、主题、模型，都在设置里</h2>
+        </div>
+        <p class="lede rise" style="margin-top: var(--s5);">
+          自动刷新的间隔能改；小懒用哪个模型、能碰什么、跑多快，也在这一页。
+        </p>
+
+        <figure class="shot rise">
+          <div class="shot-frame">
+            <picture>
+              <source srcset="assets/shots/settings.webp" type="image/webp" />
+              <img src="assets/shots/settings.png" width="2000" height="1255" loading="lazy" decoding="async"
+                alt="水懒 Git 设置窗口：左侧分类导航，右侧是小懒的模型管理、对话偏好与生成速率" />
+            </picture>
+          </div>
+          <figcaption>
+            <b>设置</b>
+            左边选分类，右边改，不用翻配置文件。
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ========== film ========== -->
+    <section class="section" id="film" aria-labelledby="film-title">
+      <div class="wrap">
+        <div class="section-head rise">
+          <span class="num">05</span>
+          <span class="label">Film</span>
+          <span class="aside">约 44 秒</span>
+          <h2 id="film-title">查看视频介绍</h2>
+        </div>
+        <p class="lede rise" style="margin-top: var(--s5);">
+          更详细了解。
+        </p>
+
+        <div class="film rise" style="margin-top: var(--s6);">
+          <video controls playsinline preload="none" poster="assets/shots/hero.webp" aria-label="水懒 Git 产品演示视频">
+            <source src="assets/ottergit-promo.mp4" type="video/mp4" />
+            你的浏览器不支持内嵌视频，可<a href="assets/ottergit-promo.mp4">直接下载观看</a>。
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== download ========== -->
+    <section class="section" id="download" aria-labelledby="dl-title">
+      <div class="wrap">
+        <div class="dl rise">
+          <p class="label">Download</p>
+          <h2 id="dl-title">装一个试试</h2>
+          <p>支持 Apple Silicon。dmg 拖进 Applications 就能用，已签名、已公证，第一次打开不会拦你。</p>
+          <div class="dl-actions">
+            <a class="btn btn-light"
+              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
+              target="_blank" rel="noopener">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              下载最新 Release
+            </a>
+            <a class="btn btn-outline-light" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank"
+              rel="noopener">看更新记录</a>
+          </div>
+          <p class="dl-note">免费 · 新版本发在 Releases</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap foot">
+      <a class="brand" href="#top">
+        <img src="assets/otter_logo_clear.png" alt="" width="24" height="24" />
+        水懒 Git
+      </a>
+      <nav class="foot-links" aria-label="相关链接">
+        <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">Releases</a>
+        <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
+          target="_blank" rel="noopener">下载</a>
+      </nav>
+      <p class="foot-copy">© 2026 水懒 Git · OtterGit · Asher_Shao</p>
     </div>
-  </section>
+  </footer>
 
-</main>
+  <script>
+    (function () {
+      var nav = document.getElementById("nav");
+      var onScroll = function () {
+        nav.classList.toggle("stuck", window.scrollY > 8);
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
 
-<footer>
-  <div class="wrap foot">
-    <a class="brand" href="#top">
-      <img src="assets/otter_logo_clear.png" alt="" width="24" height="24" />
-      水懒 Git
-    </a>
-    <nav class="foot-links" aria-label="相关链接">
-      <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">Releases</a>
-      <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg" target="_blank" rel="noopener">下载</a>
-    </nav>
-    <p class="foot-copy">© 2026 水懒 Git · OtterGit · Asher_Shao</p>
-  </div>
-</footer>
-
-<script>
-  (function () {
-    var nav = document.getElementById("nav");
-    var onScroll = function () {
-      nav.classList.toggle("stuck", window.scrollY > 8);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var els = document.querySelectorAll(".rise");
-    if (reduced || !("IntersectionObserver" in window)) {
-      for (var i = 0; i < els.length; i++) els[i].classList.add("in");
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting) {
-          e.target.classList.add("in");
-          io.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.08, rootMargin: "0px 0px -60px 0px" });
-    for (var j = 0; j < els.length; j++) io.observe(els[j]);
-  })();
-</script>
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var els = document.querySelectorAll(".rise");
+      if (reduced || !("IntersectionObserver" in window)) {
+        for (var i = 0; i < els.length; i++) els[i].classList.add("in");
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            e.target.classList.add("in");
+            io.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: "0px 0px -60px 0px" });
+      for (var j = 0; j < els.length; j++) io.observe(els[j]);
+    })();
+  </script>
 </body>
+
 </html>
