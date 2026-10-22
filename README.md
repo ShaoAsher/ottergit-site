@@ -1,4 +1,4 @@
-# 水懒 Git 官网
+# 水獭 Git 官网
 
 静态官网（GitHub Pages）。**不开源**；Releases 里只有安装包（DMG/ZIP），没有源码。
 
