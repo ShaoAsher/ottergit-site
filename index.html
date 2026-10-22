@@ -5,10 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>水獭 Git · 会帮你盯仓库的 macOS Git 客户端</title>
-  <meta name="description" content="水獭 Git（OtterGit）是 macOS 上的 Git 客户端：提交历史、双栏 diff、冲突逐块解决，小獭能听「提交推送」并把步骤跑完。" />
+  <meta name="description" content="水獭 Git（OtterGit）是 macOS 上的 Git 客户端：提交历史、双栏 diff、冲突逐块解决。小獭能听「提交推送」把步骤跑完，会做仓库体检，状态说不清时先问你。" />
   <meta name="theme-color" content="#F7F5F0" />
   <meta property="og:title" content="水獭 Git · macOS Git 客户端" />
-  <meta property="og:description" content="打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小獭来跑。" />
+  <meta property="og:description" content="打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小獭来跑；说不清的地方它会先问你。" />
   <meta property="og:image" content="assets/shots/hero.png" />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="assets/otter_logo_clear.png" />
@@ -513,6 +513,11 @@
       border-bottom: 0;
     }
 
+    /* 三张一组的补充段落：整组保留底边，避免只有首张带线的断裂感 */
+    .feats-triple > .feat {
+      border-bottom: 1px solid var(--line);
+    }
+
     .feat .n {
       font-family: var(--mono);
       font-size: var(--t-xs);
@@ -1000,7 +1005,7 @@
           <article class="feat rise" data-d="1">
             <span class="n">05</span>
             <h3>小獭</h3>
-            <p>说一句「提交推送」，它拆步骤、写说明，推送前问一声。</p>
+            <p>说一句「提交推送」，它拆步骤、写说明；拿不准时先问你，不替你猜。</p>
           </article>
           <article class="feat rise" data-d="2">
             <span class="n">06</span>
@@ -1074,6 +1079,34 @@
                 alt="小獭侧栏：用户说「提交推送」，小獭列出暂存、写说明、提交、推送四步并逐步完成" />
             </picture>
           </figure>
+        </div>
+
+        <!-- 小獭的三个新能力 -->
+        <div class="feats feats-triple" style="margin-top: var(--s7);">
+          <article class="feat rise">
+            <span class="n">01</span>
+            <h3>不该猜的时候，先问你</h3>
+            <p>
+              暂存了一半、工作区还剩一半，它不会替你决定，而是问「只提交已暂存的，还是全部一起」，
+              点一下就能选。状态清楚时不啰嗦，直接做。
+            </p>
+          </article>
+          <article class="feat rise" data-d="1">
+            <span class="n">02</span>
+            <h3>会做仓库体检</h3>
+            <p>
+              问「为什么推不上去」，它给的不是猜测而是依据：领先 2 个、落后 3 个，
+              直接 pull 会造合并提交，建议改走变基。分叉、游离 HEAD、没设上游都能查。
+            </p>
+          </article>
+          <article class="feat rise" data-d="2">
+            <span class="n">03</span>
+            <h3>记得住上下文</h3>
+            <p>
+              同一个仓库连着追问，没变的状态不会反复重发，能命中服务端缓存，
+              更快也更省。命中率在侧栏和用量页直接可见，不用凭感觉。
+            </p>
+          </article>
         </div>
       </div>
     </section>
