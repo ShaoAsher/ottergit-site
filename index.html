@@ -4,51 +4,52 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>水獭 Git · 会帮你盯仓库的 macOS Git 客户端</title>
-  <meta name="description" content="水獭 Git（OtterGit）是 macOS 上的 Git 客户端：提交历史、双栏 diff、冲突逐块解决。小獭能听「提交推送」把步骤跑完，会做仓库体检，状态说不清时先问你。" />
+  <title>水獭 Git · 看得清，不瞎猜 —— macOS 上的 Git 客户端</title>
+  <meta name="description"
+    content="水獭 Git（OtterGit）是 macOS 上的原生 Git 客户端：提交历史摊成泳道，逐行对比行号对齐，五个仓库一栏扫完。说一句「提交推送」，小獭拆好步骤跑完；拿不准的地方它先问你，不替你猜。" />
   <meta name="theme-color" content="#F7F5F0" />
-  <meta property="og:title" content="水獭 Git · macOS Git 客户端" />
-  <meta property="og:description" content="打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小獭来跑；说不清的地方它会先问你。" />
-  <meta property="og:image" content="assets/shots/hero.png" />
+  <meta property="og:title" content="水獭 Git · 看得清，不瞎猜" />
+  <meta property="og:description" content="macOS 原生 Git 客户端。历史泳道、逐行对比、冲突分块；说句「提交推送」，小獭先问清再动手。免费、无账号、无订阅。" />
+  <meta property="og:image" content="assets/shots/window.png" />
   <meta property="og:type" content="website" />
   <link rel="icon" type="image/png" href="assets/otter_logo_clear.png" />
-  <link rel="preload" as="image" href="assets/shots/hero.webp" type="image/webp" />
+  <link rel="preload" as="image" href="assets/shots/window.webp" type="image/webp" />
   <style>
-    /* ============ tokens ============ */
+    /* ==================================================================
+       ottergit-ink —— 与宣传片共用的设计语言
+       纸 #F7F5F0 · 墨 #1A1917 · 蓝 #1A5382 · 铜 #C97B4A
+       4px 墨描边 / 无模糊硬投影 / 0 圆角（仅胶囊 999px）/ 宋体 900
+       ================================================================== */
     :root {
-      /* paper */
       --paper: #f7f5f0;
-      --paper-2: #fbfaf7;
-      --surface: #ffffff;
-      --line: #e3dfd7;
-      --line-2: #d6d0c3;
-
-      /* ink */
+      --paper-2: #efe9dd;
+      --paper-3: #fbf9f4;
       --ink: #1a1917;
-      --ink-2: #46433c;
-      --muted: #6e6a62;
-
-      /* blue — 取自 App 主色与墨蓝 */
+      --ink-2: #3b372f;
+      --muted: #6b665c;
       --blue: #1a5382;
-      --blue-soft: rgba(26, 83, 130, 0.08);
-      --blue-deep: #1b3a52;
-      --blue-deeper: #142e42;
+      --blue-deep: #143a5b;
+      --blue-soft: #dce7f0;
+      --brown: #c97b4a;
+      --brown-d: #9e5a30;
+      --steel: #7fa8c9;
+      --amber: #d9a441;
+      --line: #1a1917;
+      --line-soft: #cdc6b7;
 
-      /* type */
-      --serif: "Songti SC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, "Times New Roman", serif;
+      --serif: "Songti SC", "Songti TC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
       --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-      --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      --mono: "SF Mono", ui-monospace, Menlo, Consolas, "Courier New", monospace;
 
-      --t-hero: clamp(2.55rem, 6.1vw, 4.5rem);
-      --t-h2: clamp(1.85rem, 3.3vw, 2.75rem);
-      --t-h3: 1.1875rem;
-      --t-lead: clamp(1.0625rem, 1.15vw, 1.1875rem);
+      --t-dsp: clamp(2.5rem, 6.6vw, 5.25rem);
+      --t-h2: clamp(1.9rem, 4.2vw, 3.1rem);
+      --t-h3: clamp(1.25rem, 1.9vw, 1.5rem);
+      --t-lead: clamp(1.0625rem, 1.25vw, 1.25rem);
       --t-body: 1.0625rem;
       --t-sm: 0.9375rem;
       --t-xs: 0.8125rem;
-      --t-label: 0.6875rem;
+      --t-cap: 0.6875rem;
 
-      /* space */
       --s1: 4px;
       --s2: 8px;
       --s3: 12px;
@@ -60,23 +61,20 @@
       --s9: 96px;
       --s10: 128px;
 
-      --r-sm: 6px;
-      --r-md: 10px;
-      --r-lg: 16px;
-
-      --max: 1160px;
+      --max: 1180px;
+      --hard: 8px 8px 0 var(--ink);
+      --hard-lg: 12px 12px 0 var(--ink);
+      --hard-blue: 12px 12px 0 var(--blue);
       --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-      --dur: 560ms;
     }
 
     @media (min-width: 1024px) {
       :root {
-        --s9: 120px;
-        --s10: 160px;
+        --s9: 128px;
+        --s10: 168px;
       }
     }
 
-    /* ============ base ============ */
     *,
     *::before,
     *::after {
@@ -91,6 +89,7 @@
     html {
       scroll-behavior: smooth;
       -webkit-text-size-adjust: 100%;
+      scroll-padding-top: 84px;
     }
 
     body {
@@ -98,25 +97,21 @@
       font-size: var(--t-body);
       line-height: 1.78;
       color: var(--ink);
-      background-color: var(--paper);
-      background-image:
-        radial-gradient(1200px 620px at 50% -14%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 62%),
-        radial-gradient(900px 500px at 92% 2%, rgba(26, 83, 130, 0.045), rgba(26, 83, 130, 0) 60%);
-      background-repeat: no-repeat;
+      background: var(--paper);
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       overflow-x: hidden;
     }
 
-    /* 纸纹：极淡噪点 */
+    /* 纸纹：极淡噪点，别太干净 */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      opacity: 0.5;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+      opacity: 0.55;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
     }
 
     img,
@@ -131,14 +126,14 @@
       text-decoration: none;
     }
 
-    :focus-visible {
-      outline: 2px solid var(--blue);
-      outline-offset: 3px;
-      border-radius: 2px;
+    ::selection {
+      background: var(--amber);
+      color: var(--ink);
     }
 
-    ::selection {
-      background: rgba(26, 83, 130, 0.16);
+    :focus-visible {
+      outline: 3px solid var(--brown-d);
+      outline-offset: 3px;
     }
 
     .wrap {
@@ -148,62 +143,151 @@
       margin-inline: auto;
     }
 
-    /* ============ type helpers ============ */
-    .label {
-      font-family: var(--sans);
-      font-size: var(--t-label);
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--blue);
+    /* ---------- 字 ---------- */
+    .dsp {
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: var(--t-dsp);
+      line-height: 1.04;
+      letter-spacing: -0.015em;
     }
 
-    .label.plain {
-      text-transform: none;
-      letter-spacing: 0.08em;
-      font-size: var(--t-xs);
-      color: var(--muted);
-    }
-
-    h1,
     h2 {
       font-family: var(--serif);
-      font-weight: 600;
-      letter-spacing: 0.005em;
-      line-height: 1.34;
-      color: var(--ink);
+      font-weight: 900;
+      font-size: var(--t-h2);
+      line-height: 1.14;
+      letter-spacing: -0.012em;
     }
 
-    h2 {
-      font-size: var(--t-h2);
-      line-height: 1.38;
+    h3 {
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: var(--t-h3);
+      line-height: 1.34;
+      letter-spacing: 0;
     }
 
     .lede {
       font-size: var(--t-lead);
-      line-height: 1.85;
+      line-height: 1.82;
       color: var(--ink-2);
-      max-width: 34em;
+      max-width: 32em;
     }
 
-    /* ============ nav ============ */
+    .cap {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--mono);
+      font-size: var(--t-cap);
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .cap::before {
+      content: "";
+      width: 22px;
+      height: 3px;
+      background: var(--ink);
+      flex: none;
+    }
+
+    .cap.on-dark {
+      color: var(--paper);
+    }
+
+    .cap.on-dark::before {
+      background: var(--amber);
+    }
+
+    .hl {
+      background: linear-gradient(180deg, transparent 58%, var(--amber) 58%, var(--amber) 92%, transparent 92%);
+      padding-inline: 0.08em;
+    }
+
+    .blue {
+      color: var(--blue);
+    }
+
+    .copper {
+      color: var(--brown-d);
+    }
+
+    /* ---------- 按钮 ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 26px;
+      border: 3px solid var(--ink);
+      border-radius: 0;
+      background: var(--paper-3);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: var(--t-sm);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 5px 5px 0 var(--ink);
+      transition: transform 160ms var(--ease), box-shadow 160ms var(--ease), background 160ms var(--ease);
+    }
+
+    .btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .btn:active {
+      transform: translate(3px, 3px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .btn-ink {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .btn-ink:hover {
+      background: #000;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: #f4f9fc;
+    }
+
+    .btn-blue:hover {
+      background: var(--blue-deep);
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: var(--t-xs);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .btn-sm:hover {
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .btn svg {
+      flex: none;
+    }
+
+    /* ---------- 导航 ---------- */
     .nav {
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: rgba(247, 245, 240, 0.72);
-      -webkit-backdrop-filter: saturate(1.6) blur(14px);
-      backdrop-filter: saturate(1.6) blur(14px);
-      border-bottom: 1px solid transparent;
-      transition: border-color 300ms var(--ease), background 300ms var(--ease);
+      z-index: 60;
+      background: var(--paper);
+      border-bottom: 3px solid var(--ink);
     }
 
-    .nav.stuck {
-      border-bottom-color: var(--line);
-      background: rgba(247, 245, 240, 0.88);
-    }
-
-    .nav-inner {
+    .nav-in {
       display: flex;
       align-items: center;
       gap: var(--s5);
@@ -215,29 +299,28 @@
       align-items: center;
       gap: 10px;
       font-family: var(--serif);
-      font-size: 1.0625rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
+      font-weight: 900;
+      font-size: 1.125rem;
+      letter-spacing: 0.01em;
       white-space: nowrap;
     }
 
     .brand img {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--surface);
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--ink);
+      background: var(--paper-3);
     }
 
     .brand i {
-      font-family: var(--sans);
+      font-family: var(--mono);
       font-style: normal;
-      font-size: var(--t-label);
+      font-size: var(--t-cap);
       font-weight: 600;
-      letter-spacing: 0.16em;
+      letter-spacing: 0.18em;
       color: var(--muted);
       padding-left: 10px;
-      margin-left: 2px;
-      border-left: 1px solid var(--line-2);
+      border-left: 1px solid var(--line-soft);
     }
 
     .nav-links {
@@ -246,13 +329,13 @@
       align-items: center;
       gap: var(--s5);
       font-size: var(--t-sm);
-      color: var(--ink-2);
+      font-weight: 600;
     }
 
     .nav-links>a:not(.btn) {
       position: relative;
-      padding-block: 6px;
-      transition: color 220ms var(--ease);
+      padding-block: 4px;
+      transition: color 200ms var(--ease);
     }
 
     .nav-links>a:not(.btn)::after {
@@ -260,140 +343,112 @@
       position: absolute;
       left: 0;
       right: 0;
-      bottom: 0;
-      height: 1px;
-      background: currentColor;
+      bottom: -2px;
+      height: 3px;
+      background: var(--blue);
       transform: scaleX(0);
       transform-origin: left;
-      transition: transform 320ms var(--ease);
-    }
-
-    .nav-links>a:not(.btn):hover {
-      color: var(--blue);
+      transition: transform 260ms var(--ease);
     }
 
     .nav-links>a:not(.btn):hover::after {
       transform: scaleX(1);
     }
 
-    /* ============ buttons ============ */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--s2);
-      padding: 13px 24px;
-      min-height: 46px;
-      border: 1px solid transparent;
-      border-radius: var(--r-sm);
-      font-family: var(--sans);
-      font-size: var(--t-sm);
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: background 240ms var(--ease), color 240ms var(--ease),
-        border-color 240ms var(--ease), transform 240ms var(--ease);
-    }
-
-    .btn svg {
-      flex: none;
-    }
-
-    .btn-primary {
-      background: var(--blue);
-      color: #f6fafd;
-      box-shadow: 0 1px 2px rgba(20, 46, 66, 0.18), 0 10px 24px -12px rgba(26, 83, 130, 0.55);
-    }
-
-    .btn-primary:hover {
-      background: #14456d;
-      transform: translateY(-1px);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border-color: var(--line-2);
-      color: var(--ink);
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--blue);
-      color: var(--blue);
-      background: rgba(255, 255, 255, .6);
-    }
-
-    .btn-sm {
-      padding: 9px 16px;
-      min-height: 38px;
-      font-size: var(--t-xs);
-    }
-
-    .btn-light {
-      background: #fbfaf7;
-      color: var(--blue-deeper);
-      box-shadow: 0 1px 0 rgba(255, 255, 255, .4), 0 12px 28px -14px rgba(0, 0, 0, .4);
-    }
-
-    .btn-light:hover {
-      background: #fff;
-      transform: translateY(-1px);
-    }
-
-    .btn-outline-light {
-      border-color: rgba(251, 250, 247, 0.34);
-      color: #f0f4f7;
-    }
-
-    .btn-outline-light:hover {
-      border-color: rgba(251, 250, 247, 0.75);
-      background: rgba(255, 255, 255, .06);
-    }
-
-    /* ============ hero ============ */
+    /* ---------- 首屏 ---------- */
     .hero {
-      padding-top: var(--s7);
-      padding-bottom: var(--s8);
-      position: relative;
+      padding-top: clamp(36px, 5vw, 64px);
+      padding-bottom: clamp(48px, 6vw, 84px);
     }
 
-    .hero-copy {
-      max-width: 42rem;
+    .hero-top {
+      display: grid;
+      gap: var(--s6);
+      align-items: end;
     }
 
-    .hero .label {
-      display: block;
+    .hero .label-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--s3) var(--s4);
       margin-bottom: var(--s5);
     }
 
-    h1 {
-      font-size: var(--t-hero);
-      line-height: 1.22;
-      letter-spacing: 0.01em;
-    }
-
-    h1 .mk {
-      position: relative;
+    .hero h1 {
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: clamp(2.6rem, 7.9vw, 6.5rem);
+      line-height: 1;
+      letter-spacing: -0.03em;
       white-space: nowrap;
     }
 
-    h1 .mk::after {
-      content: "";
-      position: absolute;
-      left: 0.02em;
-      right: 0.02em;
-      bottom: 0.06em;
-      height: 0.055em;
-      background: var(--blue);
-      opacity: 0.28;
-      border-radius: 1px;
+    .hero h1 em {
+      font-style: normal;
+      color: var(--blue);
     }
 
-    .hero .lede {
+    .hero h1 .dot {
+      color: var(--brown);
+    }
+
+    /* 版本规格卡：填住首屏右侧，也把「你买到了什么」写清楚 */
+    .spec {
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: var(--hard);
+    }
+
+    .spec .spec-h {
+      border-bottom: 3px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      font-family: var(--mono);
+      font-size: var(--t-cap);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+    }
+
+    .spec dl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+    }
+
+    .spec dt,
+    .spec dd {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: var(--t-xs);
+      line-height: 1.5;
+    }
+
+    .spec dt {
+      font-family: var(--mono);
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .spec dd {
+      text-align: right;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .spec dl> :nth-last-child(2),
+    .spec dl> :last-child {
+      border-bottom: 0;
+    }
+
+    .hero-lede {
       margin-top: var(--s5);
+      max-width: 34em;
     }
 
-    .hero-actions {
+    .hero-act {
       margin-top: var(--s6);
       display: flex;
       flex-wrap: wrap;
@@ -402,56 +457,115 @@
 
     .hero-meta {
       margin-top: var(--s4);
+      font-family: var(--mono);
       font-size: var(--t-xs);
       color: var(--muted);
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
     }
 
     .hero-meta span+span::before {
-      content: "·";
-      margin: 0 0.6em;
-      color: var(--line-2);
+      content: "/";
+      margin: 0 0.7em;
+      color: var(--line-soft);
     }
 
+    .hero-grid {
+      margin-top: var(--s5);
+      display: grid;
+      gap: var(--s6);
+      align-items: start;
+    }
+
+    .hero-grid .hero-lede {
+      margin-top: 0;
+    }
+
+    /* 窗口大图 */
     .stage {
-      margin-top: var(--s7);
+      margin-top: clamp(32px, 4.5vw, 56px);
+    }
+
+    .frame-shot {
       position: relative;
+      border: 3px solid var(--ink);
+      background: #fff;
+      box-shadow: var(--hard-lg);
     }
 
-    .stage::before {
-      /* 窗下柔和投影盘 */
-      content: "";
-      position: absolute;
-      left: 8%;
-      right: 8%;
-      bottom: -4%;
-      height: 42%;
-      background: radial-gradient(ellipse at center, rgba(27, 58, 82, 0.16), rgba(27, 58, 82, 0) 68%);
-      filter: blur(18px);
-      pointer-events: none;
-    }
-
-    .window {
-      position: relative;
-      filter: drop-shadow(0 26px 52px rgba(27, 58, 82, 0.17));
-    }
-
-    .window img {
+    .frame-shot img {
       width: 100%;
     }
 
-    /* ============ section shell ============ */
-    section {
-      position: relative;
-      z-index: 1;
+    .frame-shot::after {
+      content: attr(data-tag);
+      position: absolute;
+      left: -3px;
+      bottom: calc(100% + 10px);
+      font-family: var(--mono);
+      font-size: var(--t-cap);
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--amber);
+      border: 2px solid var(--ink);
+      padding: 3px 9px;
     }
 
-    .section {
-      padding-block: var(--s9);
+    /* 滚动字条 */
+    .ticker {
+      margin-top: clamp(40px, 5vw, 64px);
+      border-block: 3px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      overflow: hidden;
+      padding-block: 10px;
     }
 
-    .section-head {
-      border-top: 1px solid var(--line);
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 34s linear infinite;
+    }
+
+    .ticker-track span {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      padding-inline: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .ticker-track span::after {
+      content: "◆";
+      color: var(--amber);
+      font-size: 0.7em;
+    }
+
+    @keyframes ticker {
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track {
+        animation: none;
+      }
+    }
+
+    /* ---------- 通用小节 ---------- */
+    .sec {
+      padding-block: clamp(56px, 8vw, 104px);
+    }
+
+    .sec-head {
+      border-top: 3px solid var(--ink);
       padding-top: var(--s5);
       display: flex;
       flex-wrap: wrap;
@@ -459,291 +573,567 @@
       gap: var(--s3) var(--s5);
     }
 
-    .section-head .num {
+    .sec-head .idx {
       font-family: var(--mono);
       font-size: var(--t-xs);
+      font-weight: 600;
       letter-spacing: 0.1em;
       color: var(--muted);
     }
 
-    .section-head .label {
-      color: var(--blue);
-    }
-
-    .section-head h2 {
+    .sec-head h2 {
       flex: 1 1 100%;
       margin-top: var(--s2);
     }
 
-    .section-head .aside {
+    .sec-head .aside {
       margin-left: auto;
+      font-family: var(--mono);
       font-size: var(--t-xs);
       color: var(--muted);
       letter-spacing: 0.04em;
     }
 
-    /* ============ features ============ */
-    .feats {
-      margin-top: var(--s7);
+    .sec-intro {
+      margin-top: var(--s5);
+    }
+
+    /* 编号 + 文案 + 截图 的交替块 */
+    .feat-row {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      border-top: 1px solid var(--line);
+      gap: clamp(28px, 4vw, 56px);
+      align-items: center;
+      padding-block: clamp(36px, 5vw, 64px);
+      border-top: 1px solid var(--line-soft);
     }
 
-    .feat {
-      padding: var(--s6) var(--s5) var(--s6) 0;
-      border-bottom: 1px solid var(--line);
-      border-right: 1px solid var(--line);
+    .feat-row:first-of-type {
+      border-top: 0;
     }
 
-    .feat:nth-child(3n) {
-      border-right: 0;
-      padding-right: 0;
-    }
-
-    .feat:nth-child(3n+1) {
-      padding-left: 0;
-    }
-
-    .feat:not(:nth-child(3n+1)) {
-      padding-left: var(--s5);
-    }
-
-    .feat:nth-child(n+4) {
-      border-bottom: 0;
-    }
-
-    /* 三张一组的补充段落：整组保留底边，避免只有首张带线的断裂感 */
-    .feats-triple > .feat {
-      border-bottom: 1px solid var(--line);
-    }
-
-    .feat .n {
+    .feat-copy .num {
+      display: inline-block;
       font-family: var(--mono);
       font-size: var(--t-xs);
-      letter-spacing: 0.12em;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 3px 10px;
+      margin-bottom: var(--s4);
+    }
+
+    .feat-copy h3 {
+      font-size: clamp(1.5rem, 3vw, 2.125rem);
+    }
+
+    .feat-copy p {
+      margin-top: var(--s3);
+      font-size: var(--t-sm);
+      line-height: 1.8;
+      color: var(--ink-2);
+      max-width: 30em;
+    }
+
+    .bullets {
+      margin-top: var(--s5);
+      list-style: none;
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .bullets li {
+      position: relative;
+      padding: var(--s3) 0 var(--s3) var(--s5);
+      border-bottom: 1px solid var(--line-soft);
+      font-size: var(--t-sm);
+      line-height: 1.7;
+      color: var(--ink-2);
+    }
+
+    .bullets li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      top: var(--s3);
+      font-family: var(--mono);
       color: var(--blue);
+      font-weight: 700;
+    }
+
+    .bullets b {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    /* ---------- 数据条 ---------- */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 3px solid var(--ink);
+      border-bottom: 3px solid var(--ink);
+    }
+
+    .stat {
+      padding: var(--s5) var(--s4) var(--s5) 0;
+    }
+
+    .stat+.stat {
+      padding-left: var(--s5);
+      border-left: 1px solid var(--line);
+    }
+
+    .stat b {
+      display: block;
+      font-family: var(--mono);
+      font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.02em;
+    }
+
+    .stat b small {
+      font-size: 0.44em;
+      letter-spacing: 0.02em;
+      margin-left: 0.16em;
+      font-family: var(--sans);
+    }
+
+    .stat span {
+      display: block;
+      margin-top: var(--s2);
+      font-size: var(--t-xs);
+      line-height: 1.62;
+      color: var(--muted);
+    }
+
+    /* ---------- 卡片组 ---------- */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--s5);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s5);
+    }
+
+    .card {
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: var(--hard);
+      padding: var(--s5);
+    }
+
+    .card .k {
+      font-family: var(--mono);
+      font-size: var(--t-cap);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brown-d);
       display: block;
       margin-bottom: var(--s3);
     }
 
-    .feat h3 {
-      font-family: var(--serif);
-      font-size: var(--t-h3);
-      font-weight: 600;
-      letter-spacing: 0.01em;
-    }
-
-    .feat p {
+    .card p {
       margin-top: var(--s2);
       font-size: var(--t-sm);
-      line-height: 1.72;
+      line-height: 1.76;
       color: var(--ink-2);
     }
 
-    /* ============ figure / caption ============ */
-    figure {
-      margin: 0;
+    /* ---------- 深色段 ---------- */
+    .dark {
+      background: var(--ink);
+      color: #f2efe8;
+      border-top: 3px solid var(--ink);
     }
 
-    .shot {
-      margin-top: var(--s7);
+    .dark .sec-head {
+      border-top-color: rgba(247, 245, 240, 0.24);
     }
 
-    .shot-frame {
-      border-radius: var(--r-md);
-      overflow: hidden;
-      background: var(--surface);
-      box-shadow: 0 1px 1px rgba(27, 58, 82, .05), 0 22px 48px -26px rgba(27, 58, 82, .42);
-      outline: 1px solid var(--line);
-      outline-offset: -1px;
+    .dark .sec-head .idx,
+    .dark .sec-head .aside {
+      color: rgba(247, 245, 240, 0.58);
     }
 
-    .shot-frame img {
-      width: 100%;
+    .dark h2,
+    .dark h3,
+    .dark .dsp {
+      color: #fbf8f2;
     }
 
-    figcaption {
-      margin-top: var(--s4);
-      padding-left: var(--s4);
-      border-left: 2px solid var(--line-2);
-      font-size: var(--t-xs);
-      line-height: 1.7;
-      color: var(--muted);
-      letter-spacing: 0.03em;
+    .dark .lede,
+    .dark p {
+      color: rgba(247, 245, 240, 0.82);
     }
 
-    figcaption b {
-      display: block;
-      font-family: var(--sans);
-      font-size: var(--t-label);
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--blue);
-      margin-bottom: 2px;
+    .dark .card {
+      background: #232019;
+      border-color: #f2efe8;
+      box-shadow: 8px 8px 0 var(--brown);
     }
 
-    /* ============ split layout ============ */
-    .split {
+    .dark .card .k {
+      color: var(--amber);
+    }
+
+    .dark .card p {
+      color: rgba(247, 245, 240, 0.8);
+    }
+
+    .dark .frame-shot {
+      border-color: #f2efe8;
+      box-shadow: 12px 12px 0 var(--steel);
+    }
+
+    .dark .bullets {
+      border-top-color: rgba(247, 245, 240, 0.2);
+    }
+
+    .dark .bullets li {
+      border-bottom-color: rgba(247, 245, 240, 0.2);
+      color: rgba(247, 245, 240, 0.82);
+    }
+
+    .dark .bullets li::before {
+      color: var(--amber);
+    }
+
+    .dark .bullets b {
+      color: #fbf8f2;
+    }
+
+    /* 四档权限 */
+    .perm {
       display: grid;
-      gap: var(--s7);
-      align-items: start;
-    }
-
-    .split-copy {
-      min-width: 0;
-    }
-
-    .split-copy .lede {
-      margin-top: var(--s5);
-    }
-
-    .steps {
-      margin-top: var(--s6);
-      border-top: 1px solid var(--line);
-    }
-
-    .steps li {
-      list-style: none;
-      display: grid;
-      grid-template-columns: 4.5rem 1fr;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: var(--s4);
-      padding: var(--s4) 0;
-      border-bottom: 1px solid var(--line);
-      font-size: var(--t-sm);
-      line-height: 1.7;
-      color: var(--ink-2);
+      margin-top: var(--s6);
     }
 
-    .steps b {
+    .perm-item {
+      border: 3px solid rgba(247, 245, 240, 0.5);
+      padding: var(--s4);
+      background: #1f1c16;
+    }
+
+    .perm-item .pi-n {
       font-family: var(--mono);
+      font-size: var(--t-cap);
+      letter-spacing: 0.18em;
+      color: var(--amber);
+    }
+
+    .perm-item h4 {
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: 1.25rem;
+      margin-top: var(--s2);
+      color: #fbf8f2;
+    }
+
+    .perm-item p {
+      margin-top: 6px;
       font-size: var(--t-xs);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--blue);
-      padding-top: 2px;
+      line-height: 1.7;
+      color: rgba(247, 245, 240, 0.72);
     }
 
-    .chips {
-      margin-top: var(--s5);
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--s2);
+    .perm-item.warn {
+      border-color: var(--amber);
+      background: var(--amber);
     }
 
-    .chip {
-      font-size: var(--t-xs);
-      letter-spacing: 0.03em;
-      color: var(--blue);
-      background: var(--blue-soft);
-      border: 1px solid rgba(26, 83, 130, 0.12);
-      border-radius: 999px;
-      padding: 5px 12px;
+    .perm-item.warn .pi-n,
+    .perm-item.warn h4,
+    .perm-item.warn p {
+      color: var(--ink);
     }
 
-    .split-visual {
-      border-radius: var(--r-md);
-      overflow: hidden;
-      background: var(--surface);
-      outline: 1px solid var(--line);
-      outline-offset: -1px;
-      box-shadow: 0 20px 44px -28px rgba(27, 58, 82, 0.45);
+    .perm-item.warn p {
+      color: #3b2f16;
     }
 
-    .split-visual img {
-      width: 100%;
-      /* 底部淡出，暗示对话还在往下走 */
-      -webkit-mask-image: linear-gradient(180deg, #000 88%, rgba(0, 0, 0, 0) 100%);
-      mask-image: linear-gradient(180deg, #000 88%, rgba(0, 0, 0, 0) 100%);
-    }
-
-    /* ============ film ============ */
+    /* ---------- 短片 ---------- */
     .film {
-      border-radius: var(--r-md);
-      overflow: hidden;
-      background: var(--blue-deeper);
-      box-shadow: 0 24px 56px -30px rgba(20, 46, 66, 0.6);
-      outline: 1px solid rgba(20, 46, 66, 0.12);
-      outline-offset: -1px;
+      border: 3px solid var(--ink);
+      box-shadow: var(--hard-lg);
+      background: #0d0c0a;
     }
 
     .film video {
       width: 100%;
       aspect-ratio: 16 / 9;
       object-fit: cover;
-      background: var(--blue-deeper);
+      background: #0d0c0a;
     }
 
-    /* ============ download ============ */
+    .chapters {
+      margin-top: var(--s6);
+      border-top: 3px solid var(--ink);
+    }
+
+    .chapters a {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr auto;
+      gap: var(--s4);
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: var(--t-sm);
+      transition: background 160ms var(--ease), padding 160ms var(--ease);
+    }
+
+    .chapters a:hover {
+      background: var(--paper-2);
+      padding-inline: 10px;
+    }
+
+    .chapters .tc {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      color: var(--blue);
+      letter-spacing: 0.06em;
+    }
+
+    .chapters .cn {
+      font-size: var(--t-xs);
+      color: var(--muted);
+      font-family: var(--mono);
+      letter-spacing: 0.08em;
+    }
+
+    /* ---------- 下载 ---------- */
     .dl {
       position: relative;
+      border: 3px solid var(--ink);
+      background: var(--blue);
+      color: #f4f9fc;
+      box-shadow: 12px 12px 0 var(--ink);
+      padding: clamp(28px, 4.5vw, 56px);
       overflow: hidden;
-      border-radius: var(--r-lg);
-      background:
-        radial-gradient(760px 340px at 88% -10%, rgba(88, 150, 197, 0.32), rgba(88, 150, 197, 0) 62%),
-        linear-gradient(168deg, #22475f 0%, var(--blue-deep) 52%, var(--blue-deeper) 100%);
-      color: #eef4f8;
-      padding: var(--s7) var(--s6);
-      box-shadow: 0 32px 64px -40px rgba(20, 46, 66, 0.85);
     }
 
     .dl::after {
       content: "";
       position: absolute;
-      right: -8%;
-      top: -40%;
-      width: 46%;
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 1px solid rgba(238, 244, 248, 0.12);
-      box-shadow: 0 0 0 44px rgba(238, 244, 248, 0.04);
+      right: -60px;
+      top: -60px;
+      width: 220px;
+      height: 220px;
+      border: 3px solid rgba(244, 249, 252, 0.28);
+      transform: rotate(18deg);
       pointer-events: none;
     }
 
-    .dl .label {
-      color: rgba(238, 244, 248, 0.66);
-      position: relative;
+    .dl .cap {
+      color: #cfe2f0;
+    }
+
+    .dl .cap::before {
+      background: var(--amber);
     }
 
     .dl h2 {
-      color: #fdfefe;
+      color: #fff;
       margin-top: var(--s4);
-      position: relative;
     }
 
     .dl p {
+      position: relative;
       margin-top: var(--s4);
-      color: rgba(238, 244, 248, 0.76);
-      max-width: 32em;
+      max-width: 34em;
       font-size: var(--t-sm);
       line-height: 1.8;
-      position: relative;
+      color: rgba(244, 249, 252, 0.86);
     }
 
-    .dl-actions {
+    .dl .btn {
+      border-color: var(--ink);
+      box-shadow: 5px 5px 0 var(--ink);
+    }
+
+    .dl-act {
+      position: relative;
       margin-top: var(--s6);
       display: flex;
       flex-wrap: wrap;
       gap: var(--s3);
-      position: relative;
     }
 
     .dl-note {
-      margin-top: var(--s5);
-      font-size: var(--t-xs);
-      color: rgba(238, 244, 248, 0.64);
-      letter-spacing: 0.04em;
       position: relative;
+      margin-top: var(--s5);
+      max-width: none;
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      color: rgba(244, 249, 252, 0.7);
+      letter-spacing: 0.03em;
     }
 
-    /* ============ footer ============ */
+    .dl code {
+      font-family: var(--mono);
+      font-size: 0.9em;
+      background: rgba(12, 26, 38, 0.28);
+      border: 1px solid rgba(244, 249, 252, 0.28);
+      padding: 1px 6px;
+    }
+
+    /* ---------- 品牌 ---------- */
+    .brandblock {
+      display: grid;
+      gap: clamp(28px, 4vw, 56px);
+      align-items: center;
+    }
+
+    .brandmark {
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: var(--hard);
+      padding: var(--s5);
+      display: grid;
+      place-items: center;
+    }
+
+    .brandmark img {
+      width: min(220px, 48vw);
+    }
+
+    .swatches {
+      margin-top: var(--s5);
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      border: 3px solid var(--ink);
+    }
+
+    .sw {
+      height: 56px;
+      position: relative;
+      border-right: 1px solid rgba(26, 25, 23, 0.25);
+    }
+
+    .sw:last-child {
+      border-right: 0;
+    }
+
+    .sw span {
+      position: absolute;
+      left: 6px;
+      bottom: 4px;
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      opacity: 0.7;
+    }
+
+    .type-spec {
+      margin-top: var(--s5);
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .type-spec div {
+      display: flex;
+      justify-content: space-between;
+      gap: var(--s4);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: var(--t-xs);
+      color: var(--ink-2);
+    }
+
+    .type-spec b {
+      font-family: var(--mono);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ---------- FAQ ---------- */
+    .faq {
+      margin-top: var(--s6);
+      border-top: 3px solid var(--ink);
+    }
+
+    .faq details {
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .faq summary {
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s4);
+      padding: var(--s5) 0;
+      font-family: var(--serif);
+      font-weight: 900;
+      font-size: 1.1875rem;
+      line-height: 1.5;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary .q {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--blue);
+      padding-top: 6px;
+      flex: none;
+    }
+
+    .faq summary .sign {
+      margin-left: auto;
+      flex: none;
+      font-family: var(--mono);
+      font-size: 1.25rem;
+      line-height: 1;
+      color: var(--ink);
+      padding-top: 2px;
+    }
+
+    .faq summary .sign::before {
+      content: "+";
+    }
+
+    .faq details[open] summary .sign::before {
+      content: "−";
+    }
+
+    .faq details[open] summary .sign {
+      color: var(--brown-d);
+    }
+
+    .faq .a {
+      padding: 0 0 var(--s5) 3.2rem;
+      max-width: 52em;
+    }
+
+    .faq .a p {
+      font-size: var(--t-sm);
+      line-height: 1.82;
+      color: var(--ink-2);
+    }
+
+    .faq .a p+p {
+      margin-top: var(--s3);
+    }
+
+    /* ---------- 尾 ---------- */
     footer {
       position: relative;
       z-index: 1;
-      margin-top: var(--s8);
+      border-top: 3px solid var(--ink);
       padding-block: var(--s6) var(--s7);
-      border-top: 1px solid var(--line);
       font-size: var(--t-xs);
       color: var(--muted);
     }
@@ -752,7 +1142,7 @@
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: var(--s4) var(--s5);
+      gap: var(--s4) var(--s6);
     }
 
     .foot .brand {
@@ -761,8 +1151,8 @@
     }
 
     .foot .brand img {
-      width: 24px;
-      height: 24px;
+      width: 26px;
+      height: 26px;
     }
 
     .foot-links {
@@ -770,10 +1160,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: var(--s5);
-    }
-
-    .foot-links a {
-      transition: color 220ms var(--ease);
+      font-weight: 600;
     }
 
     .foot-links a:hover {
@@ -782,14 +1169,16 @@
 
     .foot-copy {
       flex-basis: 100%;
+      font-family: var(--mono);
       letter-spacing: 0.03em;
+      line-height: 1.9;
     }
 
-    /* ============ motion ============ */
+    /* ---------- 进场 ---------- */
     .rise {
       opacity: 0;
-      transform: translateY(18px);
-      transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+      transform: translateY(20px);
+      transition: opacity 560ms var(--ease), transform 560ms var(--ease);
     }
 
     .rise.in {
@@ -797,16 +1186,19 @@
       transform: none;
     }
 
-    .rise[data-d="1"] {
-      transition-delay: 80ms;
+    /* ?static=1：给截图与印刷用，进场动画直接落位 */
+    html.static {
+      scroll-behavior: auto;
     }
 
-    .rise[data-d="2"] {
-      transition-delay: 160ms;
+    html.static .rise {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
     }
 
-    .rise[data-d="3"] {
-      transition-delay: 240ms;
+    html.static .ticker-track {
+      animation: none !important;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -814,67 +1206,91 @@
         scroll-behavior: auto;
       }
 
-      *,
-      *::before,
-      *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-
       .rise {
         opacity: 1;
         transform: none;
+        transition: none;
       }
     }
 
-    /* ============ responsive ============ */
+    /* ---------- 响应式 ---------- */
     @media (min-width: 900px) {
-      .split {
-        grid-template-columns: minmax(0, 1fr) 340px;
-        gap: var(--s8);
+      .feat-row {
+        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
       }
 
-      .dl {
-        padding: var(--s8) var(--s7);
+      .feat-row.flip>.feat-copy {
+        order: 2;
+      }
+
+      .brandblock {
+        grid-template-columns: 320px minmax(0, 1fr);
+      }
+
+      .hero-top {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-grid {
+        grid-template-columns: minmax(0, 1fr) 284px;
+        gap: var(--s7);
       }
     }
 
     @media (max-width: 899px) {
-      .feats {
+      .grid-3,
+      .grid-2,
+      .perm {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+        row-gap: var(--s5);
       }
 
-      .feat:nth-child(3n) {
-        border-right: 1px solid var(--line);
-        padding-right: var(--s5);
-      }
-
-      .feat:nth-child(2n) {
-        border-right: 0;
-        padding-right: 0;
-      }
-
-      .feat:nth-child(2n+1) {
+      .stat+.stat {
+        border-left: 0;
         padding-left: 0;
       }
 
-      .feat:nth-child(n+4) {
-        border-bottom: 1px solid var(--line);
+      .stat:nth-child(even) {
+        padding-left: var(--s4);
+        border-left: 1px solid var(--line);
       }
 
-      .feat:nth-last-child(-n+2) {
-        border-bottom: 0;
+      .stat:nth-child(n+3) {
+        border-top: 1px solid var(--line);
+        padding-top: var(--s4);
       }
 
-      .split-visual {
-        max-width: 420px;
-        margin-inline: auto;
+      .swatches {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .brandblock {
+        grid-template-columns: minmax(0, 1fr);
       }
     }
 
     @media (max-width: 719px) {
-      .nav-inner {
+      :root {
+        --t-dsp: clamp(2.1rem, 10.5vw, 2.9rem);
+        --hard: 6px 6px 0 var(--ink);
+        --hard-lg: 7px 7px 0 var(--ink);
+        --hard-blue: 7px 7px 0 var(--blue);
+      }
+
+      .hero h1 {
+        white-space: normal;
+      }
+
+      .hero-act .btn,
+      .dl-act .btn {
+        width: 100%;
+      }
+
+      .nav-in {
         height: 60px;
       }
 
@@ -886,33 +1302,24 @@
         display: none;
       }
 
-      .feats {
-        grid-template-columns: 1fr;
+      .chapters a {
+        grid-template-columns: 4rem 1fr;
       }
 
-      .feat,
-      .feat:nth-child(3n),
-      .feat:nth-child(2n) {
-        border-right: 0;
+      .chapters .cn {
+        display: none;
+      }
+
+      .faq .a {
         padding-left: 0;
-        padding-right: 0;
-        border-bottom: 1px solid var(--line);
       }
 
-      .feat:last-child {
-        border-bottom: 0;
+      .faq summary .q {
+        display: none;
       }
 
-      .hero {
-        padding-top: var(--s6);
-      }
-
-      .steps li {
-        grid-template-columns: 3.6rem 1fr;
-      }
-
-      figcaption {
-        font-size: 0.75rem;
+      .frame-shot::after {
+        display: none;
       }
     }
   </style>
@@ -921,268 +1328,583 @@
 <body>
 
   <header class="nav" id="nav">
-    <div class="wrap nav-inner">
+    <div class="wrap nav-in">
       <a class="brand" href="#top" aria-label="水獭 Git 首页">
-        <img src="assets/otter_logo_clear.png" alt="" width="30" height="30" />
+        <img src="assets/otter_logo_clear.png" alt="" width="32" height="32" />
         水獭 Git <i>OTTERGIT</i>
       </a>
       <nav class="nav-links" aria-label="站内导航">
         <a href="#features">功能</a>
-        <a href="#diff">差异</a>
         <a href="#copilot">小獭</a>
-        <a href="#film">视频</a>
-        <a class="btn btn-primary btn-sm keep" href="#download">下载</a>
+        <a href="#film">短片</a>
+        <a href="#faq">问题</a>
+        <a class="btn btn-ink btn-sm keep" href="#download">下载 v1.0.2</a>
       </nav>
     </div>
   </header>
 
   <main id="top">
 
-    <!-- ========== hero ========== -->
+    <!-- ============ 首屏 ============ -->
     <section class="hero" aria-labelledby="hero-title">
-      <div class="wrap">
-        <div class="hero-copy">
-          <p class="label plain">macOS · Git 客户端</p>
-          <h1 id="hero-title">会帮你<span class="mk">盯仓库</span>的<br />Git 客户端</h1>
-          <p class="lede">打开就是提交历史，点一行看改动，冲突分块解决。说一句「提交推送」，剩下几步小獭来跑。</p>
-          <div class="hero-actions">
-            <a class="btn btn-primary"
-              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
-              target="_blank" rel="noopener">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              下载最新版
-            </a>
-            <a class="btn btn-ghost" href="#film">看 30 秒介绍</a>
+      <div class="wrap hero-top">
+        <div>
+          <div class="label-row">
+            <span class="cap">MACOS 原生 · GIT 客户端</span>
+            <span class="cap" style="color: var(--muted)">v1.0.2 · 21 MB</span>
           </div>
-          <p class="hero-meta"><span>Apple Silicon</span><span>免费</span><span>已签名并公证</span></p>
+          <h1 id="hero-title">看得清，<em>不瞎猜</em><span class="dot">。</span></h1>
+          <div class="hero-grid">
+            <div>
+              <p class="lede hero-lede">
+                <code style="font-family: var(--mono); font-size: 0.94em">git push</code> 被拒的那一刻，多数人打开浏览器开始搜报错。
+                水獭 Git 让你不用搜：<span class="hl">落后几个、分没分叉、哪个文件冲突</span>，
+                全在同一屏里摊开。说不清的地方，小獭先问你——它不替你猜。
+              </p>
+              <div class="hero-act">
+                <a class="btn btn-ink" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
+                  target="_blank" rel="noopener">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                      stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  下载 v1.0.2 · ARM64
+                </a>
+                <a class="btn" href="#film">先看 97 秒短片</a>
+              </div>
+              <p class="hero-meta"><span>macOS 12+</span><span>Apple Silicon</span><span>已签名 · 已公证</span><span>免费，无账号</span></p>
+            </div>
+
+            <aside class="spec" aria-label="版本规格">
+              <p class="spec-h">Release · v1.0.2</p>
+              <dl>
+                <dt>体积</dt>
+                <dd>21 MB</dd>
+                <dt>系统</dt>
+                <dd>macOS 12+</dd>
+                <dt>芯片</dt>
+                <dd>Apple Silicon</dd>
+                <dt>签名</dt>
+                <dd>已公证</dd>
+                <dt>价格</dt>
+                <dd style="color: var(--brown-d)">免费</dd>
+                <dt>账号</dt>
+                <dd>不需要</dd>
+              </dl>
+            </aside>
+          </div>
         </div>
       </div>
 
       <div class="wrap stage">
-        <div class="window">
+        <div class="frame-shot rise" data-tag="一个窗口 · 真操作">
           <picture>
-            <source srcset="assets/shots/hero.webp" type="image/webp" />
-            <img src="assets/shots/hero.png" width="2400" height="1506"
-              alt="水獭 Git 主窗口：左侧仓库与分支，中间历史列表与双栏 diff，右侧小獭 AI 对话" />
+            <source srcset="assets/shots/window.webp" type="image/webp" />
+            <img src="assets/shots/window.png" width="1600" height="1026"
+              alt="水獭 Git 主窗口：左边仓库与分支，中间提交列表、变更文件与逐行对比，右边小獭对话，底部状态栏显示分支与提交数" />
           </picture>
         </div>
       </div>
-    </section>
 
-    <!-- ========== features ========== -->
-    <section class="section" id="features" aria-labelledby="features-title">
-      <div class="wrap">
-        <div class="section-head rise">
-          <span class="num">01</span>
-          <span class="label">Features</span>
-          <h2 id="features-title">每天要用的几个动作，都在顶栏</h2>
+      <div class="wrap" style="margin-top: clamp(28px, 4vw, 48px)">
+        <div class="stats rise">
+          <div class="stat">
+            <b>148<small>条</small></b>
+            <span>历史列表顶上就数给你看，不用 scroll 到底</span>
+          </div>
+          <div class="stat">
+            <b>+278<small></small></b>
+            <span>一次重构的真实增删，绿的加、灰的删，不糊在一起</span>
+          </div>
+          <div class="stat">
+            <b>297<small>次</small></b>
+            <span>小獭这个月的请求数，含 14 次失败，一次没抹掉</span>
+          </div>
+          <div class="stat">
+            <b>0<small>个</small></b>
+            <span>账号、订阅、广告位，全都没有</span>
+          </div>
         </div>
+      </div>
 
-        <div class="feats">
-          <article class="feat rise">
-            <span class="n">01</span>
-            <h3>历史泳道</h3>
-            <p>分支线画在左边，右键就能检出、合并、打补丁。</p>
-          </article>
-          <article class="feat rise" data-d="1">
-            <span class="n">02</span>
-            <h3>双栏 diff</h3>
-            <p>行号对齐，改了哪几行一眼看到；图片也能并排比。</p>
-          </article>
-          <article class="feat rise" data-d="2">
-            <span class="n">03</span>
-            <h3>冲突化解</h3>
-            <p>有争议的块留给你选，没争议的直接过。</p>
-          </article>
-          <article class="feat rise">
-            <span class="n">04</span>
-            <h3>仓库集合</h3>
-            <p>常开的几个仓库存成书签，双击就进去。</p>
-          </article>
-          <article class="feat rise" data-d="1">
-            <span class="n">05</span>
-            <h3>小獭</h3>
-            <p>说一句「提交推送」，它拆步骤、写说明；拿不准时先问你，不替你猜。</p>
-          </article>
-          <article class="feat rise" data-d="2">
-            <span class="n">06</span>
-            <h3>菜单栏托盘</h3>
-            <p>不打开主窗口，也能看到当前分支差几个提交。</p>
-          </article>
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker-track">
+          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>97 秒，无旁白</span>
+          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>97 秒，无旁白</span>
         </div>
       </div>
     </section>
 
-    <!-- ========== diff ========== -->
-    <section class="section" id="diff" aria-labelledby="diff-title">
+    <!-- ============ 01 痛点 ============ -->
+    <section class="sec" aria-labelledby="pain-title" style="padding-top: 0">
       <div class="wrap">
-        <div class="section-head rise">
-          <span class="num">02</span>
-          <span class="label">Diff</span>
-          <span class="aside">原文件 · 变更文件</span>
-          <h2 id="diff-title">左边原文件，右边改后的</h2>
+        <div class="sec-head rise">
+          <span class="idx">01</span>
+          <span class="cap">三条命令，零个解释</span>
         </div>
-        <p class="lede rise" style="margin-top: var(--s5);">
-          行号对齐，加的行标绿，删掉的标灰。可以整块暂存，也可以只挑一块。
+        <h2 id="pain-title" class="rise" style="margin-top: var(--s5)">
+          Git 什么都知道，<br>就是不肯好好说。
+        </h2>
+        <p class="lede rise" style="margin-top: var(--s5)">
+          <code style="font-family:var(--mono);font-size:.94em">git push</code> 回你一句
+          <code style="font-family:var(--mono);font-size:.94em">non-fast-forward</code>；
+          <code style="font-family:var(--mono);font-size:.94em">git status</code> 甩你四十行英文。
+          你真正想知道的只有三件事：<b>落后几个、分没分叉、哪个文件打架</b>。
+          这三件事，命令行从来不肯直接告诉你。
         </p>
-
-        <figure class="shot rise">
-          <div class="shot-frame">
-            <picture>
-              <source srcset="assets/shots/diff.webp" type="image/webp" />
-              <img src="assets/shots/diff.png" width="1560" height="952" loading="lazy" decoding="async"
-                alt="双栏 diff 视图：左侧提交信息与变更文件清单，右侧原文件与变更文件逐行对照，新增行带浅绿底色" />
-            </picture>
-          </div>
-          <figcaption>
-            <b>双栏 diff</b>
-            提交信息、+&#8722; 行数和文件清单都在上面。绿色是加的行，灰色是删掉的块。
-          </figcaption>
-        </figure>
+        <p class="lede rise" style="margin-top: var(--s4)">
+          所以水獭 Git 把它画出来。不是把终端包一层皮，是把状态摊平。
+        </p>
       </div>
     </section>
 
-    <!-- ========== copilot ========== -->
-    <section class="section" id="copilot" aria-labelledby="copilot-title">
+    <!-- ============ 02 功能 ============ -->
+    <section class="sec" id="features" aria-labelledby="feat-title" style="padding-top: 0">
       <div class="wrap">
-        <div class="section-head rise">
-          <span class="num">03</span>
-          <span class="label">Copilot</span>
-          <span class="aside">小獭</span>
-          <h2 id="copilot-title">说一句「提交推送」</h2>
+        <div class="sec-head rise">
+          <span class="idx">02</span>
+          <span class="cap">Features</span>
+          <span class="aside">六件事，天天遇到</span>
+          <h2 id="feat-title">该有的都有，不该弹的一个不弹</h2>
         </div>
 
-        <div class="split" style="margin-top: var(--s7);">
-          <div class="split-copy rise">
-            <p class="lede">
-              它先把步骤列出来：暂存、写说明、提交、推送。做完一步勾一步，中途可以叫停。
+        <div class="feat-row rise">
+          <div class="feat-copy">
+            <span class="num">01</span>
+            <h3>提交历史，一条泳道</h3>
+            <p>
+              分支线画在最左边，谁合了谁、谁从哪儿分出去，跟着线走一遍就明白了。
+              每条提交的哈希、作者、日期、+- 行数排在同一行。
             </p>
-            <div class="chips">
-              <span class="chip">一句话</span>
-              <span class="chip">自动写说明</span>
-              <span class="chip">推送前确认</span>
-            </div>
-            <ol class="steps">
-              <li><b>意图</b><span>你说一句，它自己排顺序，不用一条条点。</span></li>
-              <li><b>执行</b><span>每一步都写在对话里，做没做一眼能看到。</span></li>
-              <li><b>确认</b><span>推送前会问一次；也可以设成不再问。</span></li>
-            </ol>
+            <ul class="bullets">
+              <li><b>148 条提交</b>，列表顶上直接报数，不用滚到底去数</li>
+              <li>右键任意提交：检出、合并到当前分支、打补丁、复制哈希</li>
+              <li>远端领先落后，鼠标停一下就浮出来，不用敲 <code>git status</code></li>
+            </ul>
           </div>
-
-          <figure class="split-visual rise" data-d="1">
+          <figure class="frame-shot" data-tag="历史 · 真录屏">
             <picture>
-              <source srcset="assets/shots/ai.webp" type="image/webp" />
-              <img src="assets/shots/ai.png" width="760" height="1113" loading="lazy" decoding="async"
-                alt="小獭侧栏：用户说「提交推送」，小獭列出暂存、写说明、提交、推送四步并逐步完成" />
+              <source srcset="assets/shots/history.webp" type="image/webp" />
+              <img src="assets/shots/history.png" width="1600" height="1026" loading="lazy" decoding="async"
+                alt="提交历史列表：左侧分支泳道，每行显示提交信息、哈希、作者、日期与增删行数" />
             </picture>
           </figure>
         </div>
 
-        <!-- 小獭的三个新能力 -->
-        <div class="feats feats-triple" style="margin-top: var(--s7);">
-          <article class="feat rise">
-            <span class="n">01</span>
-            <h3>不该猜的时候，先问你</h3>
+        <div class="feat-row flip rise">
+          <div class="feat-copy">
+            <span class="num">02</span>
+            <h3>逐行对比，行号对到同一行</h3>
             <p>
-              暂存了一半、工作区还剩一半，它不会替你决定，而是问「只提交已暂存的，还是全部一起」，
-              点一下就能选。状态清楚时不啰嗦，直接做。
+              三栏并排：左边提交、中间变更文件、右边逐行对照。原文件和改后的文件行号一一对齐，
+              加的行标绿，删掉的标灰，不会因为多了一行就整段错位。
             </p>
-          </article>
-          <article class="feat rise" data-d="1">
-            <span class="n">02</span>
-            <h3>会做仓库体检</h3>
-            <p>
-              问「为什么推不上去」，它给的不是猜测而是依据：领先 2 个、落后 3 个，
-              直接 pull 会造合并提交，建议改走变基。分叉、游离 HEAD、没设上游都能查。
-            </p>
-          </article>
-          <article class="feat rise" data-d="2">
-            <span class="n">03</span>
-            <h3>记得住上下文</h3>
-            <p>
-              同一个仓库连着追问，没变的状态不会反复重发，能命中服务端缓存，
-              更快也更省。命中率在侧栏和用量页直接可见，不用凭感觉。
-            </p>
-          </article>
+            <ul class="bullets">
+              <li>可以<b>整块暂存</b>，也可以<b>只挑一块</b>——把无关的改动留在工作区</li>
+              <li>图片、二进制文件也能并排比，不用退回命令行</li>
+              <li>一次重构的真账：<b>+278 / −22</b>，数字就在标题下面</li>
+            </ul>
+          </div>
+          <figure class="frame-shot" data-tag="逐行 · 三栏">
+            <picture>
+              <source srcset="assets/shots/diff.webp" type="image/webp" />
+              <img src="assets/shots/diff.png" width="1560" height="952" loading="lazy" decoding="async"
+                alt="三栏对比视图：提交信息与变更文件清单、原文件、变更文件逐行对照，新增行带绿色底" />
+            </picture>
+          </figure>
         </div>
-      </div>
-    </section>
 
-    <!-- ========== detail ========== -->
-    <section class="section" id="detail" aria-labelledby="detail-title">
-      <div class="wrap">
-        <div class="section-head rise">
-          <span class="num">04</span>
-          <span class="label">Detail</span>
-          <span class="aside">设置</span>
-          <h2 id="detail-title">语言、主题、模型，都在设置里</h2>
+        <div class="rise" style="padding-block: clamp(36px, 5vw, 56px); border-top: 1px solid var(--line-soft)">
+          <div class="feat-copy">
+            <span class="num">03</span>
+            <h3>冲突不是灾难，是选择题</h3>
+            <p>
+              冲突被切成一块一块：没争议的自动过，有争议的摆在你面前选左边、选右边，还是自己写。
+              三方对照摆在同一行上，谁改了什么一眼看得见。
+            </p>
+          </div>
+          <div class="grid-3" style="margin-top: var(--s5)">
+            <article class="card">
+              <span class="k">逐块</span>
+              <h3 style="font-size:1.0625rem">一块一块挑</h3>
+              <p>不让你对着满屏 <code style="font-family:var(--mono);font-size:.9em">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> 删符号。选中哪块留哪块，选完直接提交。</p>
+            </article>
+            <article class="card">
+              <span class="k">三方</span>
+              <h3 style="font-size:1.0625rem">原、我、他</h3>
+              <p>基准版、你的改动、对方的改动并排摆着。谁先动的手，看得清。</p>
+            </article>
+            <article class="card">
+              <span class="k">自动</span>
+              <h3 style="font-size:1.0625rem">没争议的直接过</h3>
+              <p>不冲突的块自动合并，只把真正打架的那几行留给你。</p>
+            </article>
+          </div>
         </div>
-        <p class="lede rise" style="margin-top: var(--s5);">
-          自动刷新的间隔能改；小獭用哪个模型、能碰什么、跑多快，也在这一页。
-        </p>
 
-        <figure class="shot rise">
-          <div class="shot-frame">
+        <div class="feat-row rise">
+          <div class="feat-copy">
+            <span class="num">04</span>
+            <h3>五个仓库，一栏扫完</h3>
+            <p>
+              常开的仓库收进一个列表，路径、分支、最后改动都写在名字下面。
+              双击就进去，切仓库不用 <code>cd</code> 到另一个目录再敲命令。
+            </p>
+            <ul class="bullets">
+              <li>仓库集合按文件夹分组，<b>5 个仓库同屏</b>，谁没提交一眼看到</li>
+              <li>新建、克隆、初始化都在同一个入口，克隆完自动加进来</li>
+              <li>菜单栏托盘常驻：不打开主窗口也知道当前分支差几个提交</li>
+            </ul>
+          </div>
+          <figure class="frame-shot" data-tag="仓库 · 一栏">
+            <picture>
+              <source srcset="assets/shots/repos.webp" type="image/webp" />
+              <img src="assets/shots/repos.png" width="1600" height="1026" loading="lazy" decoding="async"
+                alt="仓库切换面板：列表里五个仓库，每行显示名称、本地路径与当前分支" />
+            </picture>
+          </figure>
+        </div>
+
+        <div class="feat-row flip rise">
+          <div class="feat-copy">
+            <span class="num">05</span>
+            <h3>顺手的那个样子</h3>
+            <p>
+              主题跟着系统走，字号随你调；git 可执行文件路径能自己指定——
+              用 homebrew 装的那份、或者系统自带的那份，都行。
+            </p>
+            <ul class="bullets">
+              <li>浅色 / 深色 / 跟随系统，三选一，不重启就生效</li>
+              <li>界面语言中英切换，Git 提示原文不改写</li>
+              <li>自动检查更新可以关掉。它不该在你提交到一半时弹窗</li>
+            </ul>
+          </div>
+          <figure class="frame-shot" data-tag="偏好 · 设置">
             <picture>
               <source srcset="assets/shots/settings.webp" type="image/webp" />
-              <img src="assets/shots/settings.png" width="2000" height="1255" loading="lazy" decoding="async"
-                alt="水獭 Git 设置窗口：左侧分类导航，右侧是小獭的模型管理、对话偏好与生成速率" />
+              <img src="assets/shots/settings.png" width="1600" height="1026" loading="lazy" decoding="async"
+                alt="设置面板：外观主题、界面语言、Git 可执行文件路径与自动检查更新开关" />
             </picture>
-          </div>
-          <figcaption>
-            <b>设置</b>
-            左边选分类，右边改，不用翻配置文件。
-          </figcaption>
-        </figure>
+          </figure>
+        </div>
+
+        <div class="grid-3 rise" style="margin-top: var(--s6)">
+          <article class="card">
+            <span class="k">托盘</span>
+            <h3 style="font-size:1.0625rem">菜单栏那一小块</h3>
+            <p>NSStatusItem 挂在菜单栏上，鼠标一停就能看到分支、远程差。不开主窗口也能知道要不要拉一下。</p>
+          </article>
+          <article class="card">
+            <span class="k">bisect</span>
+            <h3 style="font-size:1.0625rem">二分查错</h3>
+            <p>哪次提交把功能弄坏了？<code style="font-family:var(--mono);font-size:.9em">git bisect</code> 有界面，标好、标坏，它自己二分。</p>
+          </article>
+          <article class="card">
+            <span class="k">补丁</span>
+            <h3 style="font-size:1.0625rem">把提交搬走</h3>
+            <p>改错分支了？挑一个提交生成 patch，带到正确的分支上接着用。</p>
+          </article>
+          <article class="card">
+            <span class="k">书签</span>
+            <h3 style="font-size:1.0625rem">记住你常去的地方</h3>
+            <p>仓库、分支、搜索条件都能存成书签，下次一点就到。</p>
+          </article>
+          <article class="card">
+            <span class="k">搜索</span>
+            <h3 style="font-size:1.0625rem">按提交信息、作者、哈希找</h3>
+            <p>跨分支搜索，结果直接落到历史列表里，选中就能看 diff。</p>
+          </article>
+          <article class="card">
+            <span class="k">快捷键</span>
+            <h3 style="font-size:1.0625rem">键盘一路敲到底</h3>
+            <p>提交、拉取、推送、切换分支都有快捷键，按 <code style="font-family:var(--mono);font-size:.9em">?</code> 出一览。</p>
+          </article>
+        </div>
       </div>
     </section>
 
-    <!-- ========== film ========== -->
-    <section class="section" id="film" aria-labelledby="film-title">
+    <!-- ============ 03 小獭 ============ -->
+    <section class="sec dark" id="copilot" aria-labelledby="copilot-title">
       <div class="wrap">
-        <div class="section-head rise">
-          <span class="num">05</span>
-          <span class="label">Film</span>
-          <span class="aside">约 44 秒</span>
-          <h2 id="film-title">查看视频介绍</h2>
+        <div class="sec-head rise">
+          <span class="idx">03</span>
+          <span class="cap on-dark">Copilot · 小獭</span>
+          <span class="aside">AI 真干活，不是加了个聊天框</span>
+          <h2 id="copilot-title">它动手之前，<br>先问你</h2>
         </div>
-        <p class="lede rise" style="margin-top: var(--s5);">
-          更详细了解。
+
+        <p class="lede rise" style="margin-top: var(--s5)">
+          小獭读得到你的仓库状态，也动得了你的分支——所以它不靠「聪明」赢得信任，靠规矩。
+          三条纪律，三档权限，一本连失败都记着的账。
         </p>
 
-        <div class="film rise" style="margin-top: var(--s6);">
-          <video controls playsinline preload="none" poster="assets/shots/hero.webp" aria-label="水獭 Git 产品演示视频">
-            <source src="assets/ottergit-promo.mp4" type="video/mp4" />
-            你的浏览器不支持内嵌视频，可<a href="assets/ottergit-promo.mp4">直接下载观看</a>。
-          </video>
+        <div class="grid-3 rise" style="margin-top: var(--s6)">
+          <article class="card">
+            <span class="k">纪律一</span>
+            <h3 style="font-size:1.125rem">拿不准，先问</h3>
+            <p>暂存了一半、工作区还剩一半，它不替你做决定，把两个选项摆出来：「只提交已暂存的，还是全部一起」。你说清楚的时候，它一句废话没有。</p>
+          </article>
+          <article class="card">
+            <span class="k">纪律二</span>
+            <h3 style="font-size:1.125rem">给依据，不给玄学</h3>
+            <p>问「为什么推不上去」，它答的是「领先 2 个、落后 3 个，直接 pull 会造一个合并提交，建议改走变基」——分叉、游离 HEAD、没设上游，一条条查给你看。</p>
+          </article>
+          <article class="card">
+            <span class="k">纪律三</span>
+            <h3 style="font-size:1.125rem">动作有档位</h3>
+            <p>读随便看，写要确认，高危必须你点头。它干的每件事都留在对话里，做过什么、什么时候做的，翻得到。</p>
+          </article>
+        </div>
+
+        <div class="rise" style="margin-top: var(--s8)">
+          <span class="cap on-dark">三档权限</span>
+          <div class="perm">
+            <div class="perm-item">
+              <span class="pi-n">01 / ASK</span>
+              <h4>询问</h4>
+              <p>任何写操作都弹窗。编排一律先给你审一遍再跑。最慢，也最稳。</p>
+            </div>
+            <div class="perm-item warn">
+              <span class="pi-n">02 / STANDARD</span>
+              <h4>默认</h4>
+              <p>只读与可逆的写（暂存、写提交说明、建分支）直接跑；拉取、推送、强制推送、reset --hard 仍然要确认。</p>
+            </div>
+            <div class="perm-item">
+              <span class="pi-n">03 / FULL TRUST</span>
+              <h4>完全信任</h4>
+              <p>沙箱内自动执行，不打断。知道自己在做什么的人再用它。</p>
+            </div>
+          </div>
+          <p style="margin-top: var(--s4); font-size: var(--t-xs)">
+            不管是哪一档，冲突中提交、非法全暂存这类硬规则，宿主一律拦住。
+          </p>
+        </div>
+
+        <div class="feat-row flip rise" id="ledger" style="border-top-color: rgba(247,245,240,.2)">
+          <div class="feat-copy">
+            <span class="num" style="background: var(--amber); color: var(--ink)">账本</span>
+            <h3>用了多少，明码</h3>
+            <p>
+              谁也不喜欢「AI 用量」四个字后面跟着一句「详见账单」。水獭 Git 把账摊开：
+              请求次数、输入输出令牌、合计、成功与失败，一次一条记录，时间精确到秒。
+            </p>
+            <ul class="bullets">
+              <li><b>297 次请求</b>，1,154.9 万输入令牌 + 23.7 万输出令牌</li>
+              <li><b>成功 65，失败 14</b>——失败也写在同一栏里，不美化</li>
+              <li>按天分组，每次调用都能点开看：引用了哪条提交、发了多少字</li>
+            </ul>
+          </div>
+          <figure class="frame-shot" data-tag="用量 · 明账">
+            <picture>
+              <source srcset="assets/shots/meter.webp" type="image/webp" />
+              <img src="assets/shots/meter.png" width="1600" height="1026" loading="lazy" decoding="async"
+                alt="用量明细面板：请求 297、输入令牌 11549399、输出令牌 236706、合计 11786105、成功 65、失败 14，下方按天列出每次调用" />
+            </picture>
+          </figure>
+        </div>
+
+        <div class="feat-row rise" id="orchestrate" style="border-top-color: rgba(247,245,240,.2)">
+          <div class="feat-copy">
+            <span class="num" style="background: var(--amber); color: var(--ink)">一句</span>
+            <h3>说一句「提交推送」</h3>
+            <p>
+              它把活拆成四步：暂存 → 写说明 → 提交 → 推送。做一步勾一步，中途能叫停。
+              提交说明这种脏活它包了，但推之前会停下来问你一次。
+            </p>
+            <ul class="bullets">
+              <li>模型走 OpenAI 兼容接口，地址、模型名、密钥都自己填，存在本机</li>
+              <li>速率三档：精确 / 平衡 / 发散，按模型单独记</li>
+              <li>回复里引用了哪条提交，就挂哪条——点开就是那段 diff</li>
+            </ul>
+          </div>
+          <figure class="frame-shot" data-tag="小獭 · 编排" style="max-width: 460px; justify-self: center">
+            <picture>
+              <source srcset="assets/shots/ai.webp" type="image/webp" />
+              <img src="assets/shots/ai.png" width="760" height="1113" loading="lazy" decoding="async"
+                alt="小獭对话面板：用户说「提交推送」，小獭列出暂存、写说明、提交、推送四步并逐步打勾" />
+            </picture>
+          </figure>
         </div>
       </div>
     </section>
 
-    <!-- ========== download ========== -->
-    <section class="section" id="download" aria-labelledby="dl-title">
+    <!-- ============ 04 短片 ============ -->
+    <section class="sec" id="film" aria-labelledby="film-title">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">04</span>
+          <span class="cap">Film</span>
+          <span class="aside">1 分 37 秒 · 无旁白 · 无配乐</span>
+          <h2 id="film-title">先看片，再决定装不装</h2>
+        </div>
+        <p class="lede sec-intro rise">
+          一分半，没有人声、没有背景音乐，字全打在画面上，静音也看得完。
+          里面每一帧录屏都是真操作——包括那次推不上去的失败。
+        </p>
+
+        <div class="film rise" style="margin-top: var(--s6)">
+          <video id="promo" controls playsinline preload="metadata" poster="assets/shots/film-poster.jpg"
+            width="1920" height="1080" aria-label="水獭 Git 产品短片">
+            <source src="assets/ottergit-promo.mp4" type="video/mp4" />
+            你的浏览器不支持内嵌视频，可以<a href="assets/ottergit-promo.mp4">直接下载观看</a>。
+          </video>
+        </div>
+
+        <div class="chapters rise">
+          <a href="#film" data-t="0"><span class="tc">00:00</span><span>钩子：git push 被拒了，落后几个？</span><span class="cn">HOOK</span></a>
+          <a href="#film" data-t="5"><span class="tc">00:05</span><span>别猜。</span><span class="cn">STOP</span></a>
+          <a href="#film" data-t="8"><span class="tc">00:08</span><span>把仓库摊开看</span><span class="cn">INTRO</span></a>
+          <a href="#film" data-t="12"><span class="tc">00:12</span><span>一个窗口，四件事都在</span><span class="cn">DESK</span></a>
+          <a href="#film" data-t="20"><span class="tc">00:20</span><span>提交历史，一条泳道</span><span class="cn">LANE</span></a>
+          <a href="#film" data-t="28"><span class="tc">00:28</span><span>行号对到同一行</span><span class="cn">DIFF</span></a>
+          <a href="#film" data-t="37"><span class="tc">00:37</span><span>整块暂存，或者只挑一块</span><span class="cn">STAGE</span></a>
+          <a href="#film" data-t="45"><span class="tc">00:45</span><span>冲突不是灾难，是选择题</span><span class="cn">CONFLICT</span></a>
+          <a href="#film" data-t="52"><span class="tc">00:52</span><span>五个仓库，一栏扫完</span><span class="cn">REPOS</span></a>
+          <a href="#film" data-t="59"><span class="tc">00:59</span><span>顺手的那个样子</span><span class="cn">SETTINGS</span></a>
+          <a href="#film" data-t="65"><span class="tc">01:05</span><span>说一句「提交推送」</span><span class="cn">AGENT</span></a>
+          <a href="#film" data-t="73"><span class="tc">01:13</span><span>用了多少，明码</span><span class="cn">METER</span></a>
+          <a href="#film" data-t="80"><span class="tc">01:20</span><span>它动手之前，先问你</span><span class="cn">ASK</span></a>
+          <a href="#film" data-t="87"><span class="tc">01:27</span><span>看得清，不瞎猜</span><span class="cn">TAGLINE</span></a>
+          <a href="#film" data-t="92"><span class="tc">01:32</span><span>现在，把仓库交给小獭</span><span class="cn">CTA</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 下载 ============ -->
+    <section class="sec" id="download" aria-labelledby="dl-title" style="padding-top: 0">
       <div class="wrap">
         <div class="dl rise">
-          <p class="label">Download</p>
-          <h2 id="dl-title">装一个试试</h2>
-          <p>支持 Apple Silicon。dmg 拖进 Applications 就能用，已签名、已公证，第一次打开不会拦你。</p>
-          <div class="dl-actions">
-            <a class="btn btn-light"
+          <span class="cap">05 / Download</span>
+          <h2 id="dl-title">装一个，让仓库有人盯</h2>
+          <p>
+            下载是个 DMG，拖进「应用程序」就能用。已签名、已公证，第一次打开不会被拦。
+            本机得有 git——终端敲 <code>git --version</code> 先确认一下。
+          </p>
+          <div class="dl-act">
+            <a class="btn btn-ink"
               href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
               target="_blank" rel="noopener">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
-                  stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-              下载最新 Release
+              下载 v1.0.2 · ARM64 · 21 MB
             </a>
-            <a class="btn btn-outline-light" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank"
-              rel="noopener">看更新记录</a>
+            <a class="btn" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">看更新记录</a>
           </div>
-          <p class="dl-note">免费 · 新版本发在 Releases</p>
+          <p class="dl-note">免费 · macOS 12+ · Apple Silicon · Intel 机器暂时要自己编译</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 品牌 ============ -->
+    <section class="sec" id="brand" aria-labelledby="brand-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">06</span>
+          <span class="cap">Brand</span>
+          <span class="aside">宋体 · 硬投影 · 没有圆角</span>
+          <h2 id="brand-title">水獭睡觉时，会牵着同伴的手</h2>
+        </div>
+
+        <div class="brandblock rise" style="margin-top: var(--s6)">
+          <div class="brandmark">
+            <img src="assets/otter_logo_clear.png" alt="水獭 Git 吉祥物小獭" loading="lazy" decoding="async" />
+          </div>
+          <div>
+            <p class="lede">
+              怕睡着之后被水流冲散。你的仓库也一样——领先落后、分叉游离，
+              总得有个谁替你牵着。小獭干的就是这个：你写代码，它看家。
+            </p>
+            <p style="margin-top: var(--s4); font-size: var(--t-sm); color: var(--ink-2)">
+              界面是照着一张纸做的：米白底、宋体字、四像素墨线、不带模糊的硬投影。
+              没有渐变玻璃，没有圆角药丸，没有「正在为你加载」的旋转圈。
+            </p>
+            <div class="swatches" aria-label="品牌色板">
+              <div class="sw" style="background:#f7f5f0"><span>PAPER</span></div>
+              <div class="sw" style="background:#eae4d8"><span>PAPER-2</span></div>
+              <div class="sw" style="background:#1a1917"><span style="color:#f7f5f0;opacity:.8">INK</span></div>
+              <div class="sw" style="background:#1a5382"><span style="color:#f7f5f0;opacity:.85">BLUE</span></div>
+              <div class="sw" style="background:#c97b4a"><span style="color:#fff;opacity:.9">BROWN</span></div>
+              <div class="sw" style="background:#d9a441"><span>AMBER</span></div>
+            </div>
+            <div class="type-spec">
+              <div><b>标题</b><span>宋体 900 · 字距 −0.015em</span></div>
+              <div><b>正文</b><span>苹方 / 系统无衬线 · 行高 1.78</span></div>
+              <div><b>数字与时码</b><span>SF Mono · 等宽，对齐得上</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 07 FAQ ============ -->
+    <section class="sec" id="faq" aria-labelledby="faq-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">07</span>
+          <span class="cap">FAQ</span>
+          <span class="aside">八个老问题</span>
+          <h2 id="faq-title">你大概想问的</h2>
+        </div>
+
+        <div class="faq rise">
+          <details open>
+            <summary><span class="q">01</span><span>真的免费？以后会不会收费？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>免费。没有内购、没有订阅、没有「专业版」按钮。功能都在，不锁。</p>
+              <p>小獭的模型费用是你自己和模型服务商结算的——App 不赚差价，也不抽成。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">02</span><span>小獭会乱动我的仓库吗？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>它有三档权限：询问（每步都问）、默认（可逆的直跑，拉推要确认）、完全信任（沙箱内自动跑）。默认就是中间那档。</p>
+              <p>不管哪一档，冲突中提交、非法全暂存这类硬规则，宿主一律拦住——模型说什么都不算数。它做过的每件事都在对话里，翻得到。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">03</span><span>该 pull 还是 rebase？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>这问题问小獭正合适。它先看仓库状态：分没分叉、领先落后几个，然后给建议、给选项，你确认了才动手。</p>
+              <p>本地有没提交的改动也不怕——先暂存，拉完再给你放回来。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">04</span><span>和 SourceTree、Fork、GitHub Desktop 比呢？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>各有各的好，不吹。水獭 Git 押在三件事上：行号对齐的对比、一块块挑的冲突、一个会先问你的 AI。</p>
+              <p>装一个试试，不合适就删进废纸篓，不绑架你。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">05</span><span>支持 Windows 或 Intel Mac 吗？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>目前只有 macOS · Apple Silicon（M 系列芯片）。Intel 机器暂时要自己编译源码。</p>
+              <p>代码是 Flutter 写的，工程里有 windows / linux 目录，但还没做发布，别指望它能跑。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">06</span><span>小獭用哪个模型？要自己配吗？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>走 OpenAI 兼容接口：baseUrl、模型名、密钥都自己填，存在本机。用哪家、花多少，你自己定。</p>
+              <p>用多少记在「用量明细」里：请求次数、输入输出令牌、合计、成功失败，精确到秒。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">07</span><span>为什么叫水獭 Git？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>水獭会仰躺在水面上，把石头搁肚皮上敲贝壳——工具就该长这样：顺手、老实、看着舒服。</p>
+              <p>小獭负责卖萌，Git 本身负责靠谱。</p>
+            </div>
+          </details>
+          <details>
+            <summary><span class="q">08</span><span>我的代码会被上传吗？</span><span class="sign" aria-hidden="true"></span></summary>
+            <div class="a">
+              <p>仓库读写全在你本机，走的是本地 git。只有你主动跟小獭说话时，它才会把需要判断的那点内容发给模型服务——发什么，对话里写得清清楚楚。</p>
+              <p>不跟它说话，它就是个普通的 Git 客户端。</p>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -1192,42 +1914,59 @@
   <footer>
     <div class="wrap foot">
       <a class="brand" href="#top">
-        <img src="assets/otter_logo_clear.png" alt="" width="24" height="24" />
-        水獭 Git
+        <img src="assets/otter_logo_clear.png" alt="" width="26" height="26" />
+        水獭 Git <i>看得清，不瞎猜</i>
       </a>
       <nav class="foot-links" aria-label="相关链接">
-        <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">Releases</a>
+        <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">更新记录</a>
         <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
           target="_blank" rel="noopener">下载</a>
       </nav>
-      <p class="foot-copy">© 2026 水獭 Git · OtterGit · Asher_Shao</p>
+      <p class="foot-copy">© 2026 水獭 Git · OtterGit · Asher_Shao<br>Flutter 写的 macOS 客户端，宋体与硬投影是自己挑的。</p>
     </div>
   </footer>
 
   <script>
     (function () {
-      var nav = document.getElementById("nav");
-      var onScroll = function () {
-        nav.classList.toggle("stuck", window.scrollY > 8);
-      };
-      onScroll();
-      window.addEventListener("scroll", onScroll, { passive: true });
+      var isStatic = location.search.indexOf("static") > -1;
+      if (isStatic) {
+        document.documentElement.classList.add("static");
+        // 截图/印刷模式下把懒加载拉平，避免截到空白框
+        document.querySelectorAll('img[loading="lazy"]').forEach(function (im) {
+          im.setAttribute("loading", "eager");
+          var s = im.getAttribute("src");
+          im.setAttribute("src", s);
+        });
+      }
 
       var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       var els = document.querySelectorAll(".rise");
-      if (reduced || !("IntersectionObserver" in window)) {
+      if (isStatic || reduced || !("IntersectionObserver" in window)) {
         for (var i = 0; i < els.length; i++) els[i].classList.add("in");
-        return;
+      } else {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        }, { threshold: 0.06, rootMargin: "0px 0px -60px 0px" });
+        for (var j = 0; j < els.length; j++) io.observe(els[j]);
       }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (e) {
-          if (e.isIntersecting) {
-            e.target.classList.add("in");
-            io.unobserve(e.target);
-          }
+
+      // 点章节跳进视频对应时间点
+      var v = document.getElementById("promo");
+      document.querySelectorAll(".chapters a[data-t]").forEach(function (a) {
+        a.addEventListener("click", function (ev) {
+          if (!v) return;
+          ev.preventDefault();
+          var t = parseFloat(a.getAttribute("data-t"));
+          try { v.currentTime = t; } catch (err) { }
+          v.play().catch(function () { });
+          v.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
         });
-      }, { threshold: 0.08, rootMargin: "0px 0px -60px 0px" });
-      for (var j = 0; j < els.length; j++) io.observe(els[j]);
+      });
     })();
   </script>
 </body>
