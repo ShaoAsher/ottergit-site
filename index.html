@@ -983,6 +983,157 @@
       padding: 1px 6px;
     }
 
+    /* ---------- 版本记录 ---------- */
+    .vlog {
+      margin-top: var(--s6);
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .vlog-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--s3);
+      flex-wrap: wrap;
+      padding: 16px clamp(20px, 3vw, 32px);
+      border-bottom: 3px solid var(--ink);
+      background: var(--paper-2);
+    }
+
+    .vlog-head h3 {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .vlog-all {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      color: var(--blue-deep);
+      text-decoration: none;
+      border-bottom: 2px solid var(--blue-deep);
+      padding-bottom: 1px;
+    }
+
+    .vlog-all:hover {
+      background: var(--blue-soft);
+    }
+
+    .vlist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .vlist li + li {
+      border-top: 1px solid rgba(26, 25, 23, 0.22);
+    }
+
+    .vlist a {
+      display: grid;
+      grid-template-columns: 84px 52px 1fr;
+      gap: 16px;
+      align-items: baseline;
+      padding: 13px clamp(20px, 3vw, 32px);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .vlist a:hover {
+      background: var(--blue-soft);
+    }
+
+    .vlist b {
+      font-family: var(--mono);
+      font-size: var(--t-sm);
+      color: var(--ink);
+    }
+
+    .vlist .vd {
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .vlist .vt {
+      font-size: var(--t-sm);
+      color: var(--ink-2);
+      line-height: 1.65;
+    }
+
+    @media (max-width: 640px) {
+      .vlist a {
+        grid-template-columns: 76px 1fr;
+      }
+
+      .vlist .vt {
+        grid-column: 1 / -1;
+      }
+    }
+
+    /* ---------- 更多软件 ---------- */
+    .moregrid {
+      display: grid;
+      gap: var(--s5);
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+
+    .appcard {
+      display: block;
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: 8px 8px 0 var(--ink);
+      padding: clamp(24px, 3vw, 36px);
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .appcard:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 12px 12px 0 var(--ink);
+    }
+
+    .appcard h3 {
+      margin: var(--s3) 0 0;
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+    }
+
+    .appcard .app-meta {
+      margin-top: 8px;
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .appcard p:not(.app-meta) {
+      margin-top: var(--s3);
+      font-size: var(--t-sm);
+      line-height: 1.8;
+      color: var(--ink-2);
+    }
+
+    .appcard .go {
+      margin-top: var(--s4);
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      color: var(--blue-deep);
+      border-bottom: 2px solid var(--blue-deep);
+      padding-bottom: 2px;
+    }
+
+    .appcard:hover .go {
+      background: var(--blue-soft);
+    }
+
     /* ---------- 品牌 ---------- */
     .brandblock {
       display: grid;
@@ -1337,6 +1488,7 @@
         <a href="#features">功能</a>
         <a href="#copilot">小獭</a>
         <a href="#film">短片</a>
+        <a href="#vlog">版本</a>
         <a href="#faq">问题</a>
         <a class="btn btn-ink btn-sm keep" href="#download">下载 v1.0.6</a>
       </nav>
@@ -1794,6 +1946,37 @@
           </div>
           <p class="dl-note">免费 · macOS 12+ · Apple Silicon · Intel 机器暂时要自己编译</p>
         </div>
+
+        <div class="vlog rise" id="vlog" aria-labelledby="vlog-title">
+          <div class="vlog-head">
+            <h3 id="vlog-title">版本记录</h3>
+            <a class="vlog-all" href="https://github.com/ShaoAsher/ottergit-site/releases"
+              target="_blank" rel="noopener">GitHub 上看全部历史版本 →</a>
+          </div>
+          <ol class="vlist">
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.6" target="_blank" rel="noopener">
+              <b>v1.0.6</b><span class="vd">10-23</span>
+              <span class="vt">小獭意图理解收口：模型分类器接入直达快路径；125 个工具全带示例口令</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.5" target="_blank" rel="noopener">
+              <b>v1.0.5</b><span class="vd">10-23</span>
+              <span class="vt">意图理解模型化：说不清的句子交模型裁决；执行链路重构，失败后说「继续」能换法重试</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.4" target="_blank" rel="noopener">
+              <b>v1.0.4</b><span class="vd">10-23</span>
+              <span class="vt">编排参数护栏：缺参先追问、不跑空；git-flow 口令、计划预览，追问气泡有「等你回答」徽章</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.3" target="_blank" rel="noopener">
+              <b>v1.0.3</b><span class="vd">10-23</span>
+              <span class="vt">修复 GUI 环境下找不到 Homebrew git-flow 扩展的问题</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.2" target="_blank" rel="noopener">
+              <b>v1.0.2</b><span class="vd">10-22</span>
+              <span class="vt">拉取不再被未提交改动挡住：一键「暂存并拉取」，拉取失败也不丢本地改动</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.1" target="_blank" rel="noopener">
+              <b>v1.0.1</b><span class="vd">10-22</span>
+              <span class="vt">小獭升级：提示词缓存分层更快更省；新增仓库体检；状态说不清先追问，不瞎猜</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.0" target="_blank" rel="noopener">
+              <b>v1.0.0</b><span class="vd">10-22</span>
+              <span class="vt">首个公开版本：历史泳道、逐行对比、冲突分块，助手统一叫「小獭」</span></a></li>
+          </ol>
+        </div>
       </div>
     </section>
 
@@ -1909,6 +2092,31 @@
       </div>
     </section>
 
+    <!-- ============ 08 更多软件 ============ -->
+    <section class="sec" id="more" aria-labelledby="more-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">08</span>
+          <span class="cap">More Apps</span>
+          <span class="aside">同一只水獭，别的活儿</span>
+          <h2 id="more-title">作者还做了这些</h2>
+        </div>
+
+        <div class="moregrid rise">
+          <a class="appcard" href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">
+            <span class="cap">OtterTools</span>
+            <h3>水獭工具</h3>
+            <p class="app-meta">免费 · macOS 10.15+ · Apple Silicon</p>
+            <p>
+              Mac 用了三年越来越卡，先别急着换新。体检、清垃圾、管启动项、清浏览器痕迹，
+              把攒了几年的东西理一理，它还能再跑好几年。
+            </p>
+            <span class="go">去水獭工具官网 →</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
@@ -1921,6 +2129,7 @@
         <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">更新记录</a>
         <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-1.0.6-macos-arm64.dmg"
           target="_blank" rel="noopener">下载</a>
+        <a href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">水獭工具</a>
       </nav>
       <p class="foot-copy">© 2026 水獭 Git · OtterGit · Asher_Shao<br>macOS · Apple Silicon · 免费 · 无广告</p>
     </div>
