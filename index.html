@@ -66,6 +66,19 @@
       --hard-lg: 12px 12px 0 var(--ink);
       --hard-blue: 12px 12px 0 var(--blue);
       --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+      /* 动效令牌：曲线只有三条，时长按语义分层 */
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+      /* 稳：普通过渡；收：入场落定；弹：轻回弹（选中/出现） */
+      --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+      --dur-press: 140ms;
+      --dur-hover: 200ms;
+      --dur-enter: 560ms;
+
+      /* 磨砂玻璃（iOS 感）：平色半透 + blur，不用渐变 */
+      --glass: rgba(247, 245, 240, 0.82);
+      --glass-strong: rgba(251, 249, 244, 0.92);
+      --glass-blur: saturate(160%) blur(16px);
     }
 
     @media (min-width: 1024px) {
@@ -285,6 +298,15 @@
       z-index: 60;
       background: var(--paper);
       border-bottom: 3px solid var(--ink);
+      transition: background 240ms var(--ease), box-shadow 240ms var(--ease);
+    }
+
+    /* 滚过首屏后：磨砂玻璃底（iOS 感），描边不变 */
+    .nav.scrolled {
+      background: var(--glass);
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      box-shadow: 0 1px 0 rgba(26, 25, 23, 0.06);
     }
 
     .nav-in {
@@ -355,6 +377,15 @@
       transform: scaleX(1);
     }
 
+    /* scrollspy：当前所在章节的导航项常亮 */
+    .nav-links>a:not(.btn).on {
+      color: var(--blue-deep);
+    }
+
+    .nav-links>a:not(.btn).on::after {
+      transform: scaleX(1);
+    }
+
     /* ---------- 首屏 ---------- */
     .hero {
       padding-top: clamp(36px, 5vw, 64px);
@@ -394,6 +425,66 @@
     }
 
     /* 版本规格卡：填住首屏右侧，也把「你买到了什么」写清楚 */
+    /* 账本卡：用量数字直接摊开（截图会过时，数字不会） */
+    .ledger-card {
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: var(--hard);
+      align-self: start;
+    }
+
+    .ledger-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 11px 16px;
+      border-bottom: 1px solid var(--line-soft);
+      font-family: var(--mono);
+      font-size: var(--t-xs);
+      letter-spacing: 0.02em;
+      color: var(--ink-2);
+    }
+
+    .ledger-row b {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+
+    .ledger-row.total {
+      background: var(--ink);
+      border-bottom-color: var(--ink);
+      color: var(--paper-2);
+    }
+
+    .ledger-row.total b {
+      color: var(--paper);
+    }
+
+    .ledger-row.split {
+      justify-content: flex-start;
+      gap: 28px;
+      font-weight: 600;
+    }
+
+    .ledger-row .ok {
+      color: var(--blue);
+    }
+
+    .ledger-row .bad {
+      color: var(--brown-d);
+    }
+
+    .ledger-note {
+      padding: 12px 16px;
+      font-size: var(--t-xs);
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
     .spec {
       border: 3px solid var(--ink);
       background: var(--paper-3);
@@ -1364,6 +1455,228 @@
       }
     }
 
+    /* ---------- 签名动效：泳道水线 ---------- */
+    /* 一条 git 主线自己画出来，提交节点依次浮出，小獭顺流游过一遍 */
+    .river {
+      padding-block: clamp(6px, 1.4vw, 18px);
+    }
+
+    .river svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .river path {
+      fill: none;
+      stroke-linecap: round;
+    }
+
+    .river .river-main {
+      stroke: var(--ink);
+      stroke-width: 2.5;
+      opacity: 0.9;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .river .river-branch {
+      stroke: var(--blue);
+      stroke-width: 2;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+    }
+
+    .river.in .river-main {
+      animation: riverDraw 1.15s var(--ease-out) 0.1s forwards;
+    }
+
+    .river.in .river-branch {
+      animation: riverDraw 0.7s var(--ease-out) 0.95s forwards;
+    }
+
+    @keyframes riverDraw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .river .river-node {
+      fill: var(--paper);
+      stroke: var(--ink);
+      stroke-width: 2.5;
+      transform-box: fill-box;
+      transform-origin: center;
+      transform: scale(0);
+    }
+
+    .river.in .river-node {
+      animation: nodePop 480ms var(--ease-spring) forwards;
+    }
+
+    .river.in circle.river-node:nth-of-type(1) { animation-delay: 0.55s; }
+    .river.in circle.river-node:nth-of-type(2) { animation-delay: 0.85s; }
+    .river.in circle.river-node:nth-of-type(3) { animation-delay: 1.3s; }
+    .river.in circle.river-node:nth-of-type(4) { animation-delay: 1.45s; }
+
+    @keyframes nodePop {
+      from {
+        transform: scale(0);
+      }
+
+      to {
+        transform: scale(1);
+      }
+    }
+
+    .river .river-otter {
+      fill: var(--brown);
+      stroke: var(--ink);
+      stroke-width: 2.5;
+      opacity: 0;
+    }
+
+    @supports (offset-path: path("M0 0 L10 10")) {
+      .river .river-otter {
+        offset-path: path("M2 44 C 160 28, 300 60, 460 44 S 760 28, 900 44 S 1110 58, 1158 44");
+        offset-rotate: 0deg;
+      }
+
+      .river.in .river-otter {
+        animation: otterSwim 3.4s cubic-bezier(0.45, 0.05, 0.55, 0.95) 1.6s forwards;
+      }
+    }
+
+    @keyframes otterSwim {
+      0% {
+        opacity: 0;
+        offset-distance: 0%;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      88% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        offset-distance: 100%;
+      }
+    }
+
+    /* 环境动效：呼吸浮动，只给吉祥物这类「活物」 */
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-9px);
+      }
+    }
+
+    .bob {
+      animation: bob 5.6s ease-in-out infinite;
+    }
+
+    /* 数字永远等宽：滚动计数时不跳版 */
+    [data-count] {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---------- 回到顶部（磨砂玻璃小方章） ---------- */
+    .totop {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 55;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 3px solid var(--ink);
+      background: var(--glass);
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      box-shadow: 4px 4px 0 var(--ink);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity var(--dur-hover) var(--ease), transform var(--dur-hover) var(--ease),
+        box-shadow var(--dur-press) var(--ease), background var(--dur-hover) var(--ease);
+    }
+
+    .totop.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+
+    .totop:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink);
+      background: var(--glass-strong);
+    }
+
+    .totop:active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    /* ---------- 背景节奏：整段明暗交替 ---------- */
+    #more {
+      background: var(--paper-2);
+    }
+
+    /* 动效降级：水线直接画好，小獭不游 */
+    @media (prefers-reduced-motion: reduce) {
+
+      .river path,
+      .river .river-node,
+      .river .river-otter,
+      .bob,
+      .totop {
+        animation: none !important;
+      }
+
+      .river path {
+        stroke-dashoffset: 0;
+      }
+
+      .river .river-node {
+        transform: none;
+      }
+
+      .river .river-otter {
+        display: none;
+      }
+    }
+
+    html.static .river path {
+      stroke-dashoffset: 0;
+    }
+
+    html.static .river .river-node {
+      transform: none;
+      animation: none;
+    }
+
+    html.static .river .river-otter {
+      animation: none;
+      opacity: 0;
+    }
+
+    html.static .bob {
+      animation: none;
+    }
+
     /* ---------- 响应式 ---------- */
     @media (min-width: 900px) {
       .feat-row {
@@ -1490,7 +1803,7 @@
         <a href="#film">短片</a>
         <a href="#vlog">版本</a>
         <a href="#faq">问题</a>
-        <a class="btn btn-ink btn-sm keep" href="#download">下载 v1.0.6</a>
+        <a class="btn btn-ink btn-sm keep" href="#download">下载 v1.1.0</a>
       </nav>
     </div>
   </header>
@@ -1503,7 +1816,7 @@
         <div>
           <div class="label-row">
             <span class="cap">MACOS 原生 · GIT 客户端</span>
-            <span class="cap" style="color: var(--muted)">v1.0.6 · 26 MB</span>
+            <span class="cap" style="color: var(--muted)">v1.1.0 · 界面重制</span>
           </div>
           <h1 id="hero-title">看得清，<em>不瞎猜</em><span class="dot">。</span></h1>
           <div class="hero-grid">
@@ -1514,24 +1827,24 @@
                 全在同一屏里摊开。说不清的地方，小獭先问你——它不替你猜。
               </p>
               <div class="hero-act">
-                <a class="btn btn-ink" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-1.0.6-macos-arm64.dmg"
+                <a class="btn btn-ink" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
                   target="_blank" rel="noopener">
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
                       stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
-                  下载 v1.0.6 · ARM64
+                  下载 v1.1.0 · ARM64
                 </a>
-                <a class="btn" href="#film">先看 99 秒短片</a>
+                <a class="btn" href="#film">先看 51 秒短片</a>
               </div>
               <p class="hero-meta"><span>macOS 12+</span><span>Apple Silicon</span><span>已签名 · 已公证</span><span>免费，无账号</span></p>
             </div>
 
             <aside class="spec" aria-label="版本规格">
-              <p class="spec-h">Release · v1.0.6</p>
+              <p class="spec-h">Release · v1.1.0</p>
               <dl>
                 <dt>体积</dt>
-                <dd>26 MB</dd>
+                <dd>21 MB</dd>
                 <dt>系统</dt>
                 <dd>macOS 12+</dd>
                 <dt>芯片</dt>
@@ -1552,7 +1865,7 @@
         <div class="frame-shot rise" data-tag="一个窗口 · 真操作">
           <picture>
             <source srcset="assets/shots/window.webp" type="image/webp" />
-            <img src="assets/shots/window.png" width="1600" height="1026"
+            <img src="assets/shots/window.png" width="1600" height="1000"
               alt="水獭 Git 主窗口：左边仓库与分支，中间提交列表、变更文件与逐行对比，右边小獭对话，底部状态栏显示分支与提交数" />
           </picture>
         </div>
@@ -1581,8 +1894,57 @@
 
       <div class="ticker" aria-hidden="true">
         <div class="ticker-track">
-          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>99 秒，有旁白</span>
-          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>99 秒，有旁白</span>
+          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>51 秒，有旁白</span>
+          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>51 秒，有旁白</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 泳道水线：主线自绘 · 提交节点浮出 · 小獭游过 -->
+    <div class="river rise" aria-hidden="true">
+      <div class="wrap">
+        <svg viewBox="0 0 1160 72" fill="none" preserveAspectRatio="xMidYMid meet">
+          <path class="river-main" pathLength="1" d="M2 44 C 160 28, 300 60, 460 44 S 760 28, 900 44 S 1110 58, 1158 44" />
+          <path class="river-branch" pathLength="1" d="M460 44 C 580 20, 700 14, 806 16" />
+          <circle class="river-node" cx="160" cy="38" r="5" />
+          <circle class="river-node" cx="460" cy="44" r="6" />
+          <circle class="river-node" cx="806" cy="16" r="4.5" />
+          <circle class="river-node" cx="1050" cy="47" r="5" />
+          <circle class="river-otter" cx="0" cy="0" r="7" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- ============ 00 1.1 界面重制 ============ -->
+    <section class="sec" id="whatsnew" aria-labelledby="new-title">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">NEW</span>
+          <span class="cap">v1.1.0 · 界面重制</span>
+          <span class="aside">功能一个没少，样子重做了一遍</span>
+          <h2 id="new-title">这一版，把界面重做了一遍</h2>
+        </div>
+
+        <div class="feat-row rise" style="border-top: 0; padding-top: var(--s6)">
+          <div class="feat-copy">
+            <p>
+              1.1 不发新功能，只做一件事：让这个窗口看起来、用起来都更像一台 Mac 上的原生工具。
+              改的不是配色，是每一层表面的关系——谁浮在谁上面、谁该透出底下的东西。
+            </p>
+            <ul class="bullets">
+              <li><b>三层玻璃</b>：窗口底、壳层、内容卡面各走一档透明度；浮层与对话框用同一套 <code style="font-family:var(--mono);font-size:.9em">GlassSurface</code>，不再各画各的模糊</li>
+              <li><b>分支名不再被截断</b>：侧栏能拉到 460px，窄了就在 <code style="font-family:var(--mono);font-size:.9em">/</code> 后折行，<code style="font-family:var(--mono);font-size:.9em">feature/2026-10-refactor</code> 这种名字能完整读出来</li>
+              <li><b>控件自己画</b>：勾选框、下拉、开关、导航行全部换成自绘件，去掉 Material 那套 48px 点击区与白底下拉</li>
+              <li><b>动效克制</b>：全屏只有一处常驻动画——历史列表里 HEAD 那一点呼吸；其余一律悬停即到，不给滚动留下的残影</li>
+            </ul>
+          </div>
+          <figure class="frame-shot" data-tag="1.1 · 关于本机">
+            <picture>
+              <source srcset="assets/shots/about.webp" type="image/webp" />
+              <img src="assets/shots/about.png" width="1600" height="1000" decoding="async"
+                alt="关于水獭 Git 弹窗：版本 1.1.0，玻璃质感卡片、品牌插画与功能标签" />
+            </picture>
+          </figure>
         </div>
       </div>
     </section>
@@ -1629,7 +1991,7 @@
               每条提交的哈希、作者、日期、+- 行数排在同一行。
             </p>
             <ul class="bullets">
-              <li><b>148 条提交</b>，列表顶上直接报数，不用滚到底去数</li>
+              <li><b><span data-count="148">148</span> 条提交</b>，列表顶上直接报数，不用滚到底去数</li>
               <li>右键任意提交：检出、合并到当前分支、打补丁、复制哈希</li>
               <li>远端领先落后，鼠标停一下就浮出来，不用敲 <code>git status</code></li>
             </ul>
@@ -1637,7 +1999,7 @@
           <figure class="frame-shot" data-tag="历史 · 真录屏">
             <picture>
               <source srcset="assets/shots/history.webp" type="image/webp" />
-              <img src="assets/shots/history.png" width="1600" height="1026" loading="lazy" decoding="async"
+              <img src="assets/shots/history.png" width="1600" height="1000" loading="lazy" decoding="async"
                 alt="提交历史列表：左侧分支泳道，每行显示提交信息、哈希、作者、日期与增删行数" />
             </picture>
           </figure>
@@ -1654,13 +2016,13 @@
             <ul class="bullets">
               <li>可以<b>整块暂存</b>，也可以<b>只挑一块</b>，把无关的改动留在工作区</li>
               <li>图片、二进制文件也能并排比，不用退回命令行</li>
-              <li>一次重构的真账：<b>+278 / −22</b>，数字就在标题下面</li>
+              <li>一次重构的真账：<b><span data-count="278" data-prefix="+">+278</span> / <span data-count="22" data-prefix="−">−22</span></b>，数字就在标题下面</li>
             </ul>
           </div>
           <figure class="frame-shot" data-tag="逐行 · 三栏">
             <picture>
               <source srcset="assets/shots/diff.webp" type="image/webp" />
-              <img src="assets/shots/diff.png" width="1560" height="952" loading="lazy" decoding="async"
+              <img src="assets/shots/diff.png" width="1600" height="1000" loading="lazy" decoding="async"
                 alt="三栏对比视图：提交信息与变更文件清单、原文件、变更文件逐行对照，新增行带绿色底" />
             </picture>
           </figure>
@@ -1703,7 +2065,7 @@
               双击就进去，切仓库不用 <code>cd</code> 到另一个目录再敲命令。
             </p>
             <ul class="bullets">
-              <li>仓库集合按文件夹分组，<b>5 个仓库同屏</b>，谁没提交一眼看到</li>
+              <li>仓库集合按文件夹分组，<b><span data-count="5">5</span> 个仓库同屏</b>，谁没提交一眼看到</li>
               <li>新建、克隆、初始化都在同一个入口，克隆完自动加进来</li>
               <li>菜单栏托盘常驻：不打开主窗口也知道当前分支差几个提交</li>
             </ul>
@@ -1711,7 +2073,7 @@
           <figure class="frame-shot" data-tag="仓库 · 一栏">
             <picture>
               <source srcset="assets/shots/repos.webp" type="image/webp" />
-              <img src="assets/shots/repos.png" width="1600" height="1026" loading="lazy" decoding="async"
+              <img src="assets/shots/repos.png" width="1600" height="1000" loading="lazy" decoding="async"
                 alt="仓库切换面板：列表里五个仓库，每行显示名称、本地路径与当前分支" />
             </picture>
           </figure>
@@ -1734,7 +2096,7 @@
           <figure class="frame-shot" data-tag="偏好 · 设置">
             <picture>
               <source srcset="assets/shots/settings.webp" type="image/webp" />
-              <img src="assets/shots/settings.png" width="1600" height="1026" loading="lazy" decoding="async"
+              <img src="assets/shots/settings.png" width="1600" height="1000" loading="lazy" decoding="async"
                 alt="设置面板：外观主题、界面语言、Git 可执行文件路径与自动检查更新开关" />
             </picture>
           </figure>
@@ -1841,18 +2203,29 @@
               请求次数、输入输出令牌、合计、成功与失败，一次一条记录，时间精确到秒。
             </p>
             <ul class="bullets">
-              <li><b>297 次请求</b>，1,154.9 万输入令牌 + 23.7 万输出令牌</li>
-              <li><b>成功 65，失败 14</b>。失败也写在同一栏里，不美化</li>
+              <li><b><span data-count="297">297</span> 次请求</b>，<span data-count="1154.9" data-dec="1">1,154.9</span> 万输入令牌 + <span data-count="23.7" data-dec="1">23.7</span> 万输出令牌</li>
+              <li><b>成功 <span data-count="65">65</span>，失败 <span data-count="14">14</span></b>。失败也写在同一栏里，不美化</li>
               <li>按天分组，每次调用都能点开看：引用了哪条提交、发了多少字</li>
             </ul>
           </div>
-          <figure class="frame-shot" data-tag="用量 · 明账">
-            <picture>
-              <source srcset="assets/shots/meter.webp" type="image/webp" />
-              <img src="assets/shots/meter.png" width="1600" height="1026" loading="lazy" decoding="async"
-                alt="用量明细面板：请求 297、输入令牌 11549399、输出令牌 236706、合计 11786105、成功 65、失败 14，下方按天列出每次调用" />
-            </picture>
-          </figure>
+          <div class="ledger-card" aria-label="用量账本示例">
+            <div class="ledger-row">
+              <span>请求</span><b>297</b>
+            </div>
+            <div class="ledger-row">
+              <span>输入令牌</span><b>11,549,399</b>
+            </div>
+            <div class="ledger-row">
+              <span>输出令牌</span><b>236,706</b>
+            </div>
+            <div class="ledger-row total">
+              <span>合计</span><b>11,786,105</b>
+            </div>
+            <div class="ledger-row split">
+              <span class="ok">成功 65</span><span class="bad">失败 14</span>
+            </div>
+            <p class="ledger-note">一次一条记录，时间精确到秒。失败不抹掉。</p>
+          </div>
         </div>
 
         <div class="feat-row rise" id="orchestrate" style="border-top-color: rgba(247,245,240,.2)">
@@ -1872,7 +2245,7 @@
           <figure class="frame-shot" data-tag="小獭 · 编排" style="max-width: 460px; justify-self: center">
             <picture>
               <source srcset="assets/shots/ai.webp" type="image/webp" />
-              <img src="assets/shots/ai.png" width="760" height="1113" loading="lazy" decoding="async"
+              <img src="assets/shots/ai.png" width="760" height="1112" loading="lazy" decoding="async"
                 alt="小獭对话面板：用户说「提交推送」，小獭列出暂存、写说明、提交、推送四步并逐步打勾" />
             </picture>
           </figure>
@@ -1886,12 +2259,12 @@
         <div class="sec-head rise">
           <span class="idx">04</span>
           <span class="cap">Film</span>
-          <span class="aside">1 分 39 秒 · 有旁白 · 卡点配乐</span>
+          <span class="aside">51 秒 · 有旁白 · 卡点配乐</span>
           <h2 id="film-title">先看片，再决定装不装</h2>
         </div>
         <p class="lede sec-intro rise">
-          一分半，跟着旁白看完整流程：从 push 被拒，到仓库摊开、diff 对齐、小獭动手。
-          里面每一帧录屏都是真操作——包括那次推不上去的失败。
+          51 秒，跟着旁白看新版长什么样：三层玻璃的界面、一条泳道的提交历史、
+          行号对齐的 diff、以及小獭怎么在动手前先问你一句。画面全部是新版真机录屏。
         </p>
 
         <div class="film rise" style="margin-top: var(--s6)">
@@ -1903,21 +2276,14 @@
         </div>
 
         <div class="chapters rise">
-          <a href="#film" data-t="0"><span class="tc">00:00</span><span>推送被拒了，落后几个？</span><span class="cn">HOOK</span></a>
-          <a href="#film" data-t="5"><span class="tc">00:05</span><span>状态这种事，不该靠猜</span><span class="cn">STOP</span></a>
-          <a href="#film" data-t="8"><span class="tc">00:08</span><span>把仓库摊开看</span><span class="cn">INTRO</span></a>
-          <a href="#film" data-t="12"><span class="tc">00:12</span><span>一个窗口，四件事都在</span><span class="cn">DESK</span></a>
-          <a href="#film" data-t="20"><span class="tc">00:20</span><span>提交历史，一条泳道</span><span class="cn">LANE</span></a>
-          <a href="#film" data-t="28"><span class="tc">00:28</span><span>行号对到同一行</span><span class="cn">DIFF</span></a>
-          <a href="#film" data-t="37"><span class="tc">00:37</span><span>整块暂存，或者只挑一块</span><span class="cn">STAGE</span></a>
-          <a href="#film" data-t="45"><span class="tc">00:45</span><span>冲突不是灾难，是选择题</span><span class="cn">CONFLICT</span></a>
-          <a href="#film" data-t="52"><span class="tc">00:52</span><span>五个仓库，一栏扫完</span><span class="cn">REPOS</span></a>
-          <a href="#film" data-t="59"><span class="tc">00:59</span><span>顺手的那个样子</span><span class="cn">SETTINGS</span></a>
-          <a href="#film" data-t="65"><span class="tc">01:05</span><span>说一句「提交推送」</span><span class="cn">AGENT</span></a>
-          <a href="#film" data-t="73"><span class="tc">01:13</span><span>用了多少，明码</span><span class="cn">METER</span></a>
-          <a href="#film" data-t="80"><span class="tc">01:20</span><span>它动手之前，先问你</span><span class="cn">ASK</span></a>
-          <a href="#film" data-t="87"><span class="tc">01:27</span><span>看得清，不瞎猜</span><span class="cn">TAGLINE</span></a>
-          <a href="#film" data-t="92"><span class="tc">01:32</span><span>装一个，让仓库有人盯</span><span class="cn">CTA</span></a>
+          <a href="#film" data-t="0"><span class="tc">00:00</span><span>看得清，不瞎猜</span><span class="cn">HOOK</span></a>
+          <a href="#film" data-t="5"><span class="tc">00:05</span><span>这一版，界面重做了一遍</span><span class="cn">NEW</span></a>
+          <a href="#film" data-t="12"><span class="tc">00:12</span><span>提交历史，一条泳道</span><span class="cn">LANE</span></a>
+          <a href="#film" data-t="19"><span class="tc">00:19</span><span>行号对到同一行</span><span class="cn">DIFF</span></a>
+          <a href="#film" data-t="26"><span class="tc">00:26</span><span>说一句「提交推送」</span><span class="cn">OTTER</span></a>
+          <a href="#film" data-t="34"><span class="tc">00:34</span><span>五个仓库，一栏扫完</span><span class="cn">REPOS</span></a>
+          <a href="#film" data-t="40"><span class="tc">00:40</span><span>顺手的那个样子</span><span class="cn">SETTINGS</span></a>
+          <a href="#film" data-t="45"><span class="tc">00:45</span><span>装一个，让仓库有人盯</span><span class="cn">CTA</span></a>
         </div>
       </div>
     </section>
@@ -1934,13 +2300,13 @@
           </p>
           <div class="dl-act">
             <a class="btn btn-ink"
-              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-1.0.6-macos-arm64.dmg"
+              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
               target="_blank" rel="noopener">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
                   stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
-              下载 v1.0.6 · ARM64 · 26 MB
+              下载 v1.1.0 · ARM64 · 21 MB
             </a>
             <a class="btn" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">看更新记录</a>
           </div>
@@ -1954,6 +2320,9 @@
               target="_blank" rel="noopener">GitHub 上看全部历史版本 →</a>
           </div>
           <ol class="vlist">
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.1.0" target="_blank" rel="noopener">
+              <b>v1.1.0</b><span class="vd">10-28</span>
+              <span class="vt">界面重制：三层玻璃质感；分支名可折行、侧栏可拉到 460px；勾选框与下拉全部自绘；历史图谱 HEAD 呼吸波纹</span></a></li>
             <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.6" target="_blank" rel="noopener">
               <b>v1.0.6</b><span class="vd">10-23</span>
               <span class="vt">小獭意图理解收口：模型分类器接入直达快路径；125 个工具全带示例口令</span></a></li>
@@ -1980,6 +2349,21 @@
       </div>
     </section>
 
+    <!-- 泳道水线：下载之后，游向品牌 -->
+    <div class="river rise" aria-hidden="true">
+      <div class="wrap">
+        <svg viewBox="0 0 1160 72" fill="none" preserveAspectRatio="xMidYMid meet">
+          <path class="river-main" pathLength="1" d="M2 44 C 160 28, 300 60, 460 44 S 760 28, 900 44 S 1110 58, 1158 44" />
+          <path class="river-branch" pathLength="1" d="M460 44 C 580 20, 700 14, 806 16" />
+          <circle class="river-node" cx="160" cy="38" r="5" />
+          <circle class="river-node" cx="460" cy="44" r="6" />
+          <circle class="river-node" cx="806" cy="16" r="4.5" />
+          <circle class="river-node" cx="1050" cy="47" r="5" />
+          <circle class="river-otter" cx="0" cy="0" r="7" />
+        </svg>
+      </div>
+    </div>
+
     <!-- ============ 06 品牌 ============ -->
     <section class="sec" id="brand" aria-labelledby="brand-title" style="padding-top: 0">
       <div class="wrap">
@@ -1992,7 +2376,7 @@
 
         <div class="brandblock rise" style="margin-top: var(--s6)">
           <div class="brandmark">
-            <img src="assets/otter_logo_clear.png" alt="水獭 Git 吉祥物小獭" loading="lazy" decoding="async" />
+            <img class="bob" src="assets/otter_logo_clear.png" alt="水獭 Git 吉祥物小獭" loading="lazy" decoding="async" />
           </div>
           <div>
             <p class="lede">
@@ -2127,7 +2511,7 @@
       </a>
       <nav class="foot-links" aria-label="相关链接">
         <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">更新记录</a>
-        <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-1.0.6-macos-arm64.dmg"
+        <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
           target="_blank" rel="noopener">下载</a>
         <a href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">水獭工具</a>
       </nav>
@@ -2149,22 +2533,110 @@
       }
 
       var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      /* ---------- 滚动入场：同批兄弟按序错峰，读起来像一页页翻过去 ---------- */
       var els = document.querySelectorAll(".rise");
       if (isStatic || reduced || !("IntersectionObserver" in window)) {
         for (var i = 0; i < els.length; i++) els[i].classList.add("in");
       } else {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
-            if (e.isIntersecting) {
-              e.target.classList.add("in");
-              io.unobserve(e.target);
-            }
+            if (!e.isIntersecting) return;
+            var el = e.target;
+            var sibs = Array.prototype.filter.call(el.parentNode.children, function (c) {
+              return c.classList && c.classList.contains("rise");
+            });
+            var idx = Math.max(0, sibs.indexOf(el));
+            el.style.transitionDelay = Math.min(idx * 70, 350) + "ms";
+            el.classList.add("in");
+            el.addEventListener("transitionend", function h() {
+              el.style.transitionDelay = "";
+              el.removeEventListener("transitionend", h);
+            });
+            io.unobserve(el);
           });
         }, { threshold: 0.06, rootMargin: "0px 0px -60px 0px" });
         for (var j = 0; j < els.length; j++) io.observe(els[j]);
       }
 
-      // 点章节跳进视频对应时间点
+      /* ---------- 数字滚动：等宽字体托底，到账感不跳版 ---------- */
+      function fmt(v, dec) {
+        var s = dec ? v.toFixed(dec) : String(Math.round(v));
+        var parts = s.split(".");
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts.join(".");
+      }
+
+      function setFinal(el) {
+        var to = parseFloat(el.getAttribute("data-count"));
+        var dec = parseInt(el.getAttribute("data-dec") || "0", 10);
+        el.textContent = (el.getAttribute("data-prefix") || "") + fmt(to, dec);
+      }
+
+      var counters = document.querySelectorAll("[data-count]");
+      if (isStatic || reduced || !("IntersectionObserver" in window)) {
+        counters.forEach(setFinal);
+      } else {
+        var cio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            var el = e.target;
+            cio.unobserve(el);
+            var to = parseFloat(el.getAttribute("data-count"));
+            var dec = parseInt(el.getAttribute("data-dec") || "0", 10);
+            var pre = el.getAttribute("data-prefix") || "";
+            var t0 = null;
+            var dur = 950;
+            function step(now) {
+              if (t0 === null) t0 = now;
+              var k = Math.min(1, (now - t0) / dur);
+              var ease = 1 - Math.pow(1 - k, 3);
+              el.textContent = pre + fmt(to * ease, dec);
+              if (k < 1) requestAnimationFrame(step);
+              else el.textContent = pre + fmt(to, dec);
+            }
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.5 });
+        counters.forEach(function (el) { cio.observe(el); });
+      }
+
+      /* ---------- 导航：滚过 8px 上磨砂玻璃；scrollspy 常亮当前章节 ---------- */
+      var nav = document.querySelector(".nav");
+      var totop = document.querySelector(".totop");
+      var spyLinks = Array.prototype.slice.call(document.querySelectorAll(".nav-links a[href^='#']:not(.btn)"));
+      var spyMap = {};
+      spyLinks.forEach(function (a) {
+        var sec = document.querySelector(a.getAttribute("href"));
+        if (sec) spyMap[sec.id] = a;
+      });
+
+      function onScroll() {
+        var y = window.scrollY || 0;
+        if (nav) nav.classList.toggle("scrolled", y > 8);
+        if (totop) totop.classList.toggle("show", y > 640);
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      if ("IntersectionObserver" in window) {
+        var sio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            var link = spyMap[e.target.id];
+            if (!link) return;
+            if (e.isIntersecting) {
+              spyLinks.forEach(function (a) { a.classList.remove("on"); });
+              link.classList.add("on");
+            }
+          });
+        }, { rootMargin: "-38% 0px -55% 0px", threshold: 0 });
+        Object.keys(spyMap).forEach(function (id) {
+          var sec = document.getElementById(id);
+          if (sec) sio.observe(sec);
+        });
+      }
+
+      /* ---------- 点章节跳进视频对应时间点 ---------- */
       var v = document.getElementById("promo");
       document.querySelectorAll(".chapters a[data-t]").forEach(function (a) {
         a.addEventListener("click", function (ev) {
@@ -2178,6 +2650,12 @@
       });
     })();
   </script>
+  <a class="totop" href="#top" aria-label="回到顶部">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 13V3m0 0L4 7m4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+        stroke-linejoin="round" />
+    </svg>
+  </a>
 </body>
 
 </html>
