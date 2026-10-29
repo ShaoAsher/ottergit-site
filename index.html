@@ -4,21 +4,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>水獭 Git · 看得清，不瞎猜｜macOS · Windows 上的 Git 客户端</title>
+  <title>水獭 Git · 看得清，不瞎猜｜macOS 和 Windows 上的 Git 客户端</title>
   <meta name="description"
-    content="水獭 Git（OtterGit）是 macOS / Windows 上的 Git 客户端：提交历史摊成泳道，逐行对比行号对齐，五个仓库一栏扫完。说一句「提交推送」，小獭拆好步骤跑完；拿不准的地方它先问你，不替你猜。" />
+    content="水獭 Git（OtterGit）是 macOS 和 Windows 上的 Git 客户端。侧栏直接写着领先落后几个提交，历史按分支排成泳道，改动左右对齐，冲突一块一块挑。助手小獭不配模型也能拉取推送，收不回来的操作先问你。免费，不用注册。" />
   <meta name="theme-color" content="#F7F5F0" />
   <meta property="og:title" content="水獭 Git · 看得清，不瞎猜" />
-  <meta property="og:description" content="macOS / Windows Git 客户端。历史泳道、逐行对比、冲突分块；说句「提交推送」，小獭先问清再动手。免费、无账号、无订阅。" />
-  <meta property="og:image" content="assets/shots/window.png" />
+  <meta property="og:description" content="macOS 和 Windows 上的 Git 客户端。泳道历史、左右对齐的对比、逐块解决冲突；助手小獭动手之前先问你。免费，不用注册。" />
+  <meta property="og:image" content="https://shaoasher.github.io/ottergit-site/assets/og.jpg" />
+  <meta property="og:url" content="https://shaoasher.github.io/ottergit-site/" />
   <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/png" href="assets/otter_logo_clear.png" />
-  <link rel="preload" as="image" href="assets/shots/window.webp" type="image/webp" />
+  <link rel="preload" as="image" href="assets/shots/files-light.webp" type="image/webp" />
   <style>
     /* ==================================================================
-       ottergit-ink —— 与宣传片共用的设计语言
-       纸 #F7F5F0 · 墨 #1A1917 · 蓝 #1A5382 · 铜 #C97B4A
-       4px 墨描边 / 无模糊硬投影 / 0 圆角（仅胶囊 999px）/ 宋体 900
+       ottergit-ink —— 官网和宣传片共用的设计语言
+       纸 #F7F5F0 · 墨 #1A1917 · 蓝 #1A5382 · 铜 #C97B4A · 琥珀 #D9A441
+       3px 墨描边 / 无模糊硬投影 / 0 圆角 / 标题宋体 900 / 标签等宽大写
        ================================================================== */
     :root {
       --paper: #f7f5f0;
@@ -26,7 +28,7 @@
       --paper-3: #fbf9f4;
       --ink: #1a1917;
       --ink-2: #3b372f;
-      --muted: #6b665c;
+      --muted: #67625a;
       --blue: #1a5382;
       --blue-deep: #143a5b;
       --blue-soft: #dce7f0;
@@ -34,14 +36,17 @@
       --brown-d: #9e5a30;
       --steel: #7fa8c9;
       --amber: #d9a441;
-      --line: #1a1917;
+      --red: #b4453a;
+      --green: #3f7d4e;
       --line-soft: #cdc6b7;
+      --on-dark: #f2efe8;
+      --teal: #15b8a6;
 
       --serif: "Songti SC", "Songti TC", "STSong", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
       --sans: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
       --mono: "SF Mono", ui-monospace, Menlo, Consolas, "Courier New", monospace;
 
-      --t-dsp: clamp(2.5rem, 6.6vw, 5.25rem);
+      --t-hero: clamp(2.6rem, 7.9vw, 6.5rem);
       --t-h2: clamp(1.9rem, 4.2vw, 3.1rem);
       --t-h3: clamp(1.25rem, 1.9vw, 1.5rem);
       --t-lead: clamp(1.0625rem, 1.25vw, 1.25rem);
@@ -50,7 +55,6 @@
       --t-xs: 0.8125rem;
       --t-cap: 0.6875rem;
 
-      --s1: 4px;
       --s2: 8px;
       --s3: 12px;
       --s4: 16px;
@@ -58,34 +62,16 @@
       --s6: 32px;
       --s7: 48px;
       --s8: 64px;
-      --s9: 96px;
-      --s10: 128px;
 
       --max: 1180px;
       --hard: 8px 8px 0 var(--ink);
       --hard-lg: 12px 12px 0 var(--ink);
-      --hard-blue: 12px 12px 0 var(--blue);
       --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-
-      /* 动效令牌：曲线只有三条，时长按语义分层 */
       --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-      /* 稳：普通过渡；收：入场落定；弹：轻回弹（选中/出现） */
       --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
-      --dur-press: 140ms;
-      --dur-hover: 200ms;
-      --dur-enter: 560ms;
-
-      /* 磨砂玻璃（iOS 感）：平色半透 + blur，不用渐变 */
       --glass: rgba(247, 245, 240, 0.82);
       --glass-strong: rgba(251, 249, 244, 0.92);
       --glass-blur: saturate(160%) blur(16px);
-    }
-
-    @media (min-width: 1024px) {
-      :root {
-        --s9: 128px;
-        --s10: 168px;
-      }
     }
 
     *,
@@ -116,7 +102,7 @@
       overflow-x: hidden;
     }
 
-    /* 纸纹：极淡噪点，别太干净 */
+    /* 纸纹：极淡的噪点，页面别太干净 */
     body::before {
       content: "";
       position: fixed;
@@ -139,6 +125,15 @@
       text-decoration: none;
     }
 
+    ul,
+    ol {
+      list-style: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
     ::selection {
       background: var(--amber);
       color: var(--ink);
@@ -149,6 +144,15 @@
       outline-offset: 3px;
     }
 
+    code,
+    .mono {
+      font-family: var(--mono);
+    }
+
+    code {
+      font-size: 0.9em;
+    }
+
     .wrap {
       position: relative;
       z-index: 1;
@@ -156,45 +160,48 @@
       margin-inline: auto;
     }
 
-    /* ---------- 字 ---------- */
-    .dsp {
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: var(--t-dsp);
-      line-height: 1.04;
-      letter-spacing: -0.015em;
+    .skip {
+      position: absolute;
+      left: 12px;
+      top: -60px;
+      z-index: 100;
+      padding: 8px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      font-weight: 700;
     }
 
+    .skip:focus {
+      top: 12px;
+    }
+
+    /* ---------- 字 ---------- */
     h2 {
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: var(--t-h2);
-      line-height: 1.14;
+      font: 900 var(--t-h2) / 1.14 var(--serif);
       letter-spacing: -0.012em;
     }
 
     h3 {
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: var(--t-h3);
-      line-height: 1.34;
-      letter-spacing: 0;
+      font: 900 var(--t-h3) / 1.34 var(--serif);
+    }
+
+    h2 em,
+    h3 em {
+      font-style: normal;
     }
 
     .lede {
       font-size: var(--t-lead);
       line-height: 1.82;
       color: var(--ink-2);
-      max-width: 32em;
+      max-width: 34em;
     }
 
     .cap {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-family: var(--mono);
-      font-size: var(--t-cap);
-      font-weight: 600;
+      font: 600 var(--t-cap) / 1.4 var(--mono);
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--ink);
@@ -208,25 +215,35 @@
       flex: none;
     }
 
+    .cap.soft {
+      color: var(--muted);
+    }
+
     .cap.on-dark {
-      color: var(--paper);
+      color: var(--on-dark);
     }
 
     .cap.on-dark::before {
       background: var(--amber);
     }
 
+    /* 荧光笔：只划最要紧的那半句 */
     .hl {
       background: linear-gradient(180deg, transparent 58%, var(--amber) 58%, var(--amber) 92%, transparent 92%);
       padding-inline: 0.08em;
     }
 
-    .blue {
-      color: var(--blue);
-    }
-
-    .copper {
-      color: var(--brown-d);
+    /* 贴纸标签：琥珀底、墨描边，贴在截图左上角外侧 */
+    .sticker,
+    .frame[data-tag]::after {
+      font: 600 var(--t-cap) / 1.4 var(--mono);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--amber);
+      border: 2px solid var(--ink);
+      padding: 3px 9px;
+      white-space: nowrap;
     }
 
     /* ---------- 按钮 ---------- */
@@ -237,13 +254,11 @@
       gap: 10px;
       padding: 15px 26px;
       border: 3px solid var(--ink);
-      border-radius: 0;
       background: var(--paper-3);
       color: var(--ink);
-      font-family: var(--sans);
-      font-size: var(--t-sm);
-      font-weight: 700;
+      font: 700 var(--t-sm) / 1.2 var(--sans);
       letter-spacing: 0.02em;
+      white-space: nowrap;
       cursor: pointer;
       box-shadow: 5px 5px 0 var(--ink);
       transition: transform 160ms var(--ease), box-shadow 160ms var(--ease), background 160ms var(--ease);
@@ -268,15 +283,6 @@
       background: #000;
     }
 
-    .btn-blue {
-      background: var(--blue);
-      color: #f4f9fc;
-    }
-
-    .btn-blue:hover {
-      background: var(--blue-deep);
-    }
-
     .btn-sm {
       padding: 10px 18px;
       font-size: var(--t-xs);
@@ -298,15 +304,13 @@
       z-index: 60;
       background: var(--paper);
       border-bottom: 3px solid var(--ink);
-      transition: background 240ms var(--ease), box-shadow 240ms var(--ease);
+      transition: background 240ms var(--ease);
     }
 
-    /* 滚过首屏后：磨砂玻璃底（iOS 感），描边不变 */
     .nav.scrolled {
       background: var(--glass);
       -webkit-backdrop-filter: var(--glass-blur);
       backdrop-filter: var(--glass-blur);
-      box-shadow: 0 1px 0 rgba(26, 25, 23, 0.06);
     }
 
     .nav-in {
@@ -320,9 +324,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: 1.125rem;
+      font: 900 1.125rem / 1 var(--serif);
       letter-spacing: 0.01em;
       white-space: nowrap;
     }
@@ -335,13 +337,10 @@
     }
 
     .brand i {
-      font-family: var(--mono);
-      font-style: normal;
-      font-size: var(--t-cap);
-      font-weight: 600;
+      font: normal 600 var(--t-cap) / 1 var(--mono);
       letter-spacing: 0.18em;
       color: var(--muted);
-      padding-left: 10px;
+      padding: 4px 0 4px 10px;
       border-left: 1px solid var(--line-soft);
     }
 
@@ -357,7 +356,6 @@
     .nav-links>a:not(.btn) {
       position: relative;
       padding-block: 4px;
-      transition: color 200ms var(--ease);
     }
 
     .nav-links>a:not(.btn)::after {
@@ -373,46 +371,52 @@
       transition: transform 260ms var(--ease);
     }
 
-    .nav-links>a:not(.btn):hover::after {
-      transform: scaleX(1);
-    }
-
-    /* scrollspy：当前所在章节的导航项常亮 */
-    .nav-links>a:not(.btn).on {
-      color: var(--blue-deep);
-    }
-
+    .nav-links>a:not(.btn):hover::after,
     .nav-links>a:not(.btn).on::after {
       transform: scaleX(1);
     }
 
+    .nav-links>a:not(.btn).on {
+      color: var(--blue-deep);
+    }
+
     /* ---------- 首屏 ---------- */
     .hero {
+      position: relative;
       padding-top: clamp(36px, 5vw, 64px);
-      padding-bottom: clamp(48px, 6vw, 84px);
     }
 
-    .hero-top {
-      display: grid;
-      gap: var(--s6);
-      align-items: end;
+    /* 方格纸底，往下渐隐 */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 780px;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(26, 25, 23, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 25, 23, 0.06) 1px, transparent 1px);
+      background-size: 44px 44px;
+      background-position: center -1px;
+      -webkit-mask-image: linear-gradient(#000 35%, transparent);
+      mask-image: linear-gradient(#000 35%, transparent);
     }
 
-    .hero .label-row {
+    .label-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: var(--s3) var(--s4);
+      gap: var(--s3) var(--s5);
       margin-bottom: var(--s5);
     }
 
     .hero h1 {
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: clamp(2.6rem, 7.9vw, 6.5rem);
-      line-height: 1;
+      font: 900 var(--t-hero) / 1 var(--serif);
       letter-spacing: -0.03em;
-      white-space: nowrap;
+    }
+
+    .hero h1 .nw {
+      display: inline-block;
     }
 
     .hero h1 em {
@@ -424,83 +428,61 @@
       color: var(--brown);
     }
 
-    /* 版本规格卡：填住首屏右侧，也把「你买到了什么」写清楚 */
-    /* 账本卡：用量数字直接摊开（截图会过时，数字不会） */
-    .ledger-card {
-      border: 3px solid var(--ink);
-      background: var(--paper-3);
-      box-shadow: var(--hard);
-      align-self: start;
+    .hero-grid {
+      margin-top: var(--s6);
+      display: grid;
+      gap: var(--s6);
+      align-items: start;
     }
 
-    .ledger-row {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 11px 16px;
-      border-bottom: 1px solid var(--line-soft);
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      letter-spacing: 0.02em;
-      color: var(--ink-2);
+    .hero-lede code {
+      padding: 0 6px;
+      color: var(--red);
+      background: rgba(180, 69, 58, 0.08);
+      border: 1.5px solid rgba(180, 69, 58, 0.35);
+      white-space: nowrap;
     }
 
-    .ledger-row b {
-      font-family: var(--serif);
-      font-size: 1.3rem;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-    }
-
-    .ledger-row.total {
-      background: var(--ink);
-      border-bottom-color: var(--ink);
-      color: var(--paper-2);
-    }
-
-    .ledger-row.total b {
-      color: var(--paper);
-    }
-
-    .ledger-row.split {
-      justify-content: flex-start;
-      gap: 28px;
-      font-weight: 600;
-    }
-
-    .ledger-row .ok {
+    .hero-lede b {
+      font-weight: 700;
       color: var(--blue);
+      white-space: nowrap;
     }
 
-    .ledger-row .bad {
-      color: var(--brown-d);
+    .hero-act {
+      margin-top: var(--s6);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s4);
     }
 
-    .ledger-note {
-      padding: 12px 16px;
-      font-size: var(--t-xs);
-      line-height: 1.6;
+    .hero-meta {
+      margin-top: var(--s5);
+      font: var(--t-xs) / 1.8 var(--mono);
+      letter-spacing: 0.02em;
       color: var(--muted);
     }
 
+    .hero-meta span+span::before {
+      content: "/";
+      margin: 0 0.7em;
+      color: var(--line-soft);
+    }
+
+    /* 版本规格卡 */
     .spec {
       border: 3px solid var(--ink);
       background: var(--paper-3);
       box-shadow: var(--hard);
     }
 
-    .spec .spec-h {
-      border-bottom: 3px solid var(--ink);
+    .spec-h {
       background: var(--ink);
       color: var(--paper);
-      font-family: var(--mono);
-      font-size: var(--t-cap);
-      font-weight: 600;
+      font: 600 var(--t-cap) / 1 var(--mono);
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      padding: 8px 12px;
+      padding: 10px 12px;
     }
 
     .spec dl {
@@ -526,81 +508,193 @@
     .spec dd {
       text-align: right;
       font-weight: 600;
-      color: var(--ink);
     }
 
-    .spec dl> :nth-last-child(2),
-    .spec dl> :last-child {
+    .spec dl> :nth-last-child(-n + 2) {
       border-bottom: 0;
     }
 
-    .hero-lede {
-      margin-top: var(--s5);
-      max-width: 34em;
+    .spec .free {
+      color: var(--brown-d);
     }
 
-    .hero-act {
-      margin-top: var(--s6);
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--s3);
-    }
-
-    .hero-meta {
-      margin-top: var(--s4);
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--muted);
-      letter-spacing: 0.02em;
-    }
-
-    .hero-meta span+span::before {
-      content: "/";
-      margin: 0 0.7em;
-      color: var(--line-soft);
-    }
-
-    .hero-grid {
-      margin-top: var(--s5);
-      display: grid;
-      gap: var(--s6);
-      align-items: start;
-    }
-
-    .hero-grid .hero-lede {
-      margin-top: 0;
-    }
-
-    /* 窗口大图 */
-    .stage {
-      margin-top: clamp(32px, 4.5vw, 56px);
-    }
-
-    .frame-shot {
+    /* ---------- 截图框：墨描边 + 硬投影，贴纸写在左上角外侧 ---------- */
+    .frame {
       position: relative;
       border: 3px solid var(--ink);
       background: #fff;
       box-shadow: var(--hard-lg);
     }
 
-    .frame-shot img {
-      width: 100%;
-    }
-
-    .frame-shot::after {
+    .frame[data-tag]::after {
       content: attr(data-tag);
       position: absolute;
       left: -3px;
       bottom: calc(100% + 10px);
-      font-family: var(--mono);
-      font-size: var(--t-cap);
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+    }
+
+    .fbar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      height: 32px;
+      padding: 0 12px;
+      background: var(--paper-2);
+      border-bottom: 3px solid var(--ink);
+    }
+
+    .fbar i {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      border: 1.5px solid var(--ink);
+      flex: none;
+    }
+
+    .fbar i:nth-child(1) {
+      background: #e0675a;
+    }
+
+    .fbar i:nth-child(2) {
+      background: #e7b54a;
+    }
+
+    .fbar i:nth-child(3) {
+      background: #5fae5a;
+    }
+
+    .fbar span {
+      flex: 1;
+      padding-right: 51px;
+      text-align: center;
+      font: 600 var(--t-cap) / 1 var(--mono);
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .view {
+      position: relative;
+      aspect-ratio: 2400 / 1452;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .view>img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 局部放大：--x/--y/--w/--h 是原图（2400×1452）上要露出来的那块 */
+    .crop {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: var(--w) / var(--h);
+    }
+
+    .crop>img {
+      position: absolute;
+      max-width: none;
+      width: calc(100% * 2400 / var(--w));
+      left: calc(-100% * var(--x) / var(--w));
+      top: calc(-100% * var(--y) / var(--h));
+    }
+
+    /* 圈出界面上的某个控件，--rx/--ry/--rw/--rh 同样是原图坐标 */
+    .crop>.ring {
+      position: absolute;
+      left: calc(100% * (var(--rx) - var(--x)) / var(--w));
+      top: calc(100% * (var(--ry) - var(--y)) / var(--h));
+      width: calc(100% * var(--rw) / var(--w));
+      height: calc(100% * var(--rh) / var(--h));
+      border: 3px solid var(--brown);
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+      pointer-events: none;
+    }
+
+    /* ---------- 首屏大图 ---------- */
+    .stage {
+      margin-top: clamp(64px, 7vw, 92px);
+    }
+
+    .seg {
+      position: absolute;
+      right: 0;
+      bottom: calc(100% + 10px);
+      display: inline-flex;
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .seg button {
+      padding: 6px 14px;
+      border: 0;
+      background: transparent;
       color: var(--ink);
-      background: var(--amber);
-      border: 2px solid var(--ink);
-      padding: 3px 9px;
+      font: 700 var(--t-xs) / 1.2 var(--sans);
+      cursor: pointer;
+    }
+
+    .seg button+button {
+      border-left: 3px solid var(--ink);
+    }
+
+    .seg button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .frame-hero .view .d {
+      opacity: 0;
+      transition: opacity 0.5s var(--ease);
+    }
+
+    .frame-hero.is-dark .view .d {
+      opacity: 1;
+    }
+
+    /* ---------- 数据条：只写 App 里查得到的数 ---------- */
+    .stats {
+      margin-top: clamp(48px, 6vw, 72px);
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-block: 3px solid var(--ink);
+    }
+
+    .stat {
+      padding: var(--s5) var(--s4) var(--s5) 0;
+    }
+
+    .stat+.stat {
+      padding-left: var(--s5);
+      border-left: 1px solid var(--ink);
+    }
+
+    .stat b {
+      display: block;
+      font: 700 clamp(1.75rem, 3.2vw, 2.5rem) / 1 var(--mono);
+      letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat b small {
+      margin-left: 0.16em;
+      font: 600 0.44em / 1 var(--sans);
+      letter-spacing: 0.02em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: var(--s2);
+      font-size: var(--t-xs);
+      line-height: 1.62;
+      color: var(--muted);
     }
 
     /* 滚动字条 */
@@ -616,20 +710,18 @@
     .ticker-track {
       display: flex;
       width: max-content;
-      animation: ticker 34s linear infinite;
+      animation: ticker 40s linear infinite;
     }
 
     .ticker-track span {
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      padding-inline: 18px;
       display: inline-flex;
       align-items: center;
       gap: 18px;
+      padding-inline: 18px;
+      font: 600 var(--t-xs) / 1.4 var(--mono);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
 
     .ticker-track span::after {
@@ -644,821 +736,9 @@
       }
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      .ticker-track {
-        animation: none;
-      }
-    }
-
-    /* ---------- 通用小节 ---------- */
-    .sec {
-      padding-block: clamp(56px, 8vw, 104px);
-    }
-
-    .sec-head {
-      border-top: 3px solid var(--ink);
-      padding-top: var(--s5);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: var(--s3) var(--s5);
-    }
-
-    .sec-head .idx {
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-    }
-
-    .sec-head h2 {
-      flex: 1 1 100%;
-      margin-top: var(--s2);
-    }
-
-    .sec-head .aside {
-      margin-left: auto;
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--muted);
-      letter-spacing: 0.04em;
-    }
-
-    .sec-intro {
-      margin-top: var(--s5);
-    }
-
-    /* 编号 + 文案 + 截图 的交替块 */
-    .feat-row {
-      display: grid;
-      gap: clamp(28px, 4vw, 56px);
-      align-items: center;
-      padding-block: clamp(36px, 5vw, 64px);
-      border-top: 1px solid var(--line-soft);
-    }
-
-    .feat-row:first-of-type {
-      border-top: 0;
-    }
-
-    .feat-copy .num {
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      color: var(--paper);
-      background: var(--ink);
-      padding: 3px 10px;
-      margin-bottom: var(--s4);
-    }
-
-    .feat-copy h3 {
-      font-size: clamp(1.5rem, 3vw, 2.125rem);
-    }
-
-    .feat-copy p {
-      margin-top: var(--s3);
-      font-size: var(--t-sm);
-      line-height: 1.8;
-      color: var(--ink-2);
-      max-width: 30em;
-    }
-
-    .bullets {
-      margin-top: var(--s5);
-      list-style: none;
-      border-top: 1px solid var(--line-soft);
-    }
-
-    .bullets li {
-      position: relative;
-      padding: var(--s3) 0 var(--s3) var(--s5);
-      border-bottom: 1px solid var(--line-soft);
-      font-size: var(--t-sm);
-      line-height: 1.7;
-      color: var(--ink-2);
-    }
-
-    .bullets li::before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      top: var(--s3);
-      font-family: var(--mono);
-      color: var(--blue);
-      font-weight: 700;
-    }
-
-    .bullets b {
-      color: var(--ink);
-      font-weight: 700;
-    }
-
-    /* ---------- 数据条 ---------- */
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      border-top: 3px solid var(--ink);
-      border-bottom: 3px solid var(--ink);
-    }
-
-    .stat {
-      padding: var(--s5) var(--s4) var(--s5) 0;
-    }
-
-    .stat+.stat {
-      padding-left: var(--s5);
-      border-left: 1px solid var(--line);
-    }
-
-    .stat b {
-      display: block;
-      font-family: var(--mono);
-      font-size: clamp(1.75rem, 3.2vw, 2.5rem);
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: -0.02em;
-    }
-
-    .stat b small {
-      font-size: 0.44em;
-      letter-spacing: 0.02em;
-      margin-left: 0.16em;
-      font-family: var(--sans);
-    }
-
-    .stat span {
-      display: block;
-      margin-top: var(--s2);
-      font-size: var(--t-xs);
-      line-height: 1.62;
-      color: var(--muted);
-    }
-
-    /* ---------- 卡片组 ---------- */
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--s5);
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: var(--s5);
-    }
-
-    .card {
-      border: 3px solid var(--ink);
-      background: var(--paper-3);
-      box-shadow: var(--hard);
-      padding: var(--s5);
-    }
-
-    .card .k {
-      font-family: var(--mono);
-      font-size: var(--t-cap);
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--brown-d);
-      display: block;
-      margin-bottom: var(--s3);
-    }
-
-    .card p {
-      margin-top: var(--s2);
-      font-size: var(--t-sm);
-      line-height: 1.76;
-      color: var(--ink-2);
-    }
-
-    /* ---------- 深色段 ---------- */
-    .dark {
-      background: var(--ink);
-      color: #f2efe8;
-      border-top: 3px solid var(--ink);
-    }
-
-    .dark .sec-head {
-      border-top-color: rgba(247, 245, 240, 0.24);
-    }
-
-    .dark .sec-head .idx,
-    .dark .sec-head .aside {
-      color: rgba(247, 245, 240, 0.58);
-    }
-
-    .dark h2,
-    .dark h3,
-    .dark .dsp {
-      color: #fbf8f2;
-    }
-
-    .dark .lede,
-    .dark p {
-      color: rgba(247, 245, 240, 0.82);
-    }
-
-    .dark .card {
-      background: #232019;
-      border-color: #f2efe8;
-      box-shadow: 8px 8px 0 var(--brown);
-    }
-
-    .dark .card .k {
-      color: var(--amber);
-    }
-
-    .dark .card p {
-      color: rgba(247, 245, 240, 0.8);
-    }
-
-    .dark .frame-shot {
-      border-color: #f2efe8;
-      box-shadow: 12px 12px 0 var(--steel);
-    }
-
-    .dark .bullets {
-      border-top-color: rgba(247, 245, 240, 0.2);
-    }
-
-    .dark .bullets li {
-      border-bottom-color: rgba(247, 245, 240, 0.2);
-      color: rgba(247, 245, 240, 0.82);
-    }
-
-    .dark .bullets li::before {
-      color: var(--amber);
-    }
-
-    .dark .bullets b {
-      color: #fbf8f2;
-    }
-
-    /* 四档权限 */
-    .perm {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: var(--s4);
-      margin-top: var(--s6);
-    }
-
-    .perm-item {
-      border: 3px solid rgba(247, 245, 240, 0.5);
-      padding: var(--s4);
-      background: #1f1c16;
-    }
-
-    .perm-item .pi-n {
-      font-family: var(--mono);
-      font-size: var(--t-cap);
-      letter-spacing: 0.18em;
-      color: var(--amber);
-    }
-
-    .perm-item h4 {
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: 1.25rem;
-      margin-top: var(--s2);
-      color: #fbf8f2;
-    }
-
-    .perm-item p {
-      margin-top: 6px;
-      font-size: var(--t-xs);
-      line-height: 1.7;
-      color: rgba(247, 245, 240, 0.72);
-    }
-
-    .perm-item.warn {
-      border-color: var(--amber);
-      background: var(--amber);
-    }
-
-    .perm-item.warn .pi-n,
-    .perm-item.warn h4,
-    .perm-item.warn p {
-      color: var(--ink);
-    }
-
-    .perm-item.warn p {
-      color: #3b2f16;
-    }
-
-    /* ---------- 短片 ---------- */
-    .film {
-      border: 3px solid var(--ink);
-      box-shadow: var(--hard-lg);
-      background: #0d0c0a;
-    }
-
-    .film video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      background: #0d0c0a;
-    }
-
-    .chapters {
-      margin-top: var(--s6);
-      border-top: 3px solid var(--ink);
-    }
-
-    .chapters a {
-      display: grid;
-      grid-template-columns: 5.5rem 1fr auto;
-      gap: var(--s4);
-      align-items: baseline;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--line-soft);
-      font-size: var(--t-sm);
-      transition: background 160ms var(--ease), padding 160ms var(--ease);
-    }
-
-    .chapters a:hover {
-      background: var(--paper-2);
-      padding-inline: 10px;
-    }
-
-    .chapters .tc {
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--blue);
-      letter-spacing: 0.06em;
-    }
-
-    .chapters .cn {
-      font-size: var(--t-xs);
-      color: var(--muted);
-      font-family: var(--mono);
-      letter-spacing: 0.08em;
-    }
-
-    /* ---------- 下载 ---------- */
-    .dl {
-      position: relative;
-      border: 3px solid var(--ink);
-      background: var(--blue);
-      color: #f4f9fc;
-      box-shadow: 12px 12px 0 var(--ink);
-      padding: clamp(28px, 4.5vw, 56px);
-      overflow: hidden;
-    }
-
-    .dl::after {
-      content: "";
-      position: absolute;
-      right: -60px;
-      top: -60px;
-      width: 220px;
-      height: 220px;
-      border: 3px solid rgba(244, 249, 252, 0.28);
-      transform: rotate(18deg);
-      pointer-events: none;
-    }
-
-    .dl .cap {
-      color: #cfe2f0;
-    }
-
-    .dl .cap::before {
-      background: var(--amber);
-    }
-
-    .dl h2 {
-      color: #fff;
-      margin-top: var(--s4);
-    }
-
-    .dl p {
-      position: relative;
-      margin-top: var(--s4);
-      max-width: 34em;
-      font-size: var(--t-sm);
-      line-height: 1.8;
-      color: rgba(244, 249, 252, 0.86);
-    }
-
-    .dl .btn {
-      border-color: var(--ink);
-      box-shadow: 5px 5px 0 var(--ink);
-    }
-
-    .dl-act {
-      position: relative;
-      margin-top: var(--s6);
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--s3);
-    }
-
-    .dl-note {
-      position: relative;
-      margin-top: var(--s5);
-      max-width: none;
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: rgba(244, 249, 252, 0.7);
-      letter-spacing: 0.03em;
-    }
-
-    .dl code {
-      font-family: var(--mono);
-      font-size: 0.9em;
-      background: rgba(12, 26, 38, 0.28);
-      border: 1px solid rgba(244, 249, 252, 0.28);
-      padding: 1px 6px;
-    }
-
-    /* ---------- 版本记录 ---------- */
-    .vlog {
-      margin-top: var(--s6);
-      border: 3px solid var(--ink);
-      background: var(--paper-3);
-      box-shadow: 8px 8px 0 var(--ink);
-    }
-
-    .vlog-head {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      gap: var(--s3);
-      flex-wrap: wrap;
-      padding: 16px clamp(20px, 3vw, 32px);
-      border-bottom: 3px solid var(--ink);
-      background: var(--paper-2);
-    }
-
-    .vlog-head h3 {
-      margin: 0;
-      font-size: 1.15rem;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-    }
-
-    .vlog-all {
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--blue-deep);
-      text-decoration: none;
-      border-bottom: 2px solid var(--blue-deep);
-      padding-bottom: 1px;
-    }
-
-    .vlog-all:hover {
-      background: var(--blue-soft);
-    }
-
-    .vlist {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    .vlist li + li {
-      border-top: 1px solid rgba(26, 25, 23, 0.22);
-    }
-
-    .vlist a {
-      display: grid;
-      grid-template-columns: 84px 52px 1fr;
-      gap: 16px;
-      align-items: baseline;
-      padding: 13px clamp(20px, 3vw, 32px);
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .vlist a:hover {
-      background: var(--blue-soft);
-    }
-
-    .vlist b {
-      font-family: var(--mono);
-      font-size: var(--t-sm);
-      color: var(--ink);
-    }
-
-    .vlist .vd {
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .vlist .vt {
-      font-size: var(--t-sm);
-      color: var(--ink-2);
-      line-height: 1.65;
-    }
-
-    @media (max-width: 640px) {
-      .vlist a {
-        grid-template-columns: 76px 1fr;
-      }
-
-      .vlist .vt {
-        grid-column: 1 / -1;
-      }
-    }
-
-    /* ---------- 更多软件 ---------- */
-    .moregrid {
-      display: grid;
-      gap: var(--s5);
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    }
-
-    .appcard {
-      display: block;
-      border: 3px solid var(--ink);
-      background: var(--paper-3);
-      box-shadow: 8px 8px 0 var(--ink);
-      padding: clamp(24px, 3vw, 36px);
-      text-decoration: none;
-      color: inherit;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .appcard:hover {
-      transform: translate(-3px, -3px);
-      box-shadow: 12px 12px 0 var(--ink);
-    }
-
-    .appcard h3 {
-      margin: var(--s3) 0 0;
-      font-size: 1.35rem;
-      font-weight: 900;
-      letter-spacing: -0.01em;
-    }
-
-    .appcard .app-meta {
-      margin-top: 8px;
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--muted);
-      letter-spacing: 0.03em;
-    }
-
-    .appcard p:not(.app-meta) {
-      margin-top: var(--s3);
-      font-size: var(--t-sm);
-      line-height: 1.8;
-      color: var(--ink-2);
-    }
-
-    .appcard .go {
-      margin-top: var(--s4);
-      display: inline-block;
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      color: var(--blue-deep);
-      border-bottom: 2px solid var(--blue-deep);
-      padding-bottom: 2px;
-    }
-
-    .appcard:hover .go {
-      background: var(--blue-soft);
-    }
-
-    /* ---------- 品牌 ---------- */
-    .brandblock {
-      display: grid;
-      gap: clamp(28px, 4vw, 56px);
-      align-items: center;
-    }
-
-    .brandmark {
-      border: 3px solid var(--ink);
-      background: var(--paper-3);
-      box-shadow: var(--hard);
-      padding: var(--s5);
-      display: grid;
-      place-items: center;
-    }
-
-    .brandmark img {
-      width: min(220px, 48vw);
-    }
-
-    .swatches {
-      margin-top: var(--s5);
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      border: 3px solid var(--ink);
-    }
-
-    .sw {
-      height: 56px;
-      position: relative;
-      border-right: 1px solid rgba(26, 25, 23, 0.25);
-    }
-
-    .sw:last-child {
-      border-right: 0;
-    }
-
-    .sw span {
-      position: absolute;
-      left: 6px;
-      bottom: 4px;
-      font-family: var(--mono);
-      font-size: 9px;
-      letter-spacing: 0.06em;
-      color: var(--ink);
-      opacity: 0.7;
-    }
-
-    .type-spec {
-      margin-top: var(--s5);
-      border-top: 1px solid var(--line-soft);
-    }
-
-    .type-spec div {
-      display: flex;
-      justify-content: space-between;
-      gap: var(--s4);
-      padding: 10px 0;
-      border-bottom: 1px solid var(--line-soft);
-      font-size: var(--t-xs);
-      color: var(--ink-2);
-    }
-
-    .type-spec b {
-      font-family: var(--mono);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    /* ---------- FAQ ---------- */
-    .faq {
-      margin-top: var(--s6);
-      border-top: 3px solid var(--ink);
-    }
-
-    .faq details {
-      border-bottom: 1px solid var(--line-soft);
-    }
-
-    .faq summary {
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      align-items: flex-start;
-      gap: var(--s4);
-      padding: var(--s5) 0;
-      font-family: var(--serif);
-      font-weight: 900;
-      font-size: 1.1875rem;
-      line-height: 1.5;
-    }
-
-    .faq summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .faq summary .q {
-      font-family: var(--mono);
-      font-size: var(--t-xs);
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      color: var(--blue);
-      padding-top: 6px;
-      flex: none;
-    }
-
-    .faq summary .sign {
-      margin-left: auto;
-      flex: none;
-      font-family: var(--mono);
-      font-size: 1.25rem;
-      line-height: 1;
-      color: var(--ink);
-      padding-top: 2px;
-    }
-
-    .faq summary .sign::before {
-      content: "+";
-    }
-
-    .faq details[open] summary .sign::before {
-      content: "−";
-    }
-
-    .faq details[open] summary .sign {
-      color: var(--brown-d);
-    }
-
-    .faq .a {
-      padding: 0 0 var(--s5) 3.2rem;
-      max-width: 52em;
-    }
-
-    .faq .a p {
-      font-size: var(--t-sm);
-      line-height: 1.82;
-      color: var(--ink-2);
-    }
-
-    .faq .a p+p {
-      margin-top: var(--s3);
-    }
-
-    /* ---------- 尾 ---------- */
-    footer {
-      position: relative;
-      z-index: 1;
-      border-top: 3px solid var(--ink);
-      padding-block: var(--s6) var(--s7);
-      font-size: var(--t-xs);
-      color: var(--muted);
-    }
-
-    .foot {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--s4) var(--s6);
-    }
-
-    .foot .brand {
-      font-size: var(--t-sm);
-      color: var(--ink);
-    }
-
-    .foot .brand img {
-      width: 26px;
-      height: 26px;
-    }
-
-    .foot-links {
-      margin-left: auto;
-      display: flex;
-      flex-wrap: wrap;
-      gap: var(--s5);
-      font-weight: 600;
-    }
-
-    .foot-links a:hover {
-      color: var(--blue);
-    }
-
-    .foot-copy {
-      flex-basis: 100%;
-      font-family: var(--mono);
-      letter-spacing: 0.03em;
-      line-height: 1.9;
-    }
-
-    /* ---------- 进场 ---------- */
-    .rise {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 560ms var(--ease), transform 560ms var(--ease);
-    }
-
-    .rise.in {
-      opacity: 1;
-      transform: none;
-    }
-
-    /* ?static=1：给截图与印刷用，进场动画直接落位 */
-    html.static {
-      scroll-behavior: auto;
-    }
-
-    html.static .rise {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-    }
-
-    html.static .ticker-track {
-      animation: none !important;
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      .rise {
-        opacity: 1;
-        transform: none;
-        transition: none;
-      }
-    }
-
-    /* ---------- 签名动效：泳道水线 ---------- */
-    /* 一条 git 主线自己画出来，提交节点依次浮出，小獭顺流游过一遍 */
+    /* 泳道水线：主线自己画出来，提交节点依次浮出，小獭顺流游过 */
     .river {
-      padding-block: clamp(6px, 1.4vw, 18px);
+      padding-block: clamp(10px, 2vw, 24px);
     }
 
     .river svg {
@@ -1515,10 +795,21 @@
       animation: nodePop 480ms var(--ease-spring) forwards;
     }
 
-    .river.in circle.river-node:nth-of-type(1) { animation-delay: 0.55s; }
-    .river.in circle.river-node:nth-of-type(2) { animation-delay: 0.85s; }
-    .river.in circle.river-node:nth-of-type(3) { animation-delay: 1.3s; }
-    .river.in circle.river-node:nth-of-type(4) { animation-delay: 1.45s; }
+    .river.in circle.river-node:nth-of-type(1) {
+      animation-delay: 0.55s;
+    }
+
+    .river.in circle.river-node:nth-of-type(2) {
+      animation-delay: 0.85s;
+    }
+
+    .river.in circle.river-node:nth-of-type(3) {
+      animation-delay: 1.3s;
+    }
+
+    .river.in circle.river-node:nth-of-type(4) {
+      animation-delay: 1.45s;
+    }
 
     @keyframes nodePop {
       from {
@@ -1554,10 +845,7 @@
         offset-distance: 0%;
       }
 
-      10% {
-        opacity: 1;
-      }
-
+      10%,
       88% {
         opacity: 1;
       }
@@ -1568,39 +856,895 @@
       }
     }
 
-    /* 环境动效：呼吸浮动，只给吉祥物这类「活物」 */
-    @keyframes bob {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-9px);
-      }
+    /* ---------- 小节 ---------- */
+    .sec {
+      padding-block: clamp(64px, 8vw, 112px);
     }
 
-    .bob {
-      animation: bob 5.6s ease-in-out infinite;
+    .sec-head {
+      border-top: 3px solid var(--ink);
+      padding-top: var(--s5);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: var(--s3) var(--s5);
     }
 
-    /* 数字永远等宽：滚动计数时不跳版 */
-    [data-count] {
-      font-variant-numeric: tabular-nums;
+    .sec-head .idx {
+      font: 600 var(--t-xs) / 1 var(--mono);
+      letter-spacing: 0.1em;
+      color: var(--muted);
     }
 
-    /* ---------- 回到顶部（磨砂玻璃小方章） ---------- */
+    .sec-head .aside {
+      margin-left: auto;
+      font: var(--t-xs) / 1.4 var(--mono);
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .sec-head h2 {
+      flex: 1 1 100%;
+      margin-top: var(--s2);
+    }
+
+    .sec-intro {
+      margin-top: var(--s5);
+    }
+
+    /* ---------- 01 同一件事 ---------- */
+    .why-grid {
+      margin-top: clamp(64px, 7vw, 88px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) auto minmax(0, 0.88fr);
+      align-items: center;
+      gap: clamp(20px, 3vw, 40px);
+    }
+
+    .frame.term {
+      background: #161512;
+      box-shadow: var(--hard);
+    }
+
+    .term .fbar {
+      background: #23211c;
+    }
+
+    .term .fbar span {
+      color: #a8a294;
+    }
+
+    .term pre {
+      padding: 18px 20px 22px;
+      font: 500 13.5px / 1.75 var(--mono);
+      color: #e9e5dc;
+      overflow-x: auto;
+    }
+
+    .term .p {
+      color: #8fb4d6;
+    }
+
+    .term .h {
+      color: #8a857a;
+    }
+
+    .term .e {
+      color: #ef8a7d;
+    }
+
+    .term mark {
+      background: transparent;
+      color: inherit;
+      outline: 2px solid var(--amber);
+      outline-offset: 2px;
+    }
+
+    .why-arrow {
+      display: grid;
+      place-items: center;
+      width: 52px;
+      height: 52px;
+      border: 3px solid var(--ink);
+      background: var(--amber);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .why-app figcaption {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 14px 14px;
+      background: var(--paper-3);
+      border-top: 3px solid var(--ink);
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border: 2px solid var(--ink);
+      background: #fff;
+      font-size: var(--t-xs);
+      font-weight: 600;
+    }
+
+    .chip b {
+      font: 700 var(--t-xs) / 1 var(--mono);
+    }
+
+    .chip.up b {
+      color: var(--blue);
+    }
+
+    .chip.down b {
+      color: var(--brown-d);
+    }
+
+    /* ---------- 02 功能 ---------- */
+    .feat {
+      padding-block: clamp(48px, 6vw, 80px) 0;
+    }
+
+    .feat+.feat {
+      margin-top: clamp(40px, 5vw, 64px);
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .feat-copy {
+      display: grid;
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      align-items: start;
+      gap: var(--s5) clamp(24px, 5vw, 72px);
+    }
+
+    .num {
+      display: inline-block;
+      font: 600 var(--t-xs) / 1.5 var(--mono);
+      letter-spacing: 0.18em;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 3px 10px;
+    }
+
+    .num-k {
+      margin-left: 10px;
+      font: 600 var(--t-cap) / 1 var(--mono);
+      letter-spacing: 0.22em;
+      color: var(--muted);
+    }
+
+    .feat h3 {
+      margin-top: var(--s4);
+      font-size: clamp(1.5rem, 3vw, 2.125rem);
+      line-height: 1.25;
+    }
+
+    .feat h3 .r {
+      color: var(--red);
+    }
+
+    .feat h3 .g {
+      color: var(--green);
+    }
+
+    .feat-copy p {
+      font-size: var(--t-sm);
+      line-height: 1.85;
+      color: var(--ink-2);
+    }
+
+    .bullets {
+      margin-top: var(--s5);
+      border-top: 1px solid var(--line-soft);
+    }
+
+    .bullets li {
+      position: relative;
+      padding: var(--s3) 0 var(--s3) var(--s5);
+      border-bottom: 1px solid var(--line-soft);
+      font-size: var(--t-sm);
+      line-height: 1.7;
+      color: var(--ink-2);
+    }
+
+    .bullets li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      top: var(--s3);
+      font-family: var(--mono);
+      font-weight: 700;
+      color: var(--blue);
+    }
+
+    .feat .frame {
+      margin-top: clamp(56px, 6vw, 72px);
+    }
+
+    /* ---------- 03 小獭（深色） ---------- */
+    .dark {
+      background: var(--ink);
+      color: var(--on-dark);
+    }
+
+    .dark .sec-head {
+      border-top-color: rgba(247, 245, 240, 0.24);
+    }
+
+    .dark .sec-head .idx,
+    .dark .sec-head .aside {
+      color: rgba(247, 245, 240, 0.58);
+    }
+
+    .dark h2,
+    .dark h3,
+    .dark h4 {
+      color: #fbf8f2;
+    }
+
+    .dark h2 em {
+      color: var(--amber);
+    }
+
+    .dark .lede,
+    .dark p {
+      color: rgba(247, 245, 240, 0.82);
+    }
+
+    .dark code {
+      color: var(--amber);
+    }
+
+    .otter-grid {
+      margin-top: var(--s6);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+      align-items: start;
+      gap: clamp(36px, 5vw, 72px);
+    }
+
+    .otter-grid .cap {
+      margin-top: var(--s6);
+    }
+
+    .perm {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--s3);
+      margin-top: var(--s4);
+    }
+
+    .perm-item {
+      padding: var(--s4);
+      border: 3px solid rgba(247, 245, 240, 0.5);
+      background: #1f1c16;
+    }
+
+    .perm-item .pi-n {
+      font: 600 var(--t-cap) / 1.4 var(--mono);
+      letter-spacing: 0.14em;
+      color: var(--amber);
+    }
+
+    .perm-item h4 {
+      margin-top: var(--s2);
+      font: 900 1.25rem / 1.3 var(--serif);
+    }
+
+    .dark .perm-item p {
+      margin-top: 6px;
+      font-size: var(--t-xs);
+      line-height: 1.7;
+      color: rgba(247, 245, 240, 0.72);
+    }
+
+    .perm-item.on {
+      border-color: var(--amber);
+      background: var(--amber);
+    }
+
+    .perm-item.on .pi-n,
+    .perm-item.on h4 {
+      color: var(--ink);
+    }
+
+    .dark .perm-item.on p {
+      color: #3b2f16;
+    }
+
+    .dark .fine {
+      margin-top: var(--s4);
+      font-size: var(--t-xs);
+      line-height: 1.8;
+      color: rgba(247, 245, 240, 0.66);
+    }
+
+    .dark .frame {
+      border-color: var(--on-dark);
+      box-shadow: 12px 12px 0 var(--steel);
+    }
+
+    .dark .frame .fbar {
+      background: #23211c;
+      border-bottom-color: var(--on-dark);
+    }
+
+    .dark .frame .fbar span {
+      color: #a8a294;
+    }
+
+    .otter-shot {
+      margin-top: 44px;
+      background: #141416;
+    }
+
+    .notes {
+      margin-top: clamp(56px, 7vw, 88px);
+    }
+
+    .dark .card {
+      background: #232019;
+      border-color: var(--on-dark);
+      box-shadow: 8px 8px 0 var(--brown);
+    }
+
+    .dark .card .k {
+      color: var(--amber);
+    }
+
+    /* ---------- 卡片组 ---------- */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--s5);
+    }
+
+    .card {
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: var(--hard);
+      padding: var(--s5);
+    }
+
+    .card .k {
+      display: block;
+      margin-bottom: var(--s3);
+      font: 600 var(--t-cap) / 1.4 var(--mono);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brown-d);
+    }
+
+    .card h3 {
+      font-size: 1.1875rem;
+    }
+
+    .card p {
+      margin-top: var(--s2);
+      font-size: var(--t-sm);
+      line-height: 1.76;
+      color: var(--ink-2);
+    }
+
+    .tools {
+      margin-top: var(--s7);
+    }
+
+    .tools .card {
+      transition: transform 160ms var(--ease), box-shadow 160ms var(--ease);
+    }
+
+    .tools .card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 11px 11px 0 var(--ink);
+    }
+
+    /* ---------- 05 浅色深色 ---------- */
+    .compare {
+      margin-top: clamp(64px, 7vw, 88px);
+      --pos: 50%;
+    }
+
+    .compare .view .top {
+      clip-path: inset(0 0 0 var(--pos));
+    }
+
+    .compare .handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: var(--pos);
+      width: 3px;
+      margin-left: -1.5px;
+      background: var(--ink);
+      pointer-events: none;
+    }
+
+    .compare .knob {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      transform: translate(-50%, -50%);
+      border: 3px solid var(--ink);
+      background: var(--amber);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    .compare .lab {
+      position: absolute;
+      bottom: 14px;
+      padding: 3px 9px;
+      border: 2px solid var(--ink);
+      font: 600 var(--t-cap) / 1.4 var(--mono);
+      letter-spacing: 0.16em;
+      pointer-events: none;
+    }
+
+    .compare .lab.l {
+      left: 14px;
+      background: var(--paper-3);
+    }
+
+    .compare .lab.d {
+      right: 14px;
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--paper);
+    }
+
+    .compare input[type="range"] {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      opacity: 0;
+      cursor: ew-resize;
+    }
+
+    .compare .view {
+      touch-action: pan-y;
+    }
+
+    /* ---------- 06 短片 ---------- */
+    .frame.film {
+      margin-top: clamp(64px, 7vw, 88px);
+      background: #0d0c0a;
+    }
+
+    .film video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #0d0c0a;
+    }
+
+    .chapters {
+      margin-top: var(--s7);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: repeat(5, auto);
+      grid-auto-flow: column;
+      column-gap: var(--s7);
+      border-top: 3px solid var(--ink);
+    }
+
+    .chapters a {
+      display: grid;
+      grid-template-columns: 4.2rem 1fr auto;
+      gap: var(--s4);
+      align-items: baseline;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: var(--t-sm);
+      transition: background 160ms var(--ease), padding 160ms var(--ease);
+    }
+
+    .chapters a:hover {
+      background: var(--paper-2);
+      padding-inline: 10px;
+    }
+
+    .chapters a.on {
+      background: var(--amber);
+      padding-inline: 10px;
+    }
+
+    .chapters .tc {
+      font: var(--t-xs) / 1 var(--mono);
+      letter-spacing: 0.06em;
+      color: var(--blue);
+    }
+
+    .chapters a.on .tc {
+      color: var(--ink);
+    }
+
+    .chapters .cn {
+      font: var(--t-cap) / 1 var(--mono);
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    /* ---------- 07 下载 ---------- */
+    .dl {
+      position: relative;
+      border: 3px solid var(--ink);
+      background: var(--blue);
+      color: #f4f9fc;
+      box-shadow: var(--hard-lg);
+      padding: clamp(28px, 4.5vw, 56px);
+      overflow: hidden;
+    }
+
+    .dl::after {
+      content: "";
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 220px;
+      height: 220px;
+      border: 3px solid rgba(244, 249, 252, 0.28);
+      transform: rotate(18deg);
+      pointer-events: none;
+    }
+
+    .dl .cap {
+      color: #cfe2f0;
+    }
+
+    .dl .cap::before {
+      background: var(--amber);
+    }
+
+    .dl h2 {
+      margin-top: var(--s4);
+      color: #fff;
+    }
+
+    .dl-grid {
+      position: relative;
+      z-index: 1;
+      margin-top: var(--s6);
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s5);
+    }
+
+    .dl-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: clamp(20px, 2.6vw, 30px);
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      color: var(--ink);
+      box-shadow: var(--hard);
+    }
+
+    .dl-card.mine {
+      box-shadow: 8px 8px 0 var(--amber);
+    }
+
+    .dl-card .os {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 6px 12px;
+    }
+
+    .dl-card h3 {
+      font-size: 1.5rem;
+    }
+
+    .dl-card .ver {
+      font: var(--t-xs) / 1 var(--mono);
+      color: var(--muted);
+    }
+
+    .dl-card .badge {
+      display: none;
+      margin-left: auto;
+    }
+
+    .dl-card.mine .badge {
+      display: inline-block;
+    }
+
+    .dl-card .req {
+      margin-top: var(--s3);
+      font-size: var(--t-sm);
+      font-weight: 700;
+    }
+
+    .dl-card p:not(.req) {
+      margin: var(--s2) 0 var(--s5);
+      font-size: var(--t-sm);
+      line-height: 1.75;
+      color: var(--ink-2);
+    }
+
+    .dl-card .btn {
+      align-self: flex-start;
+      margin-top: auto;
+    }
+
+    .dl-note {
+      position: relative;
+      margin-top: var(--s6);
+      font: var(--t-xs) / 1.9 var(--mono);
+      letter-spacing: 0.02em;
+      color: rgba(244, 249, 252, 0.78);
+    }
+
+    .dl-note code {
+      font-size: 0.95em;
+      padding: 1px 6px;
+      background: rgba(12, 26, 38, 0.28);
+      border: 1px solid rgba(244, 249, 252, 0.28);
+      white-space: nowrap;
+    }
+
+    /* 版本记录 */
+    .vlog {
+      margin-top: var(--s7);
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: var(--hard);
+    }
+
+    .vlog-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--s3);
+      padding: 16px clamp(20px, 3vw, 32px);
+      border-bottom: 3px solid var(--ink);
+      background: var(--paper-2);
+    }
+
+    .vlog-head h3 {
+      font-size: 1.15rem;
+    }
+
+    .vlog-all {
+      font: var(--t-xs) / 1.4 var(--mono);
+      color: var(--blue-deep);
+      border-bottom: 2px solid var(--blue-deep);
+      padding-bottom: 1px;
+    }
+
+    .vlog-all:hover {
+      background: var(--blue-soft);
+    }
+
+    .vlist li+li {
+      border-top: 1px solid rgba(26, 25, 23, 0.22);
+    }
+
+    .vlist a {
+      display: grid;
+      grid-template-columns: 84px 52px 1fr;
+      gap: 16px;
+      align-items: baseline;
+      padding: 13px clamp(20px, 3vw, 32px);
+    }
+
+    .vlist a:hover {
+      background: var(--blue-soft);
+    }
+
+    .vlist b {
+      font: 700 var(--t-sm) / 1.4 var(--mono);
+    }
+
+    .vlist .vd {
+      font: var(--t-xs) / 1.4 var(--mono);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .vlist .vt {
+      font-size: var(--t-sm);
+      line-height: 1.65;
+      color: var(--ink-2);
+    }
+
+    /* ---------- 08 问题 ---------- */
+    .faq {
+      margin-top: var(--s6);
+      border-top: 3px solid var(--ink);
+    }
+
+    .faq details {
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .faq summary {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: start;
+      column-gap: var(--s4);
+      padding: var(--s5) 0;
+      font: 900 1.1875rem / 1.5 var(--serif);
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq summary .q {
+      flex: none;
+      padding-top: 6px;
+      font: 600 var(--t-xs) / 1 var(--mono);
+      letter-spacing: 0.1em;
+      color: var(--blue);
+    }
+
+    .faq summary .sign {
+      padding-top: 2px;
+      font: 1.25rem / 1 var(--mono);
+    }
+
+    .faq summary .sign::before {
+      content: "+";
+    }
+
+    .faq details[open] summary .sign::before {
+      content: "−";
+    }
+
+    .faq details[open] summary .sign {
+      color: var(--brown-d);
+    }
+
+    .faq .a {
+      max-width: 52em;
+      padding: 0 0 var(--s5) 3.2rem;
+    }
+
+    .faq .a p {
+      font-size: var(--t-sm);
+      line-height: 1.82;
+      color: var(--ink-2);
+    }
+
+    /* ---------- 09 其他软件 ---------- */
+    #more {
+      background: var(--paper-2);
+      border-top: 3px solid var(--ink);
+    }
+
+    #more .sec-head {
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .appcard {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: var(--s5) clamp(20px, 3vw, 36px);
+      margin-top: var(--s6);
+      padding: clamp(22px, 3vw, 34px);
+      border: 3px solid var(--ink);
+      background: var(--paper-3);
+      box-shadow: 8px 8px 0 var(--teal);
+      transition: transform 160ms var(--ease), box-shadow 160ms var(--ease);
+    }
+
+    .appcard:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 11px 11px 0 var(--teal);
+    }
+
+    .appcard .mark {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      border: 3px solid var(--ink);
+      background: #0d2f2e;
+      color: #b2f5ec;
+    }
+
+    .appcard h3 {
+      margin-top: var(--s3);
+      font-size: 1.35rem;
+    }
+
+    .appcard .app-meta {
+      margin-top: 6px;
+      font: var(--t-xs) / 1.5 var(--mono);
+      letter-spacing: 0.03em;
+      color: var(--muted);
+    }
+
+    .appcard p:not(.app-meta) {
+      margin-top: var(--s3);
+      font-size: var(--t-sm);
+      line-height: 1.8;
+      color: var(--ink-2);
+    }
+
+    .appcard .go {
+      font: var(--t-xs) / 1.4 var(--mono);
+      color: var(--blue-deep);
+      border-bottom: 2px solid var(--blue-deep);
+      padding-bottom: 2px;
+      white-space: nowrap;
+    }
+
+    .appcard:hover .go {
+      background: var(--blue-soft);
+    }
+
+    /* ---------- 尾 ---------- */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 3px solid var(--ink);
+      padding-block: var(--s6) var(--s7);
+      font-size: var(--t-xs);
+      color: var(--muted);
+    }
+
+    .foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--s4) var(--s6);
+    }
+
+    .foot .brand {
+      font-size: var(--t-sm);
+      color: var(--ink);
+    }
+
+    .foot .brand img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .foot-links {
+      margin-left: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s5);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .foot-links a:hover {
+      color: var(--blue);
+    }
+
+    .foot-copy {
+      flex-basis: 100%;
+      font-family: var(--mono);
+      letter-spacing: 0.03em;
+      line-height: 1.9;
+    }
+
+    /* ---------- 回到顶部 ---------- */
     .totop {
       position: fixed;
       right: 22px;
       bottom: 22px;
       z-index: 55;
-      width: 46px;
-      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 46px;
+      height: 46px;
       border: 3px solid var(--ink);
       background: var(--glass);
       -webkit-backdrop-filter: var(--glass-blur);
@@ -1609,8 +1753,7 @@
       opacity: 0;
       pointer-events: none;
       transform: translateY(8px);
-      transition: opacity var(--dur-hover) var(--ease), transform var(--dur-hover) var(--ease),
-        box-shadow var(--dur-press) var(--ease), background var(--dur-hover) var(--ease);
+      transition: opacity 200ms var(--ease), transform 200ms var(--ease), box-shadow 140ms var(--ease);
     }
 
     .totop.show {
@@ -1625,38 +1768,31 @@
       background: var(--glass-strong);
     }
 
-    .totop:active {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 var(--ink);
+    /* ---------- 进场 ---------- */
+    .rise {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 560ms var(--ease), transform 560ms var(--ease);
     }
 
-    /* ---------- 背景节奏：整段明暗交替 ---------- */
-    #more {
-      background: var(--paper-2);
+    .rise.in {
+      opacity: 1;
+      transform: none;
     }
 
-    /* 动效降级：水线直接画好，小獭不游 */
-    @media (prefers-reduced-motion: reduce) {
+    /* ?static=1：截图用，动画直接落位 */
+    html.static {
+      scroll-behavior: auto;
+    }
 
-      .river path,
-      .river .river-node,
-      .river .river-otter,
-      .bob,
-      .totop {
-        animation: none !important;
-      }
+    html.static .rise {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
 
-      .river path {
-        stroke-dashoffset: 0;
-      }
-
-      .river .river-node {
-        transform: none;
-      }
-
-      .river .river-otter {
-        display: none;
-      }
+    html.static .ticker-track {
+      animation: none !important;
     }
 
     html.static .river path {
@@ -1673,28 +1809,46 @@
       opacity: 0;
     }
 
-    html.static .bob {
-      animation: none;
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      .rise {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .ticker-track,
+      .river path,
+      .river .river-node,
+      .river .river-otter {
+        animation: none !important;
+      }
+
+      .river path {
+        stroke-dashoffset: 0;
+      }
+
+      .river .river-node {
+        transform: none;
+      }
+
+      .river .river-otter {
+        display: none;
+      }
+
+      .btn,
+      .card,
+      .appcard,
+      .totop {
+        transition: none;
+      }
     }
 
     /* ---------- 响应式 ---------- */
     @media (min-width: 900px) {
-      .feat-row {
-        grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
-      }
-
-      .feat-row.flip>.feat-copy {
-        order: 2;
-      }
-
-      .brandblock {
-        grid-template-columns: 320px minmax(0, 1fr);
-      }
-
-      .hero-top {
-        grid-template-columns: minmax(0, 1fr);
-      }
-
       .hero-grid {
         grid-template-columns: minmax(0, 1fr) 284px;
         gap: var(--s7);
@@ -1702,68 +1856,102 @@
     }
 
     @media (max-width: 899px) {
-      .grid-3,
-      .grid-2,
-      .perm {
+
+      .why-grid,
+      .feat-copy,
+      .otter-grid,
+      .dl-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .why-arrow {
+        justify-self: center;
+        transform: rotate(90deg);
+      }
+
+      .why-app {
+        margin-top: 36px;
+      }
+
+      .grid-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .notes {
         grid-template-columns: minmax(0, 1fr);
       }
 
       .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        row-gap: var(--s5);
       }
 
       .stat+.stat {
-        border-left: 0;
         padding-left: 0;
+        border-left: 0;
       }
 
       .stat:nth-child(even) {
         padding-left: var(--s4);
-        border-left: 1px solid var(--line);
+        border-left: 1px solid var(--ink);
       }
 
-      .stat:nth-child(n+3) {
-        border-top: 1px solid var(--line);
-        padding-top: var(--s4);
+      .stat:nth-child(n + 3) {
+        border-top: 1px solid var(--ink);
       }
 
-      .swatches {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .brandblock {
+      .chapters {
         grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: none;
+        grid-auto-flow: row;
+      }
+
+      .appcard {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .appcard .go {
+        grid-column: 2;
+        justify-self: start;
       }
     }
 
     @media (max-width: 719px) {
       :root {
-        --t-dsp: clamp(2.1rem, 10.5vw, 2.9rem);
         --hard: 6px 6px 0 var(--ink);
         --hard-lg: 7px 7px 0 var(--ink);
-        --hard-blue: 7px 7px 0 var(--blue);
-      }
-
-      .hero h1 {
-        white-space: normal;
-      }
-
-      .hero-act .btn,
-      .dl-act .btn {
-        width: 100%;
       }
 
       .nav-in {
         height: 60px;
       }
 
-      .nav-links>a:not(.btn):not(.keep) {
+      .nav-links>a:not(.btn) {
         display: none;
       }
 
       .brand i {
         display: none;
+      }
+
+      .spec {
+        display: none;
+      }
+
+      .hero-act .btn {
+        width: 100%;
+      }
+
+      .grid-3,
+      .perm {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .dark .frame {
+        box-shadow: 7px 7px 0 var(--steel);
+      }
+
+      .dark .card {
+        box-shadow: 6px 6px 0 var(--brown);
       }
 
       .chapters a {
@@ -1778,18 +1966,49 @@
         padding-left: 0;
       }
 
+      .faq summary {
+        grid-template-columns: 1fr auto;
+      }
+
       .faq summary .q {
         display: none;
       }
 
-      .frame-shot::after {
+      .vlist a {
+        grid-template-columns: 70px 1fr;
+        gap: 4px 12px;
+      }
+
+      .vlist .vt {
+        grid-column: 1 / -1;
+      }
+
+      .appcard {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .appcard .mark {
         display: none;
+      }
+
+      .appcard .go {
+        grid-column: 1;
+      }
+
+      .fbar span {
+        padding-right: 0;
+      }
+
+      .totop {
+        right: 16px;
+        bottom: 16px;
       }
     }
   </style>
 </head>
 
 <body>
+  <a class="skip" href="#main">跳到正文</a>
 
   <header class="nav" id="nav">
     <div class="wrap nav-in">
@@ -1799,118 +2018,116 @@
       </a>
       <nav class="nav-links" aria-label="站内导航">
         <a href="#features">功能</a>
-        <a href="#copilot">小獭</a>
+        <a href="#otter">小獭</a>
         <a href="#film">短片</a>
         <a href="#vlog">版本</a>
         <a href="#faq">问题</a>
-        <a class="btn btn-ink btn-sm keep" href="#download">下载 v1.1.0</a>
+        <a class="btn btn-ink btn-sm" href="#download">下载 v1.1.1</a>
       </nav>
     </div>
   </header>
 
-  <main id="top">
+  <main id="main">
 
     <!-- ============ 首屏 ============ -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="wrap hero-top">
-        <div>
-          <div class="label-row">
-            <span class="cap">MACOS · WINDOWS · GIT 客户端</span>
-            <span class="cap" style="color: var(--muted)">v1.1.0 · 界面重制</span>
-          </div>
-          <h1 id="hero-title">看得清，<em>不瞎猜</em><span class="dot">。</span></h1>
-          <div class="hero-grid">
-            <div>
-              <p class="lede hero-lede">
-                <code style="font-family: var(--mono); font-size: 0.94em">git push</code> 被拒的那一刻，多数人打开浏览器开始搜报错。
-                水獭 Git 让你不用搜：<span class="hl">落后几个、分没分叉、哪个文件冲突</span>，
-                全在同一屏里摊开。说不清的地方，小獭先问你——它不替你猜。
-              </p>
-              <div class="hero-act">
-                <a class="btn btn-ink" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
-                  target="_blank" rel="noopener">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
-                      stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  下载 v1.1.0 · macOS
-                </a>
-                <a class="btn" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip"
-                  target="_blank" rel="noopener">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
-                      stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  Windows 版 · 预览
-                </a>
-                <a class="btn" href="#film">先看 51 秒短片</a>
-              </div>
-              <p class="hero-meta"><span>macOS 12+ · Apple Silicon</span><span>Windows 10 / 11 · x64 预览</span><span>mac 已签名 · 已公证</span><span>免费，无账号</span></p>
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="label-row rise">
+          <span class="cap">macOS 和 Windows 上的 Git 客户端</span>
+          <span class="cap soft">v1.1.1</span>
+        </div>
+        <h1 id="hero-title" class="rise"><span class="nw">看得清，</span><span class="nw"><em>不瞎猜</em><span class="dot">。</span></span></h1>
+
+        <div class="hero-grid">
+          <div class="rise">
+            <p class="lede hero-lede">
+              推送被拒，终端只回你一句 <code>non-fast-forward</code>。在水獭 Git 里，侧栏那一行写着
+              <b class="mono">↑2 ↓3</b>，<span class="hl">两个提交还没推，远程多了三个</span>。历史、改动和冲突摊在同一个窗口里，看明白了再动手。
+            </p>
+            <div class="hero-act">
+              <a class="btn btn-ink" id="cta-main"
+                href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
+                target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>下载 macOS 版</span>
+              </a>
+              <a class="btn" id="cta-alt"
+                href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip"
+                target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span>Windows 预览版</span>
+              </a>
+              <a class="btn" href="#film">
+                <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+                  <path d="M4 2.5v11l9.5-5.5z" fill="currentColor" />
+                </svg>
+                看 75 秒短片
+              </a>
             </div>
-
-            <aside class="spec" aria-label="版本规格">
-              <p class="spec-h">Release · v1.1.0</p>
-              <dl>
-                <dt>体积</dt>
-                <dd>21 MB</dd>
-                <dt>系统</dt>
-                <dd>macOS 12+</dd>
-                <dt>芯片</dt>
-                <dd>Apple Silicon</dd>
-                <dt>Windows</dt>
-                <dd>10 / 11 · x64 预览</dd>
-                <dt>签名</dt>
-                <dd>已公证</dd>
-                <dt>价格</dt>
-                <dd style="color: var(--brown-d)">免费</dd>
-                <dt>账号</dt>
-                <dd>不需要</dd>
-              </dl>
-            </aside>
+            <p class="hero-meta"><span>免费，不用注册</span><span>macOS 12+ · Apple Silicon</span><span>Windows 10 / 11 x64 预览版</span></p>
           </div>
+
+          <aside class="spec rise" aria-label="版本规格">
+            <p class="spec-h">Release · v1.1.1</p>
+            <dl>
+              <dt>体积</dt>
+              <dd>21 MB</dd>
+              <dt>系统</dt>
+              <dd>macOS 12+</dd>
+              <dt>芯片</dt>
+              <dd>Apple Silicon</dd>
+              <dt>Windows</dt>
+              <dd>10 / 11 · x64 预览</dd>
+              <dt>签名</dt>
+              <dd>macOS 已公证</dd>
+              <dt>价格</dt>
+              <dd class="free">免费</dd>
+              <dt>账号</dt>
+              <dd>不用注册</dd>
+            </dl>
+          </aside>
         </div>
       </div>
 
-      <div class="wrap stage">
-        <div class="frame-shot rise" data-tag="一个窗口 · 真操作">
-          <picture>
-            <source srcset="assets/shots/window.webp" type="image/webp" />
-            <img src="assets/shots/window.png" width="1600" height="1000"
-              alt="水獭 Git 主窗口：左边仓库与分支，中间提交列表、变更文件与逐行对比，右边小獭对话，底部状态栏显示分支与提交数" />
-          </picture>
+      <div class="wrap stage rise">
+        <div class="seg" role="group" aria-label="截图主题">
+          <button type="button" data-shot-theme="light" aria-pressed="true">浅色</button>
+          <button type="button" data-shot-theme="dark" aria-pressed="false">深色</button>
         </div>
+        <figure class="frame frame-hero" id="hero-win" data-tag="一个窗口 · 实机截图">
+          <div class="fbar"><i></i><i></i><i></i><span>水獭 Git</span></div>
+          <div class="view">
+            <img class="l" src="assets/shots/files-light.webp" width="2400" height="1452" fetchpriority="high"
+              alt="水獭 Git 主窗口（浅色）：左侧栏显示当前仓库 lumen-notes、分支 main 标着 ↑2 ↓3，中间是待提交的文件，右边是 package.json 的左右对比" />
+            <img class="d" src="assets/shots/files-dark.webp" width="2400" height="1452" loading="lazy"
+              decoding="async" alt="" aria-hidden="true" />
+          </div>
+        </figure>
       </div>
 
-      <div class="wrap" style="margin-top: clamp(28px, 4vw, 48px)">
+      <div class="wrap">
         <div class="stats rise">
-          <div class="stat">
-            <b>148<small>条</small></b>
-            <span>历史列表顶上就数给你看，不用 scroll 到底</span>
-          </div>
-          <div class="stat">
-            <b>+278<small></small></b>
-            <span>一次重构的真实增删，绿的加、灰的删，不糊在一起</span>
-          </div>
-          <div class="stat">
-            <b>297<small>次</small></b>
-            <span>小獭这个月的请求数，含 14 次失败，一次没抹掉</span>
-          </div>
-          <div class="stat">
-            <b>0<small>个</small></b>
-            <span>账号、订阅、广告位，全都没有</span>
-          </div>
+          <div class="stat"><b><span data-count="3">3</span><small>档</small></b><span>小獭的权限深度，出厂是中间那档</span></div>
+          <div class="stat"><b><span data-count="8">8</span><small>秒</small></b><span>默认每 8 秒在后台获取一次远程</span></div>
+          <div class="stat"><b><span data-count="125">125</span><small>个</small></b><span>小獭能调的工具，每个都配了示例口令</span></div>
+          <div class="stat"><b>0</b><span>不用注册账号，没有订阅，也没有广告</span></div>
         </div>
       </div>
 
       <div class="ticker" aria-hidden="true">
         <div class="ticker-track">
-          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>51 秒，有旁白</span>
-          <span>历史泳道</span><span>逐行对比</span><span>冲突分块</span><span>五个仓库一栏</span><span>菜单栏托盘</span><span>git bisect</span><span>真录屏，不演</span><span>51 秒，有旁白</span>
+          <span>历史泳道</span><span>逐行对比</span><span>暂存此块</span><span>冲突分块</span><span>三方合并</span><span>暂存架</span><span>git bisect</span><span>工作树</span><span>拉取请求</span><span>菜单栏托盘</span><span>浅色 / 深色</span><span>中文 / English</span>
+          <span>历史泳道</span><span>逐行对比</span><span>暂存此块</span><span>冲突分块</span><span>三方合并</span><span>暂存架</span><span>git bisect</span><span>工作树</span><span>拉取请求</span><span>菜单栏托盘</span><span>浅色 / 深色</span><span>中文 / English</span>
         </div>
       </div>
     </section>
 
-    <!-- 泳道水线：主线自绘 · 提交节点浮出 · 小獭游过 -->
     <div class="river rise" aria-hidden="true">
       <div class="wrap">
         <svg viewBox="0 0 1160 72" fill="none" preserveAspectRatio="xMidYMid meet">
@@ -1925,60 +2142,49 @@
       </div>
     </div>
 
-    <!-- ============ 00 1.1 界面重制 ============ -->
-    <section class="sec" id="whatsnew" aria-labelledby="new-title">
-      <div class="wrap">
-        <div class="sec-head rise">
-          <span class="idx">NEW</span>
-          <span class="cap">v1.1.0 · 界面重制</span>
-          <span class="aside">功能一个没少，样子重做了一遍</span>
-          <h2 id="new-title">这一版，把界面重做了一遍</h2>
-        </div>
-
-        <div class="feat-row rise" style="border-top: 0; padding-top: var(--s6)">
-          <div class="feat-copy">
-            <p>
-              1.1 不发新功能，只做一件事：让这个窗口看起来、用起来都更像一台 Mac 上的原生工具。
-              改的不是配色，是每一层表面的关系——谁浮在谁上面、谁该透出底下的东西。
-            </p>
-            <ul class="bullets">
-              <li><b>三层玻璃</b>：窗口底、壳层、内容卡面各走一档透明度；浮层与对话框用同一套 <code style="font-family:var(--mono);font-size:.9em">GlassSurface</code>，不再各画各的模糊</li>
-              <li><b>分支名不再被截断</b>：侧栏能拉到 460px，窄了就在 <code style="font-family:var(--mono);font-size:.9em">/</code> 后折行，<code style="font-family:var(--mono);font-size:.9em">feature/2026-10-refactor</code> 这种名字能完整读出来</li>
-              <li><b>控件自己画</b>：勾选框、下拉、开关、导航行全部换成自绘件，去掉 Material 那套 48px 点击区与白底下拉</li>
-              <li><b>动效克制</b>：全屏只有一处常驻动画——历史列表里 HEAD 那一点呼吸；其余一律悬停即到，不给滚动留下的残影</li>
-            </ul>
-          </div>
-          <figure class="frame-shot" data-tag="1.1 · 关于本机">
-            <picture>
-              <source srcset="assets/shots/about.webp" type="image/webp" />
-              <img src="assets/shots/about.png" width="1600" height="1000" decoding="async"
-                alt="关于水獭 Git 弹窗：版本 1.1.0，玻璃质感卡片、品牌插画与功能标签" />
-            </picture>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 01 痛点 ============ -->
-    <section class="sec" aria-labelledby="pain-title" style="padding-top: 0">
+    <!-- ============ 01 同一件事 ============ -->
+    <section class="sec" id="why" aria-labelledby="why-title" style="padding-top: clamp(40px, 5vw, 64px)">
       <div class="wrap">
         <div class="sec-head rise">
           <span class="idx">01</span>
-          <span class="cap">三条命令，零个解释</span>
+          <span class="cap">同一个仓库</span>
+          <h2 id="why-title">终端说 rejected，<br />侧栏说 <span class="mono">↑2 ↓3</span>。</h2>
         </div>
-        <h2 id="pain-title" class="rise" style="margin-top: var(--s5)">
-          Git 什么都知道，<br>就是不肯好好说。
-        </h2>
-        <p class="lede rise" style="margin-top: var(--s5)">
-          <code style="font-family:var(--mono);font-size:.94em">git push</code> 回你一句
-          <code style="font-family:var(--mono);font-size:.94em">non-fast-forward</code>；
-          <code style="font-family:var(--mono);font-size:.94em">git status</code> 甩你四十行英文。
-          你真正想知道的只有三件事：<b>落后几个、分没分叉、哪个文件打架</b>。
-          这三件事，命令行从来不肯直接告诉你。
-        </p>
-        <p class="lede rise" style="margin-top: var(--s4)">
-          所以水獭 Git 把它画出来。不是把终端包一层皮，是把状态摊平。
-        </p>
+        <p class="lede sec-intro rise">两句话讲的是同一件事。前一句你得复制下来去搜，后一句扫一眼就懂，先把远程那三个拉下来，再推。</p>
+
+        <div class="why-grid rise">
+          <div class="frame term" data-tag="终端 · git push" role="img"
+            aria-label="终端里执行 git push 被拒绝，提示 main -> main (non-fast-forward)，并建议先 git pull">
+            <div class="fbar"><i></i><i></i><i></i><span>lumen-notes — zsh</span></div>
+            <pre><span class="p">lin@studio lumen-notes %</span> git push
+<span class="h">To github.com:lumen-dev/lumen-notes.git</span>
+<span class="e"> ! [rejected]        main -&gt; main <mark>(non-fast-forward)</mark></span>
+<span class="e">error: failed to push some refs to 'github.com:lumen-dev/...'</span>
+<span class="h">hint: Updates were rejected because the tip of your
+hint: current branch is behind its remote counterpart.
+hint: use 'git pull' before pushing again.</span></pre>
+          </div>
+
+          <div class="why-arrow" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 16 16" fill="none">
+              <path d="M2.5 8h10m0 0L9 4.5M12.5 8 9 11.5" stroke="currentColor" stroke-width="2"
+                stroke-linecap="square" />
+            </svg>
+          </div>
+
+          <figure class="frame why-app" data-tag="侧栏 · 实机截图">
+            <div class="fbar"><i></i><i></i><i></i><span>水獭 Git</span></div>
+            <div class="crop" style="--x: 0; --y: 760; --w: 330; --h: 230">
+              <img src="assets/shots/files-light.webp" width="2400" height="1452" loading="lazy" decoding="async"
+                alt="水獭 Git 侧栏局部：本地分支 main 一行右侧写着 ↑2 ↓3" />
+              <span class="ring" style="--rx: 18; --ry: 872; --rw: 296; --rh: 50" aria-hidden="true"></span>
+            </div>
+            <figcaption>
+              <span class="chip up"><b>↑2</b>两个提交还没推</span>
+              <span class="chip down"><b>↓3</b>远程多了三个</span>
+            </figcaption>
+          </figure>
+        </div>
       </div>
     </section>
 
@@ -1988,541 +2194,409 @@
         <div class="sec-head rise">
           <span class="idx">02</span>
           <span class="cap">Features</span>
-          <span class="aside">六件事，天天遇到</span>
-          <h2 id="feat-title">该有的都有，不该弹的一个不弹</h2>
+          <span class="aside">截图取自 v1.1.0 实机</span>
+          <h2 id="feat-title">每天都要看的三样</h2>
         </div>
 
-        <div class="feat-row rise">
+        <article class="feat rise">
           <div class="feat-copy">
-            <span class="num">01</span>
-            <h3>提交历史，一条泳道</h3>
-            <p>
-              分支线画在最左边，谁合了谁、谁从哪儿分出去，跟着线走一遍就明白了。
-              每条提交的哈希、作者、日期、+- 行数排在同一行。
-            </p>
-            <ul class="bullets">
-              <li><b><span data-count="148">148</span> 条提交</b>，列表顶上直接报数，不用滚到底去数</li>
-              <li>右键任意提交：检出、合并到当前分支、打补丁、复制哈希</li>
-              <li>远端领先落后，鼠标停一下就浮出来，不用敲 <code>git status</code></li>
-            </ul>
+            <div>
+              <span class="num">01</span><span class="num-k">提交历史</span>
+              <h3>顺着泳道，看清分叉</h3>
+            </div>
+            <div>
+              <p>每个分支一条泳道。本地 main 停在哪、origin/main 走到了哪、后来谁合进了谁，图上都画着。点开一条提交，下半屏就是这次改了什么。</p>
+              <ul class="bullets">
+                <li>搜提交说明、作者或哈希，<code>⌘3</code> 直接打开搜索</li>
+                <li>在提交上点右键，可以遴选、变基、创建补丁</li>
+              </ul>
+            </div>
           </div>
-          <figure class="frame-shot" data-tag="历史 · 真录屏">
-            <picture>
-              <source srcset="assets/shots/history.webp" type="image/webp" />
-              <img src="assets/shots/history.png" width="1600" height="1000" loading="lazy" decoding="async"
-                alt="提交历史列表：左侧分支泳道，每行显示提交信息、哈希、作者、日期与增删行数" />
-            </picture>
+          <figure class="frame" data-tag="历史 · 泳道">
+            <div class="crop" style="--x: 350; --y: 110; --w: 2030; --h: 676">
+              <img src="assets/shots/history-light.webp" width="2400" height="1452" loading="lazy" decoding="async"
+                alt="提交历史列表：左边是分支泳道，main 停在最新的提交上，origin/main 和 origin/HEAD 停在往下第三条，右边是日期、作者和提交哈希" />
+              <span class="ring" style="--rx: 442; --ry: 381; --rw: 349; --rh: 48" aria-hidden="true"></span>
+            </div>
           </figure>
-        </div>
+        </article>
 
-        <div class="feat-row flip rise">
+        <article class="feat rise">
           <div class="feat-copy">
-            <span class="num">02</span>
-            <h3>逐行对比，行号对到同一行</h3>
-            <p>
-              三栏并排：左边提交、中间变更文件、右边逐行对照。原文件和改后的文件行号一一对齐，
-              加的行标绿，删掉的标灰，不会因为多了一行就整段错位。
-            </p>
-            <ul class="bullets">
-              <li>可以<b>整块暂存</b>，也可以<b>只挑一块</b>，把无关的改动留在工作区</li>
-              <li>图片、二进制文件也能并排比，不用退回命令行</li>
-              <li>一次重构的真账：<b><span data-count="278" data-prefix="+">+278</span> / <span data-count="22" data-prefix="−">−22</span></b>，数字就在标题下面</li>
-            </ul>
+            <div>
+              <span class="num">02</span><span class="num-k">逐行对比</span>
+              <h3>删的标<span class="r">红</span>，加的标<span class="g">绿</span></h3>
+            </div>
+            <div>
+              <p>新旧两栏按行对齐。这边多出几行，对面就空出几行，后面的代码不会整段错位。一个文件改了三处，只想先交其中一处？点那一块右上角的「暂存此块」，另外两处留在工作区。</p>
+              <ul class="bullets">
+                <li>暂存整个文件、只暂存一块、丢掉一块，按钮都在改动块的标题栏上</li>
+                <li>习惯用别的比对工具，也能换成外部差异比对</li>
+              </ul>
+            </div>
           </div>
-          <figure class="frame-shot" data-tag="逐行 · 三栏">
-            <picture>
-              <source srcset="assets/shots/diff.webp" type="image/webp" />
-              <img src="assets/shots/diff.png" width="1600" height="1000" loading="lazy" decoding="async"
-                alt="三栏对比视图：提交信息与变更文件清单、原文件、变更文件逐行对照，新增行带绿色底" />
-            </picture>
+          <figure class="frame" data-tag="工作副本 · 左右对比">
+            <div class="crop" style="--x: 830; --y: 110; --w: 1550; --h: 546">
+              <img src="assets/shots/files-light.webp" width="2400" height="1452" loading="lazy" decoding="async"
+                alt="package.json 的左右对比：左栏删掉的 version、test、build 三行标红，右栏改后的行标绿，多出来的 typecheck 一行对面空着；改动块右上角是「暂存此块」「丢弃此块」" />
+              <span class="ring" style="--rx: 2150; --ry: 170; --rw: 102; --rh: 42" aria-hidden="true"></span>
+            </div>
           </figure>
-        </div>
+        </article>
 
-        <div class="rise" style="padding-block: clamp(36px, 5vw, 56px); border-top: 1px solid var(--line-soft)">
+        <article class="feat rise">
           <div class="feat-copy">
-            <span class="num">03</span>
-            <h3>冲突不是灾难，是选择题</h3>
-            <p>
-              冲突被切成一块一块：没争议的自动过，有争议的摆在你面前，选左边、选右边，还是自己写。
-              三方对照摆在同一行上，谁改了什么一眼看得见。
-            </p>
+            <div>
+              <span class="num">03</span><span class="num-k">合并冲突</span>
+              <h3>冲突一块一块挑</h3>
+            </div>
+            <div>
+              <p>拉下来撞上冲突，文件列表会标出是哪几个文件。只有一边改过的块，点「自动解决」就合好了。两边都动过的，用「逐块解决」，留我的、留对方的，或者两边都要。想看全貌就打开「三方合并」，本地、远程和合并结果并排摆着。</p>
+              <ul class="bullets">
+                <li>合并没做完，顶上的横幅会一直挂着，改完点「去提交」</li>
+                <li>后悔了点「中止合并」，回到合并前的样子</li>
+              </ul>
+            </div>
           </div>
-          <div class="grid-3" style="margin-top: var(--s5)">
-            <article class="card">
-              <span class="k">逐块</span>
-              <h3 style="font-size:1.0625rem">一块一块挑</h3>
-              <p>不让你对着满屏 <code style="font-family:var(--mono);font-size:.9em">&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> 删符号。选中哪块留哪块，选完直接提交。</p>
-            </article>
-            <article class="card">
-              <span class="k">三方</span>
-              <h3 style="font-size:1.0625rem">原、我、他</h3>
-              <p>基准版、你的改动、对方的改动并排摆着。谁先动的手，看得清。</p>
-            </article>
-            <article class="card">
-              <span class="k">自动</span>
-              <h3 style="font-size:1.0625rem">没争议的直接过</h3>
-              <p>不冲突的块自动合并，只把真正打架的那几行留给你。</p>
-            </article>
-          </div>
-        </div>
-
-        <div class="feat-row rise">
-          <div class="feat-copy">
-            <span class="num">04</span>
-            <h3>五个仓库，一栏扫完</h3>
-            <p>
-              常开的仓库收进一个列表，路径、分支、最后改动都写在名字下面。
-              双击就进去，切仓库不用 <code>cd</code> 到另一个目录再敲命令。
-            </p>
-            <ul class="bullets">
-              <li>仓库集合按文件夹分组，<b><span data-count="5">5</span> 个仓库同屏</b>，谁没提交一眼看到</li>
-              <li>新建、克隆、初始化都在同一个入口，克隆完自动加进来</li>
-              <li>菜单栏托盘常驻：不打开主窗口也知道当前分支差几个提交</li>
-            </ul>
-          </div>
-          <figure class="frame-shot" data-tag="仓库 · 一栏">
-            <picture>
-              <source srcset="assets/shots/repos.webp" type="image/webp" />
-              <img src="assets/shots/repos.png" width="1600" height="1000" loading="lazy" decoding="async"
-                alt="仓库切换面板：列表里五个仓库，每行显示名称、本地路径与当前分支" />
-            </picture>
+          <figure class="frame" data-tag="合并 · 冲突">
+            <div class="crop" style="--x: 350; --y: 110; --w: 2030; --h: 646">
+              <img src="assets/shots/conflict-light.webp" width="2400" height="1452" loading="lazy" decoding="async"
+                alt="合并进行中：顶部横幅写着「正在合并：解决冲突后提交即可完成」，旁边是「去提交」「中止合并」；左边两个文件标着冲突，右边 queue.ts 里是 <<<<<<< HEAD 到 >>>>>>> feat/retry-backoff 的冲突块，上方有「自动解决」「逐块解决」「三方合并」" />
+              <span class="ring" style="--rx: 1744; --ry: 198; --rw: 316; --rh: 42" aria-hidden="true"></span>
+            </div>
           </figure>
-        </div>
-
-        <div class="feat-row flip rise">
-          <div class="feat-copy">
-            <span class="num">05</span>
-            <h3>顺手的那个样子</h3>
-            <p>
-              主题跟着系统走，字号随你调；git 可执行文件路径能自己指定：
-              用 homebrew 装的那份，或者系统自带的那份，都行。
-            </p>
-            <ul class="bullets">
-              <li>浅色 / 深色 / 跟随系统，三选一，不重启就生效</li>
-              <li>界面语言中英切换，Git 提示原文不改写</li>
-              <li>自动检查更新可以关掉。它不该在你提交到一半时弹窗</li>
-            </ul>
-          </div>
-          <figure class="frame-shot" data-tag="偏好 · 设置">
-            <picture>
-              <source srcset="assets/shots/settings.webp" type="image/webp" />
-              <img src="assets/shots/settings.png" width="1600" height="1000" loading="lazy" decoding="async"
-                alt="设置面板：外观主题、界面语言、Git 可执行文件路径与自动检查更新开关" />
-            </picture>
-          </figure>
-        </div>
-
-        <div class="grid-3 rise" style="margin-top: var(--s6)">
-          <article class="card">
-            <span class="k">托盘</span>
-            <h3 style="font-size:1.0625rem">菜单栏那一小块</h3>
-            <p>NSStatusItem 挂在菜单栏上，鼠标一停就能看到分支、远程差。不开主窗口也能知道要不要拉一下。</p>
-          </article>
-          <article class="card">
-            <span class="k">bisect</span>
-            <h3 style="font-size:1.0625rem">二分查错</h3>
-            <p>哪次提交把功能弄坏了？<code style="font-family:var(--mono);font-size:.9em">git bisect</code> 有界面，标好、标坏，它自己二分。</p>
-          </article>
-          <article class="card">
-            <span class="k">补丁</span>
-            <h3 style="font-size:1.0625rem">把提交搬走</h3>
-            <p>改错分支了？挑一个提交生成 patch，带到正确的分支上接着用。</p>
-          </article>
-          <article class="card">
-            <span class="k">书签</span>
-            <h3 style="font-size:1.0625rem">记住你常去的地方</h3>
-            <p>仓库、分支、搜索条件都能存成书签，下次一点就到。</p>
-          </article>
-          <article class="card">
-            <span class="k">搜索</span>
-            <h3 style="font-size:1.0625rem">按提交信息、作者、哈希找</h3>
-            <p>跨分支搜索，结果直接落到历史列表里，选中就能看 diff。</p>
-          </article>
-          <article class="card">
-            <span class="k">快捷键</span>
-            <h3 style="font-size:1.0625rem">键盘一路敲到底</h3>
-            <p>提交、拉取、推送、切换分支都有快捷键，按 <code style="font-family:var(--mono);font-size:.9em">?</code> 出一览。</p>
-          </article>
-        </div>
+        </article>
       </div>
     </section>
 
     <!-- ============ 03 小獭 ============ -->
-    <section class="sec dark" id="copilot" aria-labelledby="copilot-title">
+    <section class="sec dark" id="otter" aria-labelledby="otter-title">
       <div class="wrap">
         <div class="sec-head rise">
           <span class="idx">03</span>
-          <span class="cap on-dark">Copilot · 小獭</span>
-          <span class="aside">AI 真干活，不是加了个聊天框</span>
-          <h2 id="copilot-title">它动手之前，<br>先问你</h2>
+          <span class="cap on-dark">Copilot · 助手小獭</span>
+          <h2 id="otter-title">动手之前，<br /><em>先问你</em>。</h2>
         </div>
 
-        <p class="lede rise" style="margin-top: var(--s5)">
-          小獭读得到你的仓库状态，也动得了你的分支。所以它不靠「聪明」赢得信任，靠规矩。
-          三条纪律，三档权限，一本连失败都记着的账。
-        </p>
+        <div class="otter-grid">
+          <div class="rise">
+            <p class="lede">小獭住在窗口右边。看状态、拉取、推送、暂存、存进暂存架，这些短指令不配模型也能用。配上模型以后，写提交说明、起草 PR 描述、把「提交并推送」拆成几步跑完，都可以交给它。</p>
 
-        <div class="grid-3 rise" style="margin-top: var(--s6)">
-          <article class="card">
-            <span class="k">纪律一</span>
-            <h3 style="font-size:1.125rem">拿不准，先问</h3>
-            <p>暂存了一半、工作区还剩一半，它不替你做决定，把两个选项摆出来：「只提交已暂存的，还是全部一起」。你说清楚的时候，它一句废话没有。</p>
-          </article>
-          <article class="card">
-            <span class="k">纪律二</span>
-            <h3 style="font-size:1.125rem">给依据，不给玄学</h3>
-            <p>问「为什么推不上去」，它答的是「领先 2 个、落后 3 个，直接 pull 会造一个合并提交，建议改走变基」。分叉、游离 HEAD、没设上游，一条条查给你看。</p>
-          </article>
-          <article class="card">
-            <span class="k">纪律三</span>
-            <h3 style="font-size:1.125rem">动作有档位</h3>
-            <p>读随便看，写要确认，高危必须你点头。它干的每件事都留在对话里，做过什么、什么时候做的，翻得到。</p>
-          </article>
-        </div>
+            <p class="cap on-dark">权限深度分三档，出厂是中间那档</p>
+            <div class="perm" role="list">
+              <div class="perm-item" role="listitem"><span class="pi-n">01 / ASK</span><h4>询问</h4><p>每次写操作都确认</p></div>
+              <div class="perm-item on" role="listitem"><span class="pi-n">02 / 出厂</span><h4>默认</h4><p>日常直跑，拉推等高危确认</p></div>
+              <div class="perm-item" role="listitem"><span class="pi-n">03 / FULL TRUST</span><h4>完全信任</h4><p>沙箱内自动跑，不打断</p></div>
+            </div>
+            <p class="fine">默认档下，强制推送、硬重置、丢弃改动都要你单独点头。冲突还没解决完就想提交？哪一档都会拦下。</p>
+          </div>
 
-        <div class="rise" style="margin-top: var(--s8)">
-          <span class="cap on-dark">三档权限</span>
-          <div class="perm">
-            <div class="perm-item">
-              <span class="pi-n">01 / ASK</span>
-              <h4>询问</h4>
-              <p>任何写操作都弹窗。编排一律先给你审一遍再跑。最慢，也最稳。</p>
+          <figure class="frame otter-shot rise" data-tag="小獭 · 深色界面">
+            <div class="fbar"><i></i><i></i><i></i><span>水獭 Git</span></div>
+            <div class="crop" style="--x: 1240; --y: 0; --w: 1160; --h: 1452">
+              <img src="assets/shots/ai-dark.webp" width="2400" height="1452" loading="lazy" decoding="async"
+                alt="深色主题下的小獭面板：写着「没配模型也能用一点」，下面是「现在有什么改动？」「拉取最新」「推送」「全部暂存」「存入暂存架」几个快捷指令" />
             </div>
-            <div class="perm-item warn">
-              <span class="pi-n">02 / STANDARD</span>
-              <h4>默认</h4>
-              <p>只读与可逆的写（暂存、写提交说明、建分支）直接跑；拉取、推送、强制推送、reset --hard 仍然要确认。</p>
-            </div>
-            <div class="perm-item">
-              <span class="pi-n">03 / FULL TRUST</span>
-              <h4>完全信任</h4>
-              <p>沙箱内自动执行，不打断。知道自己在做什么的人再用它。</p>
-            </div>
-          </div>
-          <p style="margin-top: var(--s4); font-size: var(--t-xs)">
-            不管是哪一档，冲突中提交、非法全暂存这类硬规则，宿主一律拦住。
-          </p>
-        </div>
-
-        <div class="feat-row flip rise" id="ledger" style="border-top-color: rgba(247,245,240,.2)">
-          <div class="feat-copy">
-            <span class="num" style="background: var(--amber); color: var(--ink)">账本</span>
-            <h3>用了多少，明码</h3>
-            <p>
-              谁也不喜欢「AI 用量」四个字后面跟着一句「详见账单」。水獭 Git 把账摊开：
-              请求次数、输入输出令牌、合计、成功与失败，一次一条记录，时间精确到秒。
-            </p>
-            <ul class="bullets">
-              <li><b><span data-count="297">297</span> 次请求</b>，<span data-count="1154.9" data-dec="1">1,154.9</span> 万输入令牌 + <span data-count="23.7" data-dec="1">23.7</span> 万输出令牌</li>
-              <li><b>成功 <span data-count="65">65</span>，失败 <span data-count="14">14</span></b>。失败也写在同一栏里，不美化</li>
-              <li>按天分组，每次调用都能点开看：引用了哪条提交、发了多少字</li>
-            </ul>
-          </div>
-          <div class="ledger-card" aria-label="用量账本示例">
-            <div class="ledger-row">
-              <span>请求</span><b>297</b>
-            </div>
-            <div class="ledger-row">
-              <span>输入令牌</span><b>11,549,399</b>
-            </div>
-            <div class="ledger-row">
-              <span>输出令牌</span><b>236,706</b>
-            </div>
-            <div class="ledger-row total">
-              <span>合计</span><b>11,786,105</b>
-            </div>
-            <div class="ledger-row split">
-              <span class="ok">成功 65</span><span class="bad">失败 14</span>
-            </div>
-            <p class="ledger-note">一次一条记录，时间精确到秒。失败不抹掉。</p>
-          </div>
-        </div>
-
-        <div class="feat-row rise" id="orchestrate" style="border-top-color: rgba(247,245,240,.2)">
-          <div class="feat-copy">
-            <span class="num" style="background: var(--amber); color: var(--ink)">一句</span>
-            <h3>说一句「提交推送」</h3>
-            <p>
-              它把活拆成四步：暂存 → 写说明 → 提交 → 推送。做一步勾一步，中途能叫停。
-              提交说明这种脏活它包了，但推之前会停下来问你一次。
-            </p>
-            <ul class="bullets">
-              <li>模型走 OpenAI 兼容接口，地址、模型名、密钥都自己填，存在本机</li>
-              <li>速率三档：精确 / 平衡 / 发散，按模型单独记</li>
-              <li>回复里引用了哪条提交，就挂哪条，点开就是那段 diff</li>
-            </ul>
-          </div>
-          <figure class="frame-shot" data-tag="小獭 · 编排" style="max-width: 460px; justify-self: center">
-            <picture>
-              <source srcset="assets/shots/ai.webp" type="image/webp" />
-              <img src="assets/shots/ai.png" width="760" height="1112" loading="lazy" decoding="async"
-                alt="小獭对话面板：用户说「提交推送」，小獭列出暂存、写说明、提交、推送四步并逐步打勾" />
-            </picture>
           </figure>
+        </div>
+
+        <div class="grid-3 notes rise">
+          <article class="card">
+            <span class="k">Model</span>
+            <h3>模型自己接</h3>
+            <p>填接口地址、API Key 和模型名称，兼容 OpenAI 接口的服务都能用。每个模型单独选速率，精确、均衡或创意。</p>
+          </article>
+          <article class="card">
+            <span class="k">Usage</span>
+            <h3>用量摆在明处</h3>
+            <p>每个模型记着请求了几次、一共用了多少令牌，点开就是明细。</p>
+          </article>
+          <article class="card">
+            <span class="k">Memory</span>
+            <h3>仓库记忆</h3>
+            <p>提交约定、分支习惯写进仓库记忆，这个仓库里的每次对话都会带上。仓库里有 <code>AGENTS.md</code> 的话，它也会去读。</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ============ 04 短片 ============ -->
-    <section class="sec" id="film" aria-labelledby="film-title">
+    <!-- ============ 04 工具箱 ============ -->
+    <section class="sec" id="toolbox" aria-labelledby="tools-title">
       <div class="wrap">
         <div class="sec-head rise">
           <span class="idx">04</span>
-          <span class="cap">Film</span>
-          <span class="aside">51 秒 · 有旁白 · 卡点配乐</span>
-          <h2 id="film-title">先看片，再决定装不装</h2>
-        </div>
-        <p class="lede sec-intro rise">
-          51 秒，跟着旁白看新版长什么样：三层玻璃的界面、一条泳道的提交历史、
-          行号对齐的 diff、以及小獭怎么在动手前先问你一句。画面全部是新版真机录屏。
-        </p>
-
-        <div class="film rise" style="margin-top: var(--s6)">
-          <video id="promo" controls playsinline preload="metadata" poster="assets/shots/film-poster.jpg"
-            width="1920" height="1080" aria-label="水獭 Git 产品短片">
-            <source src="assets/ottergit-promo.mp4" type="video/mp4" />
-            你的浏览器不支持内嵌视频，可以<a href="assets/ottergit-promo.mp4">直接下载观看</a>。
-          </video>
+          <span class="cap">Toolbox</span>
+          <h2 id="tools-title">平时那些零碎活，也都有界面</h2>
         </div>
 
-        <div class="chapters rise">
-          <a href="#film" data-t="0"><span class="tc">00:00</span><span>看得清，不瞎猜</span><span class="cn">HOOK</span></a>
-          <a href="#film" data-t="5"><span class="tc">00:05</span><span>这一版，界面重做了一遍</span><span class="cn">NEW</span></a>
-          <a href="#film" data-t="12"><span class="tc">00:12</span><span>提交历史，一条泳道</span><span class="cn">LANE</span></a>
-          <a href="#film" data-t="19"><span class="tc">00:19</span><span>行号对到同一行</span><span class="cn">DIFF</span></a>
-          <a href="#film" data-t="26"><span class="tc">00:26</span><span>说一句「提交推送」</span><span class="cn">OTTER</span></a>
-          <a href="#film" data-t="34"><span class="tc">00:34</span><span>五个仓库，一栏扫完</span><span class="cn">REPOS</span></a>
-          <a href="#film" data-t="40"><span class="tc">00:40</span><span>顺手的那个样子</span><span class="cn">SETTINGS</span></a>
-          <a href="#film" data-t="45"><span class="tc">00:45</span><span>装一个，让仓库有人盯</span><span class="cn">CTA</span></a>
+        <div class="grid-3 tools rise">
+          <article class="card">
+            <span class="k">Stash</span>
+            <h3>暂存架</h3>
+            <p>改到一半要去别的分支救火，先把改动存进暂存架，回来再取。</p>
+          </article>
+          <article class="card">
+            <span class="k">Bisect</span>
+            <h3>二分查错</h3>
+            <p>不知道哪次提交把功能弄坏了，标一个好的、一个坏的，<code>git bisect</code> 帮你对半往下找。</p>
+          </article>
+          <article class="card">
+            <span class="k">Patch</span>
+            <h3>补丁</h3>
+            <p>提交落错了分支，创建补丁带走，到对的分支上再应用。</p>
+          </article>
+          <article class="card">
+            <span class="k">Worktree · Submodule</span>
+            <h3>工作树和子模块</h3>
+            <p><code>worktree</code> 和 <code>submodule</code> 各有管理界面，添加、更新、移除点几下就行。</p>
+          </article>
+          <article class="card">
+            <span class="k">LFS · Git-flow</span>
+            <h3>LFS 与 Git-flow</h3>
+            <p>工具栏「更多」里，大文件和 Git-flow 分支流程都有入口。</p>
+          </article>
+          <article class="card">
+            <span class="k">Pull Request</span>
+            <h3>拉取请求</h3>
+            <p>分支推上去，接着就能创建拉取请求，GitHub、Gitee、GitLab、Bitbucket 的远程都认。</p>
+          </article>
+          <article class="card">
+            <span class="k">Tray</span>
+            <h3>菜单栏托盘</h3>
+            <p>主窗口不开，也看得到可拉取几个、未推送几个，顺手点一下同步。</p>
+          </article>
+          <article class="card">
+            <span class="k">Auto Fetch</span>
+            <h3>自动刷新</h3>
+            <p>默认每 8 秒在后台获取一次远程，间隔能调，嫌烦也能关。</p>
+          </article>
+          <article class="card">
+            <span class="k">Keychain</span>
+            <h3>钥匙串</h3>
+            <p>远程账号存进系统钥匙串，推私有仓库不用每次输密码。</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- ============ 05 下载 ============ -->
+    <!-- ============ 05 浅色深色 ============ -->
+    <section class="sec" id="themes" aria-labelledby="themes-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">05</span>
+          <span class="cap">Themes</span>
+          <span class="aside">左右拖动看两套主题</span>
+          <h2 id="themes-title">浅色深色，各画了一遍</h2>
+        </div>
+        <p class="lede sec-intro rise">跟随系统，或者自己指定。菜单里点「切换主题」当场就换，不用重启。界面语言在中文和 English 之间切。</p>
+
+        <figure class="frame compare rise" id="compare" data-tag="历史 · 浅色 / 深色">
+          <div class="fbar"><i></i><i></i><i></i><span>水獭 Git</span></div>
+          <div class="view">
+            <img src="assets/shots/history-light.webp" width="2400" height="1452" loading="lazy" decoding="async"
+              alt="浅色主题的提交历史" />
+            <img class="top" src="assets/shots/history-dark.webp" width="2400" height="1452" loading="lazy"
+              decoding="async" alt="深色主题的提交历史" />
+            <span class="handle" aria-hidden="true">
+              <span class="knob">
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="none">
+                  <path d="M6 4 2 8l4 4M10 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="square" />
+                </svg>
+              </span>
+            </span>
+            <span class="lab l" aria-hidden="true">浅色</span>
+            <span class="lab d" aria-hidden="true">深色</span>
+            <input type="range" min="0" max="100" value="50" step="1" aria-label="左右拖动，对比浅色和深色主题" />
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ 06 短片 ============ -->
+    <section class="sec" id="film" aria-labelledby="film-title" style="padding-top: 0">
+      <div class="wrap">
+        <div class="sec-head rise">
+          <span class="idx">06</span>
+          <span class="cap">Film</span>
+          <span class="aside">75 秒 · 中文旁白 · 带字幕</span>
+          <h2 id="film-title">75 秒，从一次推送被拒讲起</h2>
+        </div>
+        <p class="lede sec-intro rise">画面全部取自 App 实机截图，旁白跟着画面走。点章节可以直接跳过去。</p>
+
+        <div class="frame film rise" data-tag="短片 · 建议开声音">
+          <video id="promo" controls playsinline preload="metadata" poster="assets/film-poster.jpg" width="1920"
+            height="1080" aria-label="水獭 Git 产品短片，75 秒，中文旁白">
+            <source src="assets/ottergit-promo.mp4" type="video/mp4" />
+            <track kind="captions" srclang="zh" label="中文" src="assets/ottergit-promo.zh.vtt" default />
+            你的浏览器放不了内嵌视频，可以<a href="assets/ottergit-promo.mp4">直接下载</a>来看。
+          </video>
+        </div>
+
+        <ol class="chapters rise" aria-label="短片章节">
+          <li><a href="#film" data-t="0"><span class="tc">00:00</span><span class="tt">推送被拒</span><span class="cn">PUSH</span></a></li>
+          <li><a href="#film" data-t="7"><span class="tc">00:07</span><span class="tt">侧栏说清</span><span class="cn">SIDEBAR</span></a></li>
+          <li><a href="#film" data-t="15"><span class="tc">00:15</span><span class="tt">片名</span><span class="cn">TITLE</span></a></li>
+          <li><a href="#film" data-t="21"><span class="tc">00:21</span><span class="tt">提交历史</span><span class="cn">HISTORY</span></a></li>
+          <li><a href="#film" data-t="28"><span class="tc">00:28</span><span class="tt">逐行对比</span><span class="cn">DIFF</span></a></li>
+          <li><a href="#film" data-t="36.5"><span class="tc">00:36</span><span class="tt">合并冲突</span><span class="cn">CONFLICT</span></a></li>
+          <li><a href="#film" data-t="45.5"><span class="tc">00:45</span><span class="tt">助手小獭</span><span class="cn">OTTER</span></a></li>
+          <li><a href="#film" data-t="55.5"><span class="tc">00:55</span><span class="tt">先问再动</span><span class="cn">ASK</span></a></li>
+          <li><a href="#film" data-t="61.5"><span class="tc">01:01</span><span class="tt">浅色深色</span><span class="cn">THEMES</span></a></li>
+          <li><a href="#film" data-t="67.5"><span class="tc">01:07</span><span class="tt">下载</span><span class="cn">DOWNLOAD</span></a></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ 07 下载 ============ -->
     <section class="sec" id="download" aria-labelledby="dl-title" style="padding-top: 0">
       <div class="wrap">
         <div class="dl rise">
-          <span class="cap">05 / Download</span>
-          <h2 id="dl-title">装一个，让仓库有人盯</h2>
-          <p>
-            macOS 是个 DMG，拖进「应用程序」就能用，已签名、已公证，第一次打开不会被拦。
-            Windows 是个 zip，解压后双击 <code>otter_git.exe</code>。
-            本机得有 git，终端敲 <code>git --version</code> 先确认一下。
-          </p>
-          <div class="dl-act">
-            <a class="btn btn-ink"
-              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
-              target="_blank" rel="noopener">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
-                  stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              下载 v1.1.0 · macOS · 21 MB
-            </a>
-            <a class="btn"
-              href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip"
-              target="_blank" rel="noopener">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
-                  stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              下载 v1.1.0 · Windows · 21 MB
-            </a>
-            <a class="btn" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">看更新记录</a>
+          <span class="cap">07 / Download</span>
+          <h2 id="dl-title">免费下载，不用注册</h2>
+
+          <div class="dl-grid">
+            <article class="dl-card" id="dl-mac">
+              <div class="os">
+                <h3>macOS 版</h3><span class="ver">v1.1.1 · 21 MB</span><span class="sticker badge">你的系统</span>
+              </div>
+              <p class="req">macOS 12 及以上，Apple Silicon（M 系列芯片）</p>
+              <p>DMG 安装包，拖进「应用程序」就能用。已签名、已公证，第一次打开不会被系统拦下。</p>
+              <a class="btn btn-ink"
+                href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
+                target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                下载 macOS 版
+              </a>
+            </article>
+
+            <article class="dl-card" id="dl-win">
+              <div class="os">
+                <h3>Windows 预览版</h3><span class="ver">v1.1.1 · 21 MB</span><span class="sticker badge">你的系统</span>
+              </div>
+              <p class="req">Windows 10 / 11，x64</p>
+              <p>zip 压缩包，解压后双击 <code>otter_git.exe</code>。预览版还没做代码签名，SmartScreen 拦下的话，点「更多信息」，再点「仍要运行」。</p>
+              <a class="btn"
+                href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip"
+                target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                  <path d="M8 2v8m0 0 3-3m-3 3L5 7M3 12.5V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-.5" stroke="currentColor"
+                    stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                下载 Windows 预览版
+              </a>
+            </article>
           </div>
-          <p class="dl-note">免费 · macOS 12+（Apple Silicon）· Windows 10 / 11 x64 预览 · Intel 机器暂时要自己编译</p>
-          <p class="dl-note">
-            Windows 预览版尚未代码签名：首次运行若被 SmartScreen 拦下，点「更多信息 → 仍要运行」；
-            托盘、拖放、深色跟随这些交互还没在真机全验过，遇到问题欢迎反馈。
-            校验 SHA256：macOS dmg <code>c651dca6…685b1</code> · Windows zip <code>d1a4df42…56dfd</code>（完整值见 Release 页）
-          </p>
+
+          <div class="dl-note">
+            <p>两个版本都要本机装好 git，终端里输入 <code>git --version</code> 能看到版本号就行。Intel 芯片的 Mac 暂时没有安装包。</p>
+            <p>SHA256：macOS dmg <code>c651dca6…685b1</code> · Windows zip <code>d1a4df42…56dfd</code>，完整值在 Release 页。</p>
+          </div>
         </div>
 
-        <div class="vlog rise" id="vlog" aria-labelledby="vlog-title">
+        <div class="vlog rise" id="vlog">
           <div class="vlog-head">
-            <h3 id="vlog-title">版本记录</h3>
-            <a class="vlog-all" href="https://github.com/ShaoAsher/ottergit-site/releases"
-              target="_blank" rel="noopener">GitHub 上看全部历史版本 →</a>
+            <h3>版本记录</h3>
+            <a class="vlog-all" href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">在 GitHub 上看全部版本 →</a>
           </div>
           <ol class="vlist">
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.1.0" target="_blank" rel="noopener">
-              <b>v1.1.0</b><span class="vd">10-29</span>
-              <span class="vt">界面重制：三层玻璃质感；分支名可折行、侧栏可拉到 460px；勾选框与下拉全部自绘；历史图谱 HEAD 呼吸波纹；Windows 版首发（预览）：托盘、Ctrl 快捷键、系统字体、安装图标全套对齐</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.6" target="_blank" rel="noopener">
-              <b>v1.0.6</b><span class="vd">10-23</span>
-              <span class="vt">小獭意图理解收口：模型分类器接入直达快路径；125 个工具全带示例口令</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.5" target="_blank" rel="noopener">
-              <b>v1.0.5</b><span class="vd">10-23</span>
-              <span class="vt">意图理解模型化：说不清的句子交模型裁决；执行链路重构，失败后说「继续」能换法重试</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.4" target="_blank" rel="noopener">
-              <b>v1.0.4</b><span class="vd">10-23</span>
-              <span class="vt">编排参数护栏：缺参先追问、不跑空；git-flow 口令、计划预览，追问气泡有「等你回答」徽章</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.3" target="_blank" rel="noopener">
-              <b>v1.0.3</b><span class="vd">10-23</span>
-              <span class="vt">修复 GUI 环境下找不到 Homebrew git-flow 扩展的问题</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.2" target="_blank" rel="noopener">
-              <b>v1.0.2</b><span class="vd">10-22</span>
-              <span class="vt">拉取不再被未提交改动挡住：一键「暂存并拉取」，拉取失败也不丢本地改动</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.1" target="_blank" rel="noopener">
-              <b>v1.0.1</b><span class="vd">10-22</span>
-              <span class="vt">小獭升级：提示词缓存分层更快更省；新增仓库体检；状态说不清先追问，不瞎猜</span></a></li>
-            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.0" target="_blank" rel="noopener">
-              <b>v1.0.0</b><span class="vd">10-22</span>
-              <span class="vt">首个公开版本：历史泳道、逐行对比、冲突分块，助手统一叫「小獭」</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.1.1" target="_blank" rel="noopener"><b>v1.1.1</b><span class="vd">10-29</span><span class="vt">关于页和设置里的介绍改成 macOS 和 Windows 通用，菜单栏和托盘一起写上；更新说明里会标出你装的是哪一版。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.1.0" target="_blank" rel="noopener"><b>v1.1.0</b><span class="vd">10-29</span><span class="vt">界面重做，窗口底、壳层、卡面三层玻璃质感；分支名可以折行，侧栏最宽拉到 460px；勾选框和下拉换成自绘；历史图里 HEAD 那一点会呼吸。Windows 预览版首发，托盘、Ctrl 快捷键、系统字体、安装图标都对齐了。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.6" target="_blank" rel="noopener"><b>v1.0.6</b><span class="vd">10-23</span><span class="vt">小獭听懂意图更稳，模型分类器接进快速通道；125 个工具都配了示例口令。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.5" target="_blank" rel="noopener"><b>v1.0.5</b><span class="vd">10-23</span><span class="vt">说不清的句子交给模型判断；执行链路重写，失败后说「继续」会换个办法再试。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.4" target="_blank" rel="noopener"><b>v1.0.4</b><span class="vd">10-23</span><span class="vt">编排缺参数先追问，不空跑；支持 git-flow 口令和计划预览，追问气泡带「等你回答」徽章。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.3" target="_blank" rel="noopener"><b>v1.0.3</b><span class="vd">10-23</span><span class="vt">修复图形界面下找不到 Homebrew 装的 git-flow 扩展。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.2" target="_blank" rel="noopener"><b>v1.0.2</b><span class="vd">10-22</span><span class="vt">有未提交改动也能拉取，一键「暂存并拉取」，拉取失败本地改动也不丢。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.1" target="_blank" rel="noopener"><b>v1.0.1</b><span class="vd">10-22</span><span class="vt">提示词缓存分层，回得更快、更省；新增仓库体检；状态说不清时先追问。</span></a></li>
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.0.0" target="_blank" rel="noopener"><b>v1.0.0</b><span class="vd">10-22</span><span class="vt">首个公开版本，历史泳道、逐行对比、冲突分块，助手统一叫「小獭」。</span></a></li>
           </ol>
         </div>
       </div>
     </section>
 
-    <!-- 泳道水线：下载之后，游向品牌 -->
-    <div class="river rise" aria-hidden="true">
-      <div class="wrap">
-        <svg viewBox="0 0 1160 72" fill="none" preserveAspectRatio="xMidYMid meet">
-          <path class="river-main" pathLength="1" d="M2 44 C 160 28, 300 60, 460 44 S 760 28, 900 44 S 1110 58, 1158 44" />
-          <path class="river-branch" pathLength="1" d="M460 44 C 580 20, 700 14, 806 16" />
-          <circle class="river-node" cx="160" cy="38" r="5" />
-          <circle class="river-node" cx="460" cy="44" r="6" />
-          <circle class="river-node" cx="806" cy="16" r="4.5" />
-          <circle class="river-node" cx="1050" cy="47" r="5" />
-          <circle class="river-otter" cx="0" cy="0" r="7" />
-        </svg>
-      </div>
-    </div>
-
-    <!-- ============ 06 品牌 ============ -->
-    <section class="sec" id="brand" aria-labelledby="brand-title" style="padding-top: 0">
-      <div class="wrap">
-        <div class="sec-head rise">
-          <span class="idx">06</span>
-          <span class="cap">Brand</span>
-          <span class="aside">宋体 · 硬投影 · 没有圆角</span>
-          <h2 id="brand-title">水獭睡觉时，会牵着同伴的手</h2>
-        </div>
-
-        <div class="brandblock rise" style="margin-top: var(--s6)">
-          <div class="brandmark">
-            <img class="bob" src="assets/otter_logo_clear.png" alt="水獭 Git 吉祥物小獭" loading="lazy" decoding="async" />
-          </div>
-          <div>
-            <p class="lede">
-              怕睡着之后被水流冲散。你的仓库也一样——领先落后、分叉游离，
-              总得有个谁替你牵着。小獭干的就是这个：你写代码，它看家。
-            </p>
-            <p style="margin-top: var(--s4); font-size: var(--t-sm); color: var(--ink-2)">
-              界面是照着一张纸做的：米白底、宋体字、四像素墨线、不带模糊的硬投影。
-              没有渐变玻璃，没有圆角药丸，没有「正在为你加载」的旋转圈。
-            </p>
-            <div class="swatches" aria-label="品牌色板">
-              <div class="sw" style="background:#f7f5f0"><span>PAPER</span></div>
-              <div class="sw" style="background:#eae4d8"><span>PAPER-2</span></div>
-              <div class="sw" style="background:#1a1917"><span style="color:#f7f5f0;opacity:.8">INK</span></div>
-              <div class="sw" style="background:#1a5382"><span style="color:#f7f5f0;opacity:.85">BLUE</span></div>
-              <div class="sw" style="background:#c97b4a"><span style="color:#fff;opacity:.9">BROWN</span></div>
-              <div class="sw" style="background:#d9a441"><span>AMBER</span></div>
-            </div>
-            <div class="type-spec">
-              <div><b>标题</b><span>宋体 900 · 字距 −0.015em</span></div>
-              <div><b>正文</b><span>苹方 / 系统无衬线 · 行高 1.78</span></div>
-              <div><b>数字与时码</b><span>SF Mono · 等宽，对齐得上</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ 07 FAQ ============ -->
+    <!-- ============ 08 问题 ============ -->
     <section class="sec" id="faq" aria-labelledby="faq-title" style="padding-top: 0">
       <div class="wrap">
         <div class="sec-head rise">
-          <span class="idx">07</span>
+          <span class="idx">08</span>
           <span class="cap">FAQ</span>
-          <span class="aside">八个老问题</span>
           <h2 id="faq-title">你大概想问的</h2>
         </div>
 
         <div class="faq rise">
           <details open>
-            <summary><span class="q">01</span><span>真的免费？以后会不会收费？</span><span class="sign" aria-hidden="true"></span></summary>
+            <summary><span class="q">01</span><span>要花钱吗？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>免费。没有内购、没有订阅、没有「专业版」按钮。功能都在，不锁。</p>
-              <p>小獭的模型费用是你自己和模型服务商结算的，App 不赚差价，也不抽成。</p>
+              <p>不用。没有内购，没有订阅，也没有专业版。小獭用的模型由你自己接，模型费用你直接跟服务商结，App 不经手。</p>
             </div>
           </details>
           <details>
             <summary><span class="q">02</span><span>小獭会乱动我的仓库吗？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>它有三档权限：询问（每步都问）、默认（可逆的直跑，拉推要确认）、完全信任（沙箱内自动跑）。默认就是中间那档。</p>
-              <p>不管哪一档，冲突中提交、非法全暂存这类硬规则，宿主一律拦住，模型说什么都不算数。它做过的每件事都在对话里，翻得到。</p>
+              <p>出厂是「默认」档，日常操作直接跑，拉取、推送这类会先问你，收不回来的操作每次单独确认。嫌它问得多，可以调到「完全信任」；想每步都看，就调到「询问」。冲突没解决完的提交，哪一档都会拦。</p>
             </div>
           </details>
           <details>
-            <summary><span class="q">03</span><span>该 pull 还是 rebase？</span><span class="sign" aria-hidden="true"></span></summary>
+            <summary><span class="q">03</span><span>我的代码会被上传吗？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>这问题问小獭正合适。它先看仓库状态：分没分叉、领先落后几个，然后给建议、给选项，你确认了才动手。</p>
-              <p>本地有没提交的改动也不怕：先暂存，拉完再给你放回来。</p>
+              <p>仓库读写都在本机，用的是你装的 git。不配模型的时候，小獭的短指令也在本机跑。配了模型、你跟它对话时，它要用到的内容会发到你填的那个接口地址。</p>
             </div>
           </details>
           <details>
-            <summary><span class="q">04</span><span>和 SourceTree、Fork、GitHub Desktop 比呢？</span><span class="sign" aria-hidden="true"></span></summary>
+            <summary><span class="q">04</span><span>支持 Windows 和 Intel Mac 吗？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>各有各的好，不吹。水獭 Git 押在三件事上：行号对齐的对比、一块块挑的冲突、一个会先问你的 AI。</p>
-              <p>装一个试试，不合适就删进废纸篓，不绑架你。</p>
+              <p>Windows 10 / 11（x64）有预览版。托盘、拖放、深色跟随这些交互还没在真机上全部验过，遇到问题欢迎反馈。M 系列之前的 Intel Mac，目前还装不了。</p>
             </div>
           </details>
           <details>
-            <summary><span class="q">05</span><span>支持 Windows 或 Intel Mac 吗？</span><span class="sign" aria-hidden="true"></span></summary>
+            <summary><span class="q">05</span><span>要先装 git 吗？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>目前只有 macOS · Apple Silicon（M 系列芯片）。Windows / Linux 版在计划中，还没有发布时间。</p>
-              <p>Intel 机器暂时需要自行编译源码。</p>
+              <p>要。水獭 Git 调用的是你电脑上的 git，没装就先装一份。装了好几份的话，设置里可以指定用哪一个。</p>
             </div>
           </details>
           <details>
-            <summary><span class="q">06</span><span>小獭用哪个模型？要自己配吗？</span><span class="sign" aria-hidden="true"></span></summary>
+            <summary><span class="q">06</span><span>和 SourceTree、Fork、GitHub Desktop 比呢？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>走 OpenAI 兼容接口：baseUrl、模型名、密钥都自己填，存在本机。用哪家、花多少，你自己定。</p>
-              <p>用多少记在「用量明细」里：请求次数、输入输出令牌、合计、成功失败，精确到秒。</p>
+              <p>各有各的好。水獭 Git 在对比、冲突和小獭这几块花的力气最多。装上试试，不顺手删掉就是。</p>
             </div>
           </details>
           <details>
-            <summary><span class="q">07</span><span>为什么叫水獭 Git？</span><span class="sign" aria-hidden="true"></span></summary>
+            <summary><span class="q">07</span><span>为什么叫水獭？</span><span class="sign" aria-hidden="true"></span></summary>
             <div class="a">
-              <p>水獭会仰躺在水面上，把石头搁肚皮上敲贝壳——工具就该长这样：顺手、老实、看着舒服。</p>
-              <p>小獭负责卖萌，Git 本身负责靠谱。</p>
-            </div>
-          </details>
-          <details>
-            <summary><span class="q">08</span><span>我的代码会被上传吗？</span><span class="sign" aria-hidden="true"></span></summary>
-            <div class="a">
-              <p>仓库读写全在你本机，走的是本地 git。只有你主动跟小獭说话时，它才会把需要判断的那点内容发给模型服务。发什么，对话里写得清清楚楚。</p>
-              <p>不跟它说话，它就是个普通的 Git 客户端。</p>
+              <p>水獭睡觉时会牵着同伴的手，怕睡着以后被水冲散。分支一多也容易走散，总得有谁帮你盯着。</p>
             </div>
           </details>
         </div>
       </div>
     </section>
 
-    <!-- ============ 08 更多软件 ============ -->
-    <section class="sec" id="more" aria-labelledby="more-title" style="padding-top: 0">
+    <!-- ============ 09 其他软件 ============ -->
+    <section class="sec" id="more" aria-labelledby="more-title">
       <div class="wrap">
         <div class="sec-head rise">
-          <span class="idx">08</span>
+          <span class="idx">09</span>
           <span class="cap">More Apps</span>
-          <span class="aside">同一只水獭，别的活儿</span>
-          <h2 id="more-title">作者还做了这些</h2>
+          <h2 id="more-title">作者的其他软件</h2>
         </div>
 
-        <div class="moregrid rise">
-          <a class="appcard" href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">
+        <a class="appcard rise" href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">
+          <span class="mark" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+              stroke-linecap="square" stroke-linejoin="miter">
+              <path d="M3 9h18v11H3z" />
+              <path d="M8 9V5h8v4M3 13h18M10 13v2h4v-2" />
+            </svg>
+          </span>
+          <div>
             <span class="cap">OtterTools</span>
-            <h3>水獭工具</h3>
+            <h3>水獭工具 OtterTools</h3>
             <p class="app-meta">免费 · macOS 10.15+ · Apple Silicon</p>
-            <p>
-              Mac 用了三年越来越卡，先别急着换新。体检、清垃圾、管启动项、清浏览器痕迹，
-              把攒了几年的东西理一理，它还能再跑好几年。
-            </p>
-            <span class="go">去水獭工具官网 →</span>
-          </a>
-        </div>
+            <p>Mac 用了三年越来越卡，先别急着换新的。体检、清垃圾、管启动项、清浏览器痕迹，理一理还能接着用好几年。</p>
+          </div>
+          <span class="go">去水獭工具官网 →</span>
+        </a>
       </div>
     </section>
 
@@ -2536,33 +2610,37 @@
       </a>
       <nav class="foot-links" aria-label="相关链接">
         <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">更新记录</a>
-        <a href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg"
-          target="_blank" rel="noopener">下载</a>
+        <a href="#download">下载</a>
         <a href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">水獭工具</a>
       </nav>
-      <p class="foot-copy">© 2026 水獭 Git · OtterGit · Asher_Shao<br>macOS · Apple Silicon · 免费 · 无广告</p>
+      <p class="foot-copy">© 2026 水獭 Git · OtterGit · Asher_Shao<br />macOS · Windows · 免费 · 无广告</p>
     </div>
   </footer>
 
+  <a class="totop" href="#top" aria-label="回到顶部">
+    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 13V3m0 0L4 7m4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" />
+    </svg>
+  </a>
+
   <script>
     (function () {
+      var root = document.documentElement;
       var isStatic = location.search.indexOf("static") > -1;
+      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
       if (isStatic) {
-        document.documentElement.classList.add("static");
-        // 截图/印刷模式下把懒加载拉平，避免截到空白框
+        // 截图模式：懒加载拉平、动画直接落位，避免截到空白
+        root.classList.add("static");
         document.querySelectorAll('img[loading="lazy"]').forEach(function (im) {
           im.setAttribute("loading", "eager");
-          var s = im.getAttribute("src");
-          im.setAttribute("src", s);
         });
       }
 
-      var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      /* ---------- 滚动入场：同批兄弟按序错峰，读起来像一页页翻过去 ---------- */
-      var els = document.querySelectorAll(".rise");
+      /* ---------- 滚动入场：同批兄弟错开 70ms ---------- */
+      var rises = document.querySelectorAll(".rise");
       if (isStatic || reduced || !("IntersectionObserver" in window)) {
-        for (var i = 0; i < els.length; i++) els[i].classList.add("in");
+        rises.forEach(function (el) { el.classList.add("in"); });
       } else {
         var io = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
@@ -2571,36 +2649,18 @@
             var sibs = Array.prototype.filter.call(el.parentNode.children, function (c) {
               return c.classList && c.classList.contains("rise");
             });
-            var idx = Math.max(0, sibs.indexOf(el));
-            el.style.transitionDelay = Math.min(idx * 70, 350) + "ms";
+            el.style.transitionDelay = Math.min(Math.max(0, sibs.indexOf(el)) * 70, 280) + "ms";
             el.classList.add("in");
-            el.addEventListener("transitionend", function h() {
-              el.style.transitionDelay = "";
-              el.removeEventListener("transitionend", h);
-            });
             io.unobserve(el);
           });
-        }, { threshold: 0.06, rootMargin: "0px 0px -60px 0px" });
-        for (var j = 0; j < els.length; j++) io.observe(els[j]);
+        }, { threshold: 0.06, rootMargin: "0px 0px -48px 0px" });
+        rises.forEach(function (el) { io.observe(el); });
       }
 
-      /* ---------- 数字滚动：等宽字体托底，到账感不跳版 ---------- */
-      function fmt(v, dec) {
-        var s = dec ? v.toFixed(dec) : String(Math.round(v));
-        var parts = s.split(".");
-        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        return parts.join(".");
-      }
-
-      function setFinal(el) {
-        var to = parseFloat(el.getAttribute("data-count"));
-        var dec = parseInt(el.getAttribute("data-dec") || "0", 10);
-        el.textContent = (el.getAttribute("data-prefix") || "") + fmt(to, dec);
-      }
-
+      /* ---------- 数据条：滚到眼前再数上去 ---------- */
       var counters = document.querySelectorAll("[data-count]");
       if (isStatic || reduced || !("IntersectionObserver" in window)) {
-        counters.forEach(setFinal);
+        counters.forEach(function (el) { el.textContent = el.getAttribute("data-count"); });
       } else {
         var cio = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
@@ -2608,17 +2668,12 @@
             var el = e.target;
             cio.unobserve(el);
             var to = parseFloat(el.getAttribute("data-count"));
-            var dec = parseInt(el.getAttribute("data-dec") || "0", 10);
-            var pre = el.getAttribute("data-prefix") || "";
             var t0 = null;
-            var dur = 950;
             function step(now) {
               if (t0 === null) t0 = now;
-              var k = Math.min(1, (now - t0) / dur);
-              var ease = 1 - Math.pow(1 - k, 3);
-              el.textContent = pre + fmt(to * ease, dec);
+              var k = Math.min(1, (now - t0) / 950);
+              el.textContent = String(Math.round(to * (1 - Math.pow(1 - k, 3))));
               if (k < 1) requestAnimationFrame(step);
-              else el.textContent = pre + fmt(to, dec);
             }
             requestAnimationFrame(step);
           });
@@ -2626,61 +2681,94 @@
         counters.forEach(function (el) { cio.observe(el); });
       }
 
-      /* ---------- 导航：滚过 8px 上磨砂玻璃；scrollspy 常亮当前章节 ---------- */
-      var nav = document.querySelector(".nav");
+      /* ---------- 导航：滚过 8px 上磨砂；当前章节常亮 ---------- */
+      var nav = document.getElementById("nav");
       var totop = document.querySelector(".totop");
-      var spyLinks = Array.prototype.slice.call(document.querySelectorAll(".nav-links a[href^='#']:not(.btn)"));
-      var spyMap = {};
-      spyLinks.forEach(function (a) {
-        var sec = document.querySelector(a.getAttribute("href"));
-        if (sec) spyMap[sec.id] = a;
-      });
-
       function onScroll() {
         var y = window.scrollY || 0;
-        if (nav) nav.classList.toggle("scrolled", y > 8);
-        if (totop) totop.classList.toggle("show", y > 640);
+        nav.classList.toggle("scrolled", y > 8);
+        totop.classList.toggle("show", y > 720);
       }
       window.addEventListener("scroll", onScroll, { passive: true });
       onScroll();
 
+      var spy = {};
+      document.querySelectorAll(".nav-links a[href^='#']:not(.btn)").forEach(function (a) {
+        var sec = document.querySelector(a.getAttribute("href"));
+        if (sec) spy[sec.id] = a;
+      });
       if ("IntersectionObserver" in window) {
         var sio = new IntersectionObserver(function (entries) {
           entries.forEach(function (e) {
-            var link = spyMap[e.target.id];
-            if (!link) return;
-            if (e.isIntersecting) {
-              spyLinks.forEach(function (a) { a.classList.remove("on"); });
-              link.classList.add("on");
-            }
+            var link = spy[e.target.id];
+            if (!link || !e.isIntersecting) return;
+            Object.keys(spy).forEach(function (k) { spy[k].classList.remove("on"); });
+            link.classList.add("on");
           });
-        }, { rootMargin: "-38% 0px -55% 0px", threshold: 0 });
-        Object.keys(spyMap).forEach(function (id) {
-          var sec = document.getElementById(id);
-          if (sec) sio.observe(sec);
-        });
+        }, { rootMargin: "-40% 0px -55% 0px" });
+        Object.keys(spy).forEach(function (id) { sio.observe(document.getElementById(id)); });
       }
 
-      /* ---------- 点章节跳进视频对应时间点 ---------- */
-      var v = document.getElementById("promo");
-      document.querySelectorAll(".chapters a[data-t]").forEach(function (a) {
-        a.addEventListener("click", function (ev) {
-          if (!v) return;
-          ev.preventDefault();
-          var t = parseFloat(a.getAttribute("data-t"));
-          try { v.currentTime = t; } catch (err) { }
-          v.play().catch(function () { });
-          v.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+      /* ---------- 按访客系统调整下载按钮 ---------- */
+      var ua = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || navigator.userAgent || "";
+      var isWin = /win/i.test(ua);
+      var isMac = /mac/i.test(ua) && !/iphone|ipad/i.test(navigator.userAgent);
+      var mainBtn = document.getElementById("cta-main");
+      var altBtn = document.getElementById("cta-alt");
+      if (isWin) {
+        var macHref = mainBtn.href;
+        mainBtn.href = altBtn.href;
+        mainBtn.querySelector("span").textContent = "下载 Windows 预览版";
+        altBtn.href = macHref;
+        altBtn.querySelector("span").textContent = "macOS 版";
+        document.getElementById("dl-win").classList.add("mine");
+      } else if (isMac) {
+        document.getElementById("dl-mac").classList.add("mine");
+      }
+
+      /* ---------- 首屏截图：浅色 / 深色（默认跟访客系统走） ---------- */
+      var heroWin = document.getElementById("hero-win");
+      var segBtns = document.querySelectorAll("[data-shot-theme]");
+      function setShot(theme) {
+        heroWin.classList.toggle("is-dark", theme === "dark");
+        segBtns.forEach(function (b) {
+          b.setAttribute("aria-pressed", String(b.getAttribute("data-shot-theme") === theme));
         });
+      }
+      segBtns.forEach(function (b) {
+        b.addEventListener("click", function () { setShot(b.getAttribute("data-shot-theme")); });
+      });
+      if (!isStatic && window.matchMedia("(prefers-color-scheme: dark)").matches) setShot("dark");
+
+      /* ---------- 浅色深色对比滑块 ---------- */
+      var cmp = document.getElementById("compare");
+      var range = cmp.querySelector("input");
+      function setPos(v) { cmp.style.setProperty("--pos", v + "%"); }
+      range.addEventListener("input", function () { setPos(range.value); });
+      setPos(range.value);
+
+      /* ---------- 短片：点章节跳到对应时间，播放时章节跟着亮 ---------- */
+      var video = document.getElementById("promo");
+      var chapters = Array.prototype.slice.call(document.querySelectorAll(".chapters a[data-t]"));
+      chapters.forEach(function (a) {
+        a.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          try { video.currentTime = parseFloat(a.getAttribute("data-t")); } catch (err) { }
+          video.play().catch(function () { });
+          video.scrollIntoView({ block: "center", behavior: reduced ? "auto" : "smooth" });
+        });
+      });
+      video.addEventListener("timeupdate", function () {
+        var t = video.currentTime;
+        var cur = null;
+        chapters.forEach(function (a) { if (t >= parseFloat(a.getAttribute("data-t")) - 0.05) cur = a; });
+        chapters.forEach(function (a) { a.classList.toggle("on", a === cur && !video.paused); });
+      });
+      video.addEventListener("pause", function () {
+        chapters.forEach(function (a) { a.classList.remove("on"); });
       });
     })();
   </script>
-  <a class="totop" href="#top" aria-label="回到顶部">
-    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-      <path d="M8 13V3m0 0L4 7m4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-        stroke-linejoin="round" />
-    </svg>
-  </a>
 </body>
 
 </html>
