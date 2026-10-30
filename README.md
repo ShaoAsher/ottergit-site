@@ -3,7 +3,16 @@
 静态官网（GitHub Pages）。**不开源**；Releases 里只有安装包（DMG/ZIP），没有源码。
 
 - 官网：**https://shaoasher.github.io/ottergit-site/**
-- 下载：https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg
+- 下载 macOS：https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg
+- 下载 Windows：https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip
+
+Windows 包由 `OtterGitApp` 的 GitHub Actions（`.github/workflows/windows.yml`，推到 `feat/windows**` 或手动 dispatch 触发）在 windows-latest 上构建，产物是 artifact `OtterGit-windows-x64`。生成本机没网拉包时，等 CI 跑完再补传：
+
+```bash
+gh run list --repo ShaoAsher/otter-git --workflow windows-build -L 3
+gh release upload v1.2.0 OtterGit-1.2.0+10-windows-x64.zip \
+  --repo ShaoAsher/ottergit-site --clobber
+```
 
 ## 发布安装包
 
