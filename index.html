@@ -1424,21 +1424,22 @@
       height: 64px;
     }
 
-    .appcard .trio {
-      display: flex;
+    /* 家族入口只放小獭剪影，不排成员图标：成员会越来越多 */
+    .appcard .fam {
+      display: grid;
+      place-items: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: color-mix(in srgb, var(--amber) 14%, transparent);
     }
 
-    .appcard .trio img {
-      display: block;
-      width: 40px;
-      height: 40px;
-      margin-left: -12px;
-      border-radius: 9px;
-      box-shadow: -4px 0 10px -4px rgba(0, 0, 0, .55);
-    }
-
-    .appcard .trio img:first-child {
-      margin-left: 0;
+    .appcard .fam i {
+      width: 38px;
+      height: 38px;
+      background: var(--ink);
+      -webkit-mask: url(assets/otter_family.png) center/contain no-repeat;
+      mask: url(assets/otter_family.png) center/contain no-repeat;
     }
 
     .appcard p {
@@ -2104,15 +2105,11 @@
       <div class="wrap">
         <h2 id="more-title" class="rise" style="font-size: 22px; margin-bottom: 20px">水獭家族</h2>
         <a class="appcard rise" href="https://shaoasher.github.io/otter-family-site/?from=ottergit#members" target="_blank" rel="noopener">
-          <span class="trio" aria-hidden="true">
-            <img src="assets/gametime_icon.png" alt="" width="44" height="44" loading="lazy" />
-            <img src="assets/ottertools_icon.png" alt="" width="44" height="44" loading="lazy" />
-            <img src="assets/otter_git_icon.png" alt="" width="44" height="44" loading="lazy" />
-          </span>
+          <span class="fam" aria-hidden="true"><i></i></span>
           <div>
-            <h3>同一只小獭，三个软件</h3>
-            <span class="meta">水獭游时 · 水獭工具 · 水獭 Git</span>
-            <p>记录游戏时间、照看 Mac、管好代码仓库。三个软件都在家族官网上，各有一段简介。</p>
+            <h3>同一只小獭，在不同的地方陪你</h3>
+            <span class="meta">免费 · 不用注册 · 数据留在本机</span>
+            <p>水獭家族是一组安静、好看、不打扰的小软件，每一个只做好一件事。全部成员和介绍都在家族官网上。</p>
           </div>
           <span class="go">访问水獭家族官网 →</span>
         </a>
