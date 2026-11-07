@@ -1,4 +1,4 @@
-/* ═══ 小獭 AI 助手面板（与 App 2.0.0 的 ai_panel 同构） ═══
+/* ═══ 小獭 AI 助手面板（与 App 2.0.1 的 ai_panel 同构） ═══
    用户消息：靠右、无头像、选中色底、无描边。
    助手消息：连续几条只在第一条挂头像和「小獭」名字；气泡细描边、左上角收成小圆角。
    操作：最后一条助手消息常显「复制 / 重新生成」；其余悬停才出现（用户消息在气泡左侧，助手消息浮在右下角）。 */
@@ -33,7 +33,6 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .mr.u{justify-content:flex-end}
 .mr.new{animation:rise .42s var(--ease)}
 .mr .av{width:30px;height:30px;flex:none;margin-right:8px}
-.mr .av.ph{visibility:hidden}
 .mr .col{display:flex;flex-direction:column;align-items:flex-start;min-width:0;max-width:calc(100% - 38px)}
 .mr.u .col{align-items:flex-end}
 .mr .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px;font-weight:600;color:var(--mid);margin:0 0 4px 2px}
@@ -147,7 +146,7 @@ function rowHtml(m,i){
   const bubble=`<div class="bb">${body}</div>`;
   const framed=m.live?`<div class="fr">${bubble}</div>`:pin?`<div class="fr">${bubble}</div>`:isU?`<div class="fr">${acts('')}${bubble}</div>`:`<div class="fr">${bubble}${acts('fl')}</div>`;
   const chips=!isU&&!m.live&&m.chips.length?`<div class="chips2">${m.chips.map(c=>`<button data-chip="${esc(c)}">${esc(c)}</button>`).join('')}</div>`:'';
-  const av=isU?'':lead?`<img class="av" src="${pick(m.live?'busy':'greet')}" alt="">`:'<span class="av ph"></span>';
+  const av=isU?'':`<img class="av" src="${pick(m.live?'busy':'greet')}" alt="">`;
   return `<div class="mr ${isU?'u':'a'} ${lead?'lead':''} ${m.fresh?'new':''}" data-row="${m.id}">${av}<div class="col">${meta}${framed}${chips}${pin?acts('pin'):''}</div></div>`;
 }
 function aiRender(){

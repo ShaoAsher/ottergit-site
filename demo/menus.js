@@ -154,8 +154,8 @@ const M={
   push:()=>[{ic:'push',lb:'推送 dev → origin/dev',k:'⌘⇧U'},{ic:'push',lb:'推送到',sub:REMOTES.map(r=>({ic:'cloud',lb:r,sm:r==='origin'?'github.com/shaw/OtterGit':'github.com/otter/OtterGit'}))},{ic:'tag',lb:'推送所有标签'},'-',{ic:'push',lb:'强制推送…',sm:'--force-with-lease',danger:1,act:()=>DLG.danger()},{ic:'wrench',lb:'推送选项…',dlg:'pushOpts'}],
   stash:()=>[{ic:'stash',lb:'暂存更改…',k:'⌘⌥S',dlg:'stashSave'},{ic:'stash',lb:'快速暂存',sm:'含未跟踪'},'-',{h:'暂存列表',hr:'3'},
     ...[['stash@{0}','WIP on dev: 首页布局'],['stash@{1}','试验：背景动效速度'],['stash@{2}','On main: 修 tray 图标']].map(([s,m])=>({ic:'list',lb:m,sm:s,sub:[{ic:'eye',lb:'预览…'},{ic:'check',lb:'应用'},{ic:'pull',lb:'弹出（应用并删除）'},{ic:'branch',lb:'从这里创建分支…'},'-',{ic:'trash',lb:'删除',danger:1}]}))],
-  more:()=>[{ic:'flow',lb:'Git-flow',sub:[{ic:'flow',lb:'初始化…'},'-',{ic:'plus',lb:'开始 Feature…',dlg:'flowStart'},{ic:'plus',lb:'开始 Release…',dlg:'flowStart'},{ic:'plus',lb:'开始 Hotfix…',dlg:'flowStart'},{ic:'plus',lb:'开始 Support…',dlg:'flowStart'},'-',{ic:'check',lb:'完成 feature/ambient-backdrop…'},{ic:'info',lb:'查看配置'}]},
-    {ic:'edit',lb:'交互式变基…',dlg:'rebaseI'},{ic:'bisect',lb:'二分查找…'},{ic:'patch',lb:'应用补丁…'},{ic:'plus',lb:'添加子模块…'},{ic:'reset',lb:'Reflog 恢复…'},{ic:'work',lb:'工作树…'},
+  more:()=>[{ic:'flow',lb:'Git-flow',sub:[{ic:'plus',lb:'开始 Feature…',act:()=>DLG.flowStart('feature')},{ic:'plus',lb:'开始 Release…',act:()=>DLG.flowStart('release')},{ic:'plus',lb:'开始 Hotfix…',act:()=>DLG.flowStart('hotfix')},{ic:'plus',lb:'开始 Support…',act:()=>DLG.flowStart('support')},'-',{ic:'check',lb:'完成 feature/ambient-backdrop…',act:()=>DLG.flowFinish()},'-',{ic:'wrench',lb:'分支设置…',act:()=>DLG.flowSettings()}]},
+    {ic:'edit',lb:'交互式变基…',dlg:'rebaseI'},{ic:'bisect',lb:'二分查错…',dlg:'bisect'},{ic:'patch',lb:'应用补丁…',dlg:'patch'},{ic:'plus',lb:'添加子模块…',dlg:'submodule'},{ic:'reset',lb:'Reflog 恢复…'},{ic:'work',lb:'添加工作树…',dlg:'worktree'},
     {ic:'lock',lb:'Git LFS',sub:[{ic:'plus',lb:'跟踪文件类型…'},{ic:'x',lb:'取消跟踪…'},{ic:'lock',lb:'文件锁'},'-',{ic:'refresh',lb:'拉取 LFS 对象'}]},'-',
     {chk:true,lb:'显示小獭栏',k:'⌘⇧O'},{ic:'key',lb:'快捷键',k:'⌘/'}],
   branch:b=>[{ic:'check',lb:`切换到 ${b}`,dis:b==='dev'},{ic:'merge',lb:`合并 ${b} 到 dev…`,dis:b==='dev',dlg:'merge'},{ic:'edit',lb:`将 dev 变基到 ${b}`,dis:b==='dev'},{ic:'cherry',lb:`从 ${b} 拣选…`,dis:b==='dev'},{ic:'compare',lb:'与当前分支比较'},'-',
@@ -171,8 +171,8 @@ const M={
     {ic:'copy',lb:'复制',sub:[{ic:'copy',lb:'完整 SHA'},{ic:'copy',lb:'短哈希',sm:HASH[hsel]},{ic:'copy',lb:'提交标题'}]},{ic:'patch',lb:'创建补丁…'},{ic:'reset',lb:'Reflog 恢复…'},{ic:'spark',lb:'问小獭这次改了什么'}],
   repo:r=>[{ic:'ext',lb:'打开',k:'↩',act:()=>go('files')},{ic:'finder',lb:'在访达中显示'},{ic:'term',lb:'在终端打开'},{ic:'copy',lb:'复制路径'},'-',{ic:'edit',lb:'重命名…',dlg:'rename'},
     {ic:'group',lb:'设置分组',sub:[...GROUPS.map(g=>({dot:g[1],lb:g[0],chk:undefined,sm:r&&r[3]===g[0]?'当前':''})),{dot:'transparent',lb:'不分组'},'-',{ic:'plus',lb:'新建分组…',dlg:'newGroup'}]},
-    {ic:'star',lb:r&&r[11]?'取消置顶':'置顶'},{ic:'wrench',lb:'仓库设置…'},'-',{ic:'x',lb:'从列表移除'},{ic:'trash',lb:'移到废纸篓…',danger:1,act:()=>DLG.danger()}],
-  add:()=>[{ic:'clone',lb:'克隆远程仓库…',k:'⌘⇧O',dlg:'clone'},{ic:'folder',lb:'添加本地仓库…',k:'⌘O'},{ic:'scan',lb:'扫描文件夹…',dlg:'scan'},'-',{ic:'plus',lb:'新建本地仓库…'},{ic:'cloud',lb:'在远端创建',sub:[{ic:'cloud',lb:'GitHub'},{ic:'cloud',lb:'Gitee'},{ic:'cloud',lb:'GitLab',dis:1,sm:'未登录'},'-',{ic:'user',lb:'账号设置…',act:()=>{stab=3;openSettings()}}]}],
+    {ic:'star',lb:r&&r[11]?'取消置顶':'置顶'},{ic:'wrench',lb:'仓库设置…',act:()=>DLG.repoSettings()},'-',{ic:'x',lb:'从列表移除'},{ic:'trash',lb:'移到废纸篓…',danger:1,act:()=>DLG.danger()}],
+  add:()=>[{ic:'clone',lb:'克隆远程仓库…',k:'⌘⇧O',dlg:'clone'},{ic:'folder',lb:'添加本地仓库…',k:'⌘O',dlg:'addLocal'},{ic:'scan',lb:'扫描文件夹…',dlg:'scan'},'-',{ic:'plus',lb:'新建本地仓库…',dlg:'initRepo'},{ic:'cloud',lb:'新建远程仓库…',dlg:'createRemote'}],
   switcher:()=>[{h:'本地分支',hr:'4'},...['dev','main','release','feat/windows'].map(b=>({chk:b==='dev',lb:b,sm:b==='dev'?'↑'+ahead:b==='feat/windows'?'↓2':''})),{h:'远端',hr:'origin'},...['origin/main','origin/dev','origin/release','origin/feat/tray'].map(b=>({ic:'cloud',lb:b})),'-',{ic:'plus',lb:'新建分支…',k:'⌘⇧N',dlg:'branch'},{ic:'list',lb:'查看当前分支历史',act:()=>go('history')}]
 };
 
@@ -341,7 +341,7 @@ Object.assign(DLG,{
 });
 
 /* 控制台入口 */
-document.querySelector('#console .opt[data-k=dlg]').insertAdjacentHTML('beforeend',['clone','scan','merge','reset','tag','stashSave','pushOpts','pullOpts','flowStart','rebaseI'].map(k=>`<button data-x="${k}" data-v="x-${k}">${{clone:'克隆',scan:'扫描',merge:'合并',reset:'重置',tag:'标签',stashSave:'暂存',pushOpts:'推送选项',pullOpts:'拉取选项',flowStart:'Git-flow',rebaseI:'交互式变基'}[k]}</button>`).join(''));
+document.querySelector('#console .opt[data-k=dlg]').insertAdjacentHTML('beforeend',['clone','initRepo','addLocal','createRemote','scan','merge','reset','tag','stashSave','pushOpts','pullOpts','flowStart','rebaseI','patch','worktree','bisect','submodule'].map(k=>`<button data-x="${k}" data-v="x-${k}">${{clone:'克隆',initRepo:'新建仓库',addLocal:'添加仓库',createRemote:'远程新建',scan:'扫描',merge:'合并',reset:'重置',tag:'标签',stashSave:'暂存',pushOpts:'推送选项',pullOpts:'拉取选项',flowStart:'Git-flow',rebaseI:'交互式变基',patch:'补丁',worktree:'工作树',bisect:'二分查错',submodule:'子模块'}[k]}</button>`).join(''));
 document.querySelector('#console .opt[data-k=dlg]').insertAdjacentHTML('afterend',`<h2>菜单（含二级联动）</h2><div class="opt" data-k="menu">${[['more','更多 ▸ Git-flow'],['push','推送 ▸ 远端'],['stash','暂存列表 ▸'],['file','右键文件'],['commit','右键提交'],['branch','右键分支'],['switch','分支切换'],['repo','右键仓库']].map(([k,l])=>`<button data-m="${k}" data-v="m-${k}">${l}</button>`).join('')}</div><p>窗口里也可以直接右键：文件、提交、侧栏分支 / 标签、仓库行；状态栏的分支名可以点。菜单支持 ↑↓ ← → 回车 Esc。</p>`);
 document.getElementById('console').addEventListener('click',e=>{
   const x=e.target.closest('[data-x]');if(x){e.stopImmediatePropagation();if(x.dataset.x==='reset'&&S.page!=='history')go('history');return DLG[x.dataset.x]()}

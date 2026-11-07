@@ -42,11 +42,11 @@
 ./tool/release_github.sh --skip-build # 已有 dist 产物时
 ```
 
-Windows 包由 `OtterGitApp` 的 GitHub Actions（`.github/workflows/windows.yml`）构建，产物是 artifact `OtterGit-windows-x64`，CI 跑完再补传：
+Windows 包由 `OtterGitApp` 的 GitHub Actions（`.github/workflows/windows.yml`）构建，产物是 artifact `OtterGit-windows-x64`，CI 跑完后把里面的 zip 改名为固定的 `OtterGit-windows-x64.zip`（官网下载链接用这个名字）再补传：
 
 ```bash
 gh run list --repo ShaoAsher/otter-git --workflow windows-build -L 3
-gh release upload v2.0.0 OtterGit-2.0.0+11-windows-x64.zip \
+gh release upload v2.0.1 OtterGit-windows-x64.zip \
   --repo ShaoAsher/ottergit-site --clobber
 ```
 
@@ -54,7 +54,7 @@ gh release upload v2.0.0 OtterGit-2.0.0+11-windows-x64.zip \
 
 ## 宣传片
 
-宣传片（75s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 `../ottergit-film/`（HyperFrames）。
+宣传片（62s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 `../ottergit-film/`（HyperFrames）。
 
 ## 本地预览
 

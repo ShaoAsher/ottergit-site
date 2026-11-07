@@ -1192,7 +1192,7 @@
 
     .chapters {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
       margin: 16px 0 0;
       padding: 0;
@@ -1419,13 +1419,9 @@
     }
 
     .appcard .mark {
-      display: grid;
-      place-items: center;
-      width: 56px;
-      height: 56px;
-      border-radius: 14px;
-      background: linear-gradient(45deg, #fa5a1e, #ffb04a);
-      color: #1a0e06;
+      display: block;
+      width: 64px;
+      height: 64px;
     }
 
     .appcard p {
@@ -1524,7 +1520,7 @@
       }
 
       .chapters {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(4, 1fr);
       }
     }
 
@@ -1627,7 +1623,7 @@
         <button type="button" class="greet" id="greet" data-in aria-label="小獭的问候，点一下换一句">
           <img src="demo/assets/expr/hi.webp" alt="" width="30" height="30" />
           <span id="greet-text">你好，我是小獭</span>
-          <span class="v">v2.0.0</span>
+          <span class="v">v2.0.1</span>
         </button>
 
         <h1 id="hero-title"><span class="w" data-in>看得清，</span><span class="w" data-in><em>不瞎猜</em>。</span></h1>
@@ -1975,23 +1971,26 @@
       <div class="wrap">
         <div class="sec-head rise">
           <p class="eyebrow">06 · 产品短片</p>
-          <h2 id="film-title">75 秒，从一次推送被拒讲起。</h2>
-          <p class="lede">中文旁白，带字幕。点章节可以直接跳转。</p>
+          <h2 id="film-title">一分钟，看懂水獭 Git 2.0。</h2>
+          <p class="lede">中文配音，画面内带字幕。点章节可以直接跳转。</p>
         </div>
         <div class="frame film rise">
           <video id="promo" controls playsinline preload="none" poster="assets/film-poster.jpg" width="1920" height="1080"
-            aria-label="水獭 Git 产品短片，75 秒，中文旁白">
+            aria-label="水獭 Git 2.0 宣传片，62 秒，中文配音">
             <source src="assets/ottergit-promo.mp4" type="video/mp4" />
-            <track kind="captions" srclang="zh" label="中文" src="assets/ottergit-promo.zh.vtt" default />
+            <track kind="captions" srclang="zh" label="中文" src="assets/ottergit-promo.zh.vtt" />
             你的浏览器无法播放内嵌视频，可以<a href="assets/ottergit-promo.mp4">直接下载</a>观看。
           </video>
         </div>
         <ol class="chapters rise" aria-label="短片章节">
-          <li><a href="#film" data-t="0"><span>00:00</span>推送被拒</a></li>
-          <li><a href="#film" data-t="21"><span>00:21</span>提交历史</a></li>
-          <li><a href="#film" data-t="36.5"><span>00:36</span>合并冲突</a></li>
-          <li><a href="#film" data-t="45.5"><span>00:45</span>助手小獭</a></li>
-          <li><a href="#film" data-t="67.5"><span>01:07</span>下载</a></li>
+          <li><a href="#film" data-t="0"><span>00:00</span>开场</a></li>
+          <li><a href="#film" data-t="10"><span>00:10</span>全局总览</a></li>
+          <li><a href="#film" data-t="15"><span>00:15</span>精确暂存</a></li>
+          <li><a href="#film" data-t="20.5"><span>00:20</span>分支泳道</a></li>
+          <li><a href="#film" data-t="26.5"><span>00:26</span>冲突处理</a></li>
+          <li><a href="#film" data-t="33.5"><span>00:33</span>智能助手</a></li>
+          <li><a href="#film" data-t="48"><span>00:48</span>双主题 · 双平台</a></li>
+          <li><a href="#film" data-t="54.5"><span>00:54</span>免费下载</a></li>
         </ol>
       </div>
     </section>
@@ -2005,13 +2004,13 @@
         </div>
         <div class="dl">
           <article class="dl-card rise" id="dl-mac">
-            <div class="os"><h3>macOS 版</h3><span class="ver">v2.0.0</span><span class="yours">你的系统</span></div>
+            <div class="os"><h3>macOS 版</h3><span class="ver">v2.0.1</span><span class="yours">你的系统</span></div>
             <p class="req">macOS 12 及以上，Apple Silicon（M 系列芯片）</p>
             <p>DMG 安装包，拖进「应用程序」即可使用。已签名、已公证，首次打开不会被系统拦截。</p>
             <a class="btn btn-amber" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg" target="_blank" rel="noopener">下载 macOS 版</a>
           </article>
           <article class="dl-card rise" id="dl-win">
-            <div class="os"><h3>Windows 预览版</h3><span class="ver">v2.0.0</span><span class="yours">你的系统</span></div>
+            <div class="os"><h3>Windows 预览版</h3><span class="ver">v2.0.1</span><span class="yours">你的系统</span></div>
             <p class="req">Windows 10 / 11，x64</p>
             <p>zip 压缩包，解压后双击 <code>otter_git.exe</code>。预览版尚未代码签名，SmartScreen 拦截时点「更多信息」，再点「仍要运行」。</p>
             <a class="btn" href="https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip" target="_blank" rel="noopener">下载 Windows 预览版</a>
@@ -2028,6 +2027,7 @@
             <a href="https://github.com/ShaoAsher/ottergit-site/releases" target="_blank" rel="noopener">在 GitHub 上查看全部版本 →</a>
           </div>
           <ol class="vlist">
+            <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v2.0.1" target="_blank" rel="noopener"><b>v2.0.1</b><span class="vd">11-07</span><span class="vt">所有编辑页和操作弹窗统一重做：分组卡片、单选和开关行、就地提示与一键修正，执行前能看到将要运行的 git 命令。新建 / 克隆 / 关联远程仓库、合并、重置、交互式变基、二分查错、工作树等都换了新样式；小獭面板可展开执行步骤，等待回复时头像会动。</span></a></li>
             <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v2.0.0" target="_blank" rel="noopener"><b>v2.0.0</b><span class="vd">11-06</span><span class="vt">小獭 AI 助手重做：回复带步骤卡，写操作先出确认卡并标注风险等级，会话按仓库隔离并保留记忆。全新首页，小獭表情按场景切换，背景环境层随仓库状态换色；提交、推送、拉取的结果直接显示在进度弹窗里，提交后可一键推送。主色改为琥珀金。</span></a></li>
             <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.2.0" target="_blank" rel="noopener"><b>v1.2.0</b><span class="vd">10-30</span><span class="vt">图标全部重画成 78 枚双重量线稿；按钮、芯片、下拉框、输入框补齐键盘焦点环和悬停反馈，页面间距归一到 2pt 刻度。</span></a></li>
             <li><a href="https://github.com/ShaoAsher/ottergit-site/releases/tag/v1.1.1" target="_blank" rel="noopener"><b>v1.1.1</b><span class="vd">10-29</span><span class="vt">关于页和设置里的介绍改为 macOS 和 Windows 通用。</span></a></li>
@@ -2084,9 +2084,7 @@
       <div class="wrap">
         <h2 id="more-title" class="rise" style="font-size: 22px; margin-bottom: 20px">作者的其他软件</h2>
         <a class="appcard rise" href="https://shaoasher.github.io/ottertools-site/" target="_blank" rel="noopener">
-          <span class="mark" aria-hidden="true">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6a4 4 0 0 0 5 5l-8 8-3-3 8-8a4 4 0 0 0-2-2z" /></svg>
-          </span>
+          <img class="mark" src="assets/ottertools_icon.png" alt="" width="64" height="64" loading="lazy" />
           <div>
             <h3>水獭工具 OtterTools</h3>
             <span class="meta">免费 · macOS 10.15+ · Apple Silicon</span>
