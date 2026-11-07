@@ -35,18 +35,19 @@
 
 ## 发布安装包
 
-在 `OtterGitApp`：
+安装包都从 `OtterGitApp` 的 `release` 分支发出（git-flow 发布分支）：
 
 ```bash
-./tool/release_github.sh              # 编译 + 公证 + 上传 DMG/ZIP
+git checkout release                  # 已 git flow release finish 并 push
+./tool/release_github.sh              # 编译 + 公证 + 上传 macOS DMG/ZIP
 ./tool/release_github.sh --skip-build # 已有 dist 产物时
 ```
 
-Windows 包由 `OtterGitApp` 的 GitHub Actions（`.github/workflows/windows.yml`）构建，产物是 artifact `OtterGit-windows-x64`，CI 跑完后把里面的 zip 改名为固定的 `OtterGit-windows-x64.zip`（官网下载链接用这个名字）再补传：
+push `release` 后 `OtterGitApp` 的 GitHub Actions（`.github/workflows/windows.yml`）构建 Windows 包。配了 secret `SITE_RELEASE_TOKEN` 会自动以固定名 `OtterGit-windows-x64.zip`（官网下载链接用这个名字）传到同一个 Release；没配时从 artifact `OtterGit-windows-x64` 取出 zip，改名后补传：
 
 ```bash
 gh run list --repo ShaoAsher/otter-git --workflow windows-build -L 3
-gh release upload v2.0.2 OtterGit-windows-x64.zip \
+gh release upload v2.0.3 OtterGit-windows-x64.zip \
   --repo ShaoAsher/ottergit-site --clobber
 ```
 
