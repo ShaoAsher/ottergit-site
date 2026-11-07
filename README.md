@@ -54,7 +54,16 @@ gh release upload v2.0.2 OtterGit-windows-x64.zip \
 
 ## 宣传片
 
-宣传片（151s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 `../ottergit-story/`（HyperFrames）。
+宣传片（151s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 App 仓库的 `OtterGitApp/promo/`（HyperFrames，剧本见 `promo/copy/剧本.md`）：
+
+```bash
+cd ../OtterGitApp/promo
+npm run build && npm run render      # 成片 renders/ottergit-promo.mp4
+ffmpeg -i renders/ottergit-promo.mp4 -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart ../../ottergit-site/assets/ottergit-promo.mp4
+cp renders/ottergit-promo.zh.vtt ../../ottergit-site/assets/
+```
+
+无旁白、无字幕的二创底板：`npm run build:bed && npm run render:bed`。
 
 ## 本地预览
 
