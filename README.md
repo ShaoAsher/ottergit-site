@@ -54,7 +54,7 @@ gh release upload v2.0.2 OtterGit-windows-x64.zip \
 
 ## 宣传片
 
-宣传片（62s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 `../ottergit-film/`（HyperFrames）。
+宣传片（151s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 `../ottergit-story/`（HyperFrames）。
 
 ## 本地预览
 
