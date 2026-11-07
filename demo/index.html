@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>水獭 Git · 交互原型 · 2.0.1</title>
+<title>水獭 Git · 交互原型 · 2.0.2</title>
 <style>
 /* ═══════════════════════════════════════════════════════════════
    水獭 Git · 原型令牌（与游时记 mockup2 同源，见 方案.md §1）
@@ -499,7 +499,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
 <aside id="console">
   <h1>水獭 Git · 原型 v5</h1>
-  <div class="sub">与 App 2.0.1 同步 · 2026-11-07</div>
+  <div class="sub">与 App 2.0.2 同步 · 2026-11-07</div>
   <h2>页面</h2>
   <div class="opt" data-k="page">
     <button data-v="splash">启动</button><button data-v="home">首页</button><button data-v="files">工作副本</button><button data-v="history">历史</button><button data-v="settings">设置</button><button data-v="about">关于</button>
@@ -600,7 +600,7 @@ function renderSidebar(){
     <div class="cardp tree"><h4>仓库<span>4</span></h4>${['OtterGitApp','GameTime','MacToolsApp','shawWeb'].map((r,i)=>`<div class="it ${i?'':'cur'}">${r}</div>`).join('')}
     <h4>本地分支<span class="ha"><i title="按层级 / 按时间排序">⇅</i><i title="新建分支">＋</i>4</span></h4><div class="it cur">dev<span class="sm">↑${ahead||''}</span></div><div class="it">main</div><div class="it">release</div><div class="grp">feat</div><div class="it sub">windows<span class="sm">↓2</span></div>
     <h4>远程分支<span>4</span></h4><div class="grp">origin</div><div class="it sub">dev</div><div class="it sub">main</div><div class="it sub">release</div><div class="it sub">feat/tray</div>
-    <h4>标签<span class="ha"><i title="新建标签">＋</i>3</span></h4><div class="it">v2.0.1<span class="tag">最新</span></div><div class="it">v2.0.0</div><div class="it">v1.2.0</div>
+    <h4>标签<span class="ha"><i title="新建标签">＋</i>3</span></h4><div class="it">v2.0.2<span class="tag">最新</span></div><div class="it">v2.0.1</div><div class="it">v2.0.0</div>
     <h4>暂存架<span>2</span></h4><div class="it">WIP on dev: 首页布局<span class="sm">{0}</span></div><div class="it">试验：背景动效速度<span class="sm">{1}</span></div></div>`;
     face(sb.querySelector('.mood img'),sc);
   });
@@ -768,7 +768,7 @@ const DLG={
   danger:()=>openDlg(`<img data-scene="askDanger"><h3>丢弃这 3 个文件的改动？</h3><p>丢掉就找不回来了。<br><span style="font-family:var(--mono);font-size:12.5px;color:var(--hi)">theme.dart · toolbar.dart · ripple.dart</span></p><div class="btns"><button class="slab danger block rp" data-close>丢弃改动</button><button class="ghost block rp" data-close>再想想</button></div>`,'ask'),
   branch:()=>openDlg(`<div class="dh"><div class="blk" style="background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)">${svg('branch')}</div><h3>新建分支<small>基于 dev 创建</small></h3><button class="ib" data-close>${svg('x')}</button></div><div class="db" style="width:440px"><div class="field"><label>分支名</label><input value="feat/ambient-backdrop" autofocus></div><div class="field"><label>起点</label><input value="dev · a1f3c9e feat(home): 首页"></div><label style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--mid)"><span class="chk on"></span>创建后切换过去</label></div><div class="da"><button class="ghost rp" data-close>取消</button><button class="slab rp" data-close>创建分支</button></div>`),
   repos:()=>DLG.branch(),new:()=>DLG.branch(),
-  about:()=>{openDlg(`<div class="logo play" id="aboutLogo"><div class="tile"></div><div class="ring"></div><div class="ring r2"></div><div class="disc"></div><div class="otter"></div><div class="badge"><svg viewBox="0 0 24 24"><path d="M8 5v14M8 12h6"/><circle cx="8" cy="5" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16.5" cy="12" r="1.9"/></svg></div></div><h2>水獭 Git</h2><div class="tg">本地优先的 Git 客户端 · v2.0.1</div><div class="family"><div data-fam="游时记">${famIcon('gt',44)}游时记</div><div data-fam="水獭工具">${famIcon('tl',44)}水獭工具</div><div class="cur">${famIcon('git',44)}水獭 Git · 当前</div></div><div style="margin-top:20px;position:relative"><button class="ghost rp" data-close>好的</button></div><button class="ib" data-close style="position:absolute;top:14px;right:14px">${svg('x')}</button>`,'about');
+  about:()=>{openDlg(`<div class="logo play" id="aboutLogo"><div class="tile"></div><div class="ring"></div><div class="ring r2"></div><div class="disc"></div><div class="otter"></div><div class="badge"><svg viewBox="0 0 24 24"><path d="M8 5v14M8 12h6"/><circle cx="8" cy="5" r="1.7"/><circle cx="8" cy="19" r="1.7"/><circle cx="16.5" cy="12" r="1.9"/></svg></div></div><h2>水獭 Git</h2><div class="tg">本地优先的 Git 客户端 · v2.0.2</div><div class="family"><div data-fam="游时记">${famIcon('gt',44)}游时记</div><div data-fam="水獭工具">${famIcon('tl',44)}水獭工具</div><div class="cur">${famIcon('git',44)}水獭 Git · 当前</div></div><div style="margin-top:20px;position:relative"><button class="ghost rp" data-close>好的</button></div><button class="ib" data-close style="position:absolute;top:14px;right:14px">${svg('x')}</button>`,'about');
     const lg=document.getElementById('aboutLogo');lg.onclick=()=>{lg.classList.remove('play');void lg.offsetWidth;lg.classList.add('play')};
     scrim.querySelectorAll('[data-fam]').forEach(f=>f.onclick=()=>moment({scene:'pet',title:f.dataset.fam==='游时记'?'游时记：记你玩了多久的那只':'水獭工具：帮你收拾电脑的那只',sub:'都是水獭家族的'}))},
   settings:()=>openSettings()
@@ -778,7 +778,7 @@ const DLG={
 const STABS=[['外观与偏好','语言、主题、刷新节奏','sun','--win'],['小獭','模型、权限深度、它能做什么','spark','--alt'],['Git','身份、默认行为、外部工具','wrench','--accent'],['账号','远端账号与凭据','user','--info'],['忽略规则','.gitignore 模板与本仓库规则','eye','--ok'],['关于','版本、更新记录、水獭家族','info','--love']];
 let stab=0;
 function openSettings(){
-  openDlg(`<div class="settings"><div class="snav"><div class="home-card rp" id="hcard">${famIcon('git',40)}<div><b>水獭 Git</b><span class="fam">水獭家族</span><span class="v">v2.0.1</span></div></div><div class="navlist"><div class="rail"></div><div class="knot" id="knot"></div>${STABS.map((t,i)=>`<div class="ni rp" data-t="${i}"><div class="b">${svg(t[2])}</div>${t[0]}</div>`).join('')}</div><div class="brand">水獭 Git · OtterGit</div></div>
+  openDlg(`<div class="settings"><div class="snav"><div class="home-card rp" id="hcard">${famIcon('git',40)}<div><b>水獭 Git</b><span class="fam">水獭家族</span><span class="v">v2.0.2</span></div></div><div class="navlist"><div class="rail"></div><div class="knot" id="knot"></div>${STABS.map((t,i)=>`<div class="ni rp" data-t="${i}"><div class="b">${svg(t[2])}</div>${t[0]}</div>`).join('')}</div><div class="brand">水獭 Git · OtterGit</div></div>
   <div class="smain"><div class="aura" id="aura"></div><div class="shead"><img data-scene="settings"><div><h2 id="stitle"></h2><p id="sdesc"></p></div></div><div class="sbody"><div class="in" id="sbody"></div></div><button class="ib" data-close style="position:absolute;top:14px;right:14px">${svg('x')}</button></div></div>`);
   scrim.querySelectorAll('.ni').forEach(n=>n.onclick=()=>{stab=+n.dataset.t;renderStab()});
   document.getElementById('hcard').onclick=()=>{closeDlg();setTimeout(DLG.about,300)};
@@ -851,13 +851,13 @@ face(document.getElementById('tbOtter'),'greet');
 document.querySelectorAll('#app img[data-scene]').forEach(im=>face(im,im.dataset.scene));
 S.tone='warm';renderSidebar();renderFiles();go('home');envFrom=envTo=envSlots();requestAnimationFrame(drawAmbient);splash();
 </script>
-<script src="palette.js?v=2.0.1"></script>
-<script src="viewer.js?v=2.0.1"></script>
-<script src="menus.js?v=2.0.1"></script>
-<script src="edit.js?v=2.0.1"></script>
-<script src="flow.js?v=2.0.1"></script>
-<script src="forms.js?v=2.0.1"></script>
-<script src="tray.js?v=2.0.1"></script>
-<script src="ai.js?v=2.0.1"></script>
-<script src="embed.js?v=2.0.1"></script>
+<script src="palette.js?v=2.0.2"></script>
+<script src="viewer.js?v=2.0.2"></script>
+<script src="menus.js?v=2.0.2"></script>
+<script src="edit.js?v=2.0.2"></script>
+<script src="flow.js?v=2.0.2"></script>
+<script src="forms.js?v=2.0.2"></script>
+<script src="tray.js?v=2.0.2"></script>
+<script src="ai.js?v=2.0.2"></script>
+<script src="embed.js?v=2.0.2"></script>
 </body>

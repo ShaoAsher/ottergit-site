@@ -46,7 +46,7 @@ Windows 包由 `OtterGitApp` 的 GitHub Actions（`.github/workflows/windows.yml
 
 ```bash
 gh run list --repo ShaoAsher/otter-git --workflow windows-build -L 3
-gh release upload v2.0.1 OtterGit-windows-x64.zip \
+gh release upload v2.0.2 OtterGit-windows-x64.zip \
   --repo ShaoAsher/ottergit-site --clobber
 ```
 
