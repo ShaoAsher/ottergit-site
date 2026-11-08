@@ -55,16 +55,15 @@ gh release upload v2.0.3 OtterGit-windows-x64.zip \
 
 ## 宣传片
 
-宣传片（151s，横屏 1080p30）放在 `assets/ottergit-promo.mp4`，字幕 `assets/ottergit-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 App 仓库的 `OtterGitApp/promo/`（HyperFrames，剧本见 `promo/copy/剧本.md`）：
+讲解片（263s，横屏 1080p30）放在 `assets/ottergit-site-promo.mp4`，字幕 `assets/ottergit-site-promo.zh.vtt`，封面 `assets/film-poster.jpg`，分享图 `assets/og.jpg`。工程在 App 仓库的 `OtterGitApp/promo-site/`（HyperFrames，剧本见 `promo-site/copy/script.json`，分四段：官网和下载 / 产品特色 / 功能细讲 / 总结）：
 
 ```bash
-cd ../OtterGitApp/promo
-npm run build && npm run render      # 成片 renders/ottergit-promo.mp4
-ffmpeg -i renders/ottergit-promo.mp4 -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart ../../ottergit-site/assets/ottergit-promo.mp4
-cp renders/ottergit-promo.zh.vtt ../../ottergit-site/assets/
+cd ../OtterGitApp/promo-site
+npm run build && npm run render      # 成片 renders/ottergit-site-promo.mp4
+python3 tool/cover.py                # 封面 renders/cover-{3x4,9x16,16x9}.jpg（与水獭工具同一系列）
+ffmpeg -i renders/ottergit-site-promo.mp4 -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart ../../ottergit-site/assets/ottergit-site-promo.mp4
+cp renders/ottergit-site-promo.zh.vtt ../../ottergit-site/assets/
 ```
-
-无旁白、无字幕的二创底板：`npm run build:bed && npm run render:bed`。
 
 ## 本地预览
 
