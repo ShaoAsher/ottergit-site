@@ -161,13 +161,49 @@
   if (isWin) {
     $("#dl-win").classList.add("mine");
     var main = $("#cta-main"), alt = $("#cta-alt");
-    var href = main.href;
+    var href = main.href, file = main.dataset.dl;
     main.href = alt.href;
+    main.dataset.dl = alt.dataset.dl;
     alt.href = href;
+    alt.dataset.dl = file;
     $("span", main).textContent = "下载 Windows 预览版";
     $("span", alt).textContent = "macOS 版";
   } else if (isMac) {
     $("#dl-mac").classList.add("mine");
+  }
+
+  /* ── 下载源：默认 Gitee，IP 查到不在中国大陆时换 GitHub ──
+     查询失败、超时或被墙都保持 Gitee。data-dl 为文件名，空串表示 Release 页。 */
+  var MIRRORS = {
+    gitee: { file: "https://gitee.com/shaw2026/ottergit-site/releases/download/latest/", page: "https://gitee.com/shaw2026/ottergit-site/releases/latest" },
+    github: { file: "https://github.com/ShaoAsher/ottergit-site/releases/latest/download/", page: "https://github.com/ShaoAsher/ottergit-site/releases/latest" }
+  };
+  function useMirror(name) {
+    var m = MIRRORS[name];
+    $$("[data-dl]").forEach(function (a) {
+      a.href = a.dataset.dl ? m.file + a.dataset.dl : m.page;
+    });
+  }
+  function country(url, pick) {
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 2500);
+    return fetch(url, { signal: ctl && ctl.signal, cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { clearTimeout(timer); return pick(d) || Promise.reject(); });
+  }
+  var cached = null;
+  try { cached = sessionStorage.getItem("og-mirror"); } catch (e) {}
+  if (cached) {
+    useMirror(cached);
+  } else if (window.fetch) {
+    country("https://api.country.is/", function (d) { return d.country; })
+      .catch(function () { return country("https://get.geojs.io/v1/ip/country.json", function (d) { return d.country; }); })
+      .then(function (cc) {
+        var name = String(cc).toUpperCase() === "CN" ? "gitee" : "github";
+        try { sessionStorage.setItem("og-mirror", name); } catch (e) {}
+        useMirror(name);
+      })
+      .catch(function () {});
   }
 
   /* ── 状态章节 ── */

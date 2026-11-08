@@ -4,8 +4,10 @@
 
 - 官网：**https://shaoasher.github.io/ottergit-site/**
 - 在线试用：https://shaoasher.github.io/ottergit-site/demo/
-- 下载 macOS：https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg
-- 下载 Windows：https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip
+- 下载 macOS：https://gitee.com/shaw2026/ottergit-site/releases/download/latest/OtterGit-macos-arm64.dmg（国内）· https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-macos-arm64.dmg
+- 下载 Windows：https://gitee.com/shaw2026/ottergit-site/releases/download/latest/OtterGit-windows-x64.zip（国内）· https://github.com/ShaoAsher/ottergit-site/releases/latest/download/OtterGit-windows-x64.zip
+
+页面上的下载链接默认指向 Gitee（国内镜像 `shaw2026/ottergit-site`，只放发行版附件，保留最近 3 版）；`assets/site.js` 查到访客 IP 不在中国大陆时换成 GitHub，查询失败或超时保持 Gitee。
 
 ## 目录
 
@@ -52,6 +54,8 @@ gh release upload v2.0.3 OtterGit-windows-x64.zip \
 ```
 
 不要再建 `site-assets` 之类媒体 Release（会抢占 `/releases/latest`）。
+
+国内镜像：`./tool/release_gitee.sh [版本]` 把 GitHub Release 的包同步到 Gitee 发行版。`release_github.sh` 结束时会自动调用；CI 配了 secret `GITEE_TOKEN` 时，Windows 包传完也会再同步一次。
 
 ## 宣传片
 
