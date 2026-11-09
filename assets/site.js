@@ -8,7 +8,7 @@
   "use strict";
   var root = document.documentElement;
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var EXPR = "demo/assets/expr/";
+  var EXPR = "demo/assets/otter/expr/";
   var $ = function (s, el) { return (el || document).querySelector(s); };
   var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
 
