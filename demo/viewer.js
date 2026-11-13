@@ -87,9 +87,9 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .wv .row{display:flex;align-items:center;gap:14px} .wv .row .lb{width:60px;font-size:12px;color:var(--mid)}
 .wv canvas{flex:1;height:110px;border-radius:12px;background:rgba(var(--ink),.04);border:.5px solid var(--line)}
 /* 二进制 */
-.meta{padding:24px;max-width:820px;margin:0 auto}
-.meta table{width:100%;border-collapse:collapse;font-size:13px} .meta td{padding:10px 12px;border-bottom:.5px solid var(--line)} .meta td:first-child{color:var(--lo);width:140px}
-.meta .mono{font-family:var(--mono);font-size:12px} .meta .up{color:var(--add)} .meta .dn{color:var(--del)}
+.binmeta{padding:24px;max-width:820px;margin:0 auto}
+.binmeta table{width:100%;border-collapse:collapse;font-size:13px} .binmeta td{padding:10px 12px;border-bottom:.5px solid var(--line)} .binmeta td:first-child{color:var(--lo);width:140px}
+.binmeta .mono{font-family:var(--mono);font-size:12px} .binmeta .up{color:var(--add)} .binmeta .dn{color:var(--del)}
 .hex{font:12px/1.9 var(--mono);padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
 .hex div{white-space:pre;color:var(--mid)} .hex .o{color:var(--lo)} .hex mark{background:color-mix(in srgb,var(--accent) 30%,transparent);color:var(--hi);border-radius:2px}
 /* 详情面板里的小预览 */
@@ -253,7 +253,7 @@ function rBin(st,f,m){
     st.innerHTML=`<div class="hex"><div><div class="lb" style="font-family:inherit;margin-bottom:6px"><span class="tg old">旧</span></div>${col(A,false)}</div><div><div class="lb" style="font-family:inherit;margin-bottom:6px"><span class="tg new">新</span></div>${col(B,true)}</div></div>`;
     return `<span>显示前 288 字节 · 高亮为变化字节</span>`;
   }
-  st.innerHTML=`<div class="meta"><table>
+  st.innerHTML=`<div class="binmeta"><table>
     <tr><td>大小</td><td class="mono">1.82 MB → 1.86 MB <span class="up">（+38.4 KB）</span></td></tr>
     <tr><td>SHA-256</td><td class="mono">3f9a1c…e07b → 8c21d4…19fa</td></tr>
     <tr><td>类型</td><td>Mach-O 动态库 · arm64 + x86_64</td></tr>

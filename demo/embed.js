@@ -25,13 +25,15 @@
   const report=()=>{if(parent!==window)parent.postMessage({type:'otter-demo-state',page:S.page,theme:S.theme,tone:S.tone,ai:typeof AI!=='undefined'&&AI.open},'*')};
   const _m=markConsole;markConsole=()=>{_m();report()};
 
-  if(!q.has('embed'))return;
-  document.documentElement.classList.add('embed');
-  document.head.insertAdjacentHTML('beforeend','<style>.embed #console{display:none}.embed #stage{padding:0}.embed,.embed body{background:transparent}.embed #win{box-shadow:0 30px 80px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.08)}</style>');
-  const fit2=()=>{const k=Math.max(.2,Math.min((innerWidth-2)/1280,(innerHeight-2)/800,1.25));document.getElementById('win').style.transform=`scale(${k})`};
-  addEventListener('resize',fit2);fit2();
   if(q.get('theme')==='day')setTheme('day');
   if(q.has('nosplash')){const sp=document.getElementById('splash');sp.classList.remove('on');sp.style.opacity=0}
   const p=q.get('page');if(p)go(p);
+
+  if(q.has('embed')){
+    document.documentElement.classList.add('embed');
+    document.head.insertAdjacentHTML('beforeend','<style>.embed #console{display:none}.embed #stage{padding:0}.embed,.embed body{background:transparent}.embed #win{box-shadow:0 30px 80px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.08)}</style>');
+    const fit2=()=>{const k=Math.max(.2,Math.min((innerWidth-2)/1280,(innerHeight-2)/800,1.25));document.getElementById('win').style.transform=`scale(${k})`};
+    addEventListener('resize',fit2);fit2();
+  }
   report();
 })();

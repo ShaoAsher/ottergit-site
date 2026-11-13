@@ -36,21 +36,28 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .mempty{padding:14px;text-align:center;font-size:12px;color:var(--lo)}
 .act .cv{position:absolute;right:1px;bottom:5px;width:8px;height:8px;stroke:var(--lo)!important;stroke-width:2.4!important}
 #sbBranchBtn{cursor:pointer;padding:2px 8px;border-radius:999px;margin-left:-8px;transition:background .12s} #sbBranchBtn:hover{background:rgba(var(--ink),.08);color:var(--hi)}
-/* 仓库列表页 */
-#p-repos .rnav{width:220px;flex:none;padding:10px 8px;display:flex;flex-direction:column;gap:2px}
-.rnav .it{display:flex;align-items:center;gap:10px;height:34px;padding:0 10px;border-radius:10px;font-size:13px;color:var(--mid);cursor:pointer;position:relative}
-.rnav .it svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.rnav .it:hover{background:rgba(var(--ink),.05);color:var(--hi)} .rnav .it.on{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--hi);font-weight:700} .rnav .it.on svg{stroke:var(--accent)}
-.rnav .it .n{margin-left:auto;font-size:11px;color:var(--lo);font-variant-numeric:tabular-nums}
-.rnav .it .gd{width:9px;height:9px;border-radius:3px}
-.rnav h4{font-size:11px;color:var(--lo);letter-spacing:.6px;padding:12px 10px 4px;display:flex;justify-content:space-between;align-items:center}
-.rnav h4 button{color:var(--lo);font-size:15px;line-height:1} .rnav h4 button:hover{color:var(--accent)}
-.rnav .scan{margin-top:auto;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--alt) 10%,transparent);border:.5px solid color-mix(in srgb,var(--alt) 25%,transparent);font-size:12px;color:var(--mid);cursor:pointer;position:relative}
+/* 仓库列表页 · 结构不变，交互与层级做细 */
+#p-repos{gap:8px}
+#p-repos .rnav{width:228px;flex:none;padding:10px 8px 12px;display:flex;flex-direction:column;gap:2px;min-height:0}
+.rnav .it{display:grid;grid-template-columns:14px minmax(0,1fr) auto;align-items:center;column-gap:8px;min-height:28px;height:28px;padding:0 8px;border-radius:8px;font-size:12.5px;color:var(--mid);cursor:pointer;position:relative;isolation:isolate;transition:background-color .12s ease,color .12s ease}
+.rnav .it .lb{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rnav .it svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.rnav .it:hover{background:rgba(var(--ink),.05);color:var(--hi)}
+.rnav .it.on{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--hi);font-weight:700}
+.rnav .it.on::before{content:"";position:absolute;left:0;top:5px;bottom:5px;width:2px;border-radius:2px;background:var(--accent)}
+.rnav .it.on svg{stroke:var(--accent)}
+.rnav .it .n{justify-self:end;min-width:18px;height:18px;padding:0 5px;border-radius:999px;font:700 10.5px/18px var(--mono);color:var(--lo);background:rgba(var(--ink),.05);text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}
+.rnav .it.on .n{color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,transparent)}
+.rnav .it .gd{width:8px;height:8px;border-radius:2px;box-shadow:0 0 0 2px color-mix(in srgb,currentColor 10%,transparent)}
+.rnav h4{font-size:10.5px;color:var(--lo);letter-spacing:.4px;padding:10px 8px 4px;display:flex;justify-content:space-between;align-items:center;font-weight:800}
+.rnav h4 button{color:var(--lo);font-size:15px;line-height:1;width:22px;height:22px;border-radius:7px} .rnav h4 button:hover{color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.rnav .scan{margin-top:auto;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--alt) 10%,transparent);border:.5px solid color-mix(in srgb,var(--alt) 25%,transparent);font-size:12px;color:var(--mid);cursor:pointer;position:relative}
 .rnav .scan b{display:block;color:var(--hi);font-size:13px;margin-bottom:2px}
-.rmain{flex:1;display:flex;flex-direction:column;min-width:0}
-.rhead{display:flex;align-items:center;gap:10px;padding:14px 16px 10px;position:relative}
-.rhead h2{font-size:18px;font-weight:800} .rhead .c{font-size:12px;color:var(--lo)}
-.rsearch{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:999px;background:var(--field);border:.5px solid var(--line);width:260px;margin-left:auto}
+.rnav .scan:hover{border-color:color-mix(in srgb,var(--alt) 45%,transparent)}
+.rmain{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+.rhead{display:flex;align-items:center;gap:8px;padding:12px 14px 10px;position:relative;flex:none;flex-wrap:wrap}
+.rhead h2{font-size:18px;font-weight:800;letter-spacing:-.3px} .rhead .c{font-size:12px;color:var(--lo)}
+.rsearch{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border-radius:999px;background:var(--field);border:.5px solid var(--line);width:min(280px,36vw);margin-left:auto}
 .rsearch svg{width:15px;height:15px;stroke:var(--lo);fill:none;stroke-width:2} .rsearch input{flex:1;background:none;border:0;outline:none;color:var(--hi);font:inherit;font-size:13px}
 .rsearch:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
 .tbtn{height:34px;padding:0 12px;border-radius:999px;display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--mid);background:rgba(var(--ink),.05);border:.5px solid rgba(var(--ink),.08);position:relative;overflow:hidden}
@@ -58,22 +65,55 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .vseg{display:flex;padding:3px;border-radius:999px;background:rgba(var(--ink),.05);border:.5px solid rgba(var(--ink),.08)}
 .vseg button{width:30px;height:26px;border-radius:999px;display:grid;place-items:center;color:var(--mid)} .vseg button svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8}
 .vseg button.on{background:var(--accent);color:var(--onAccent)}
-.rlist{flex:1;overflow:auto;padding:0 8px 10px;position:relative}
-.rcols{display:grid;grid-template-columns:44px minmax(200px,1.6fr) 130px 150px minmax(180px,1.4fr) 40px;align-items:center;gap:10px}
-.rth{font-size:11px;color:var(--lo);font-weight:700;letter-spacing:.4px;padding:6px 10px;position:sticky;top:0;background:var(--pane);z-index:1}
-.rrow{padding:8px 10px;border-radius:12px;cursor:pointer;position:relative;animation:rise .42s var(--ease) both;transition:background .12s}
-.rrow:hover{background:rgba(var(--ink),.05)} .rrow.sel{background:color-mix(in srgb,var(--accent) 12%,transparent)}
-.rrow .mg{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;font-weight:800;color:#0b0a14}
-.rrow .nm{font-weight:700;font-size:14px;display:flex;align-items:center;gap:6px} .rrow .nm .star{width:13px;height:13px;stroke:var(--win);fill:var(--win)}
-.rrow .pt{font:11.5px var(--mono);color:var(--lo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rrow .br{font-size:12.5px;color:var(--mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rrow .lc{font-size:12px;color:var(--mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .rrow .lc small{display:block;color:var(--lo);font-size:11px}
-.rrow .more{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;opacity:0;transition:opacity .12s,background .12s} .rrow .more svg{width:16px;height:16px;stroke:var(--mid);fill:none;stroke-width:2}
-.rrow:hover .more,.rrow .more.open{opacity:1} .rrow .more:hover{background:rgba(var(--ink),.1)}
-.rgrp{font-size:11px;font-weight:700;color:var(--lo);padding:12px 10px 4px;display:flex;align-items:center;gap:8px;letter-spacing:.4px}
-.rgrp i{width:8px;height:8px;border-radius:3px}
-.pill.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)} .pill.dn{background:color-mix(in srgb,var(--alt) 18%,transparent);color:var(--alt)}
-.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:4px 8px 12px}
+.rlist{flex:1;overflow:auto;padding:0 10px 12px;position:relative;min-height:0}
+.rban{margin:0 6px 10px;padding:10px 12px;border-radius:12px;border:.5px solid color-mix(in srgb,var(--danger) 32%,transparent);background:color-mix(in srgb,var(--danger) 8%,transparent);display:flex;align-items:center;gap:12px}
+.rban b{display:block;font-size:13px;color:var(--danger)} .rban span{font-size:12px;color:var(--mid)}
+.rban .sp{flex:1} .rban button{height:30px}
+.rcols{display:grid;grid-template-columns:36px minmax(200px,1.7fr) 110px 150px minmax(140px,1.3fr) 80px;align-items:center;gap:8px}
+.rth{font-size:10.5px;color:var(--lo);font-weight:700;letter-spacing:.3px;padding:6px 8px;position:sticky;top:0;background:color-mix(in srgb,var(--pane) 92%,transparent);backdrop-filter:blur(8px);z-index:1;border-bottom:.5px solid var(--line);margin-bottom:6px}
+.rrow{padding:7px 10px;min-height:44px;border-radius:10px;cursor:pointer;position:relative;isolation:isolate;animation:rise .32s var(--ease) both;transition:background-color .12s ease,border-color .12s ease,transform .15s ease;border:.5px solid rgba(var(--ink),.07);background:rgba(var(--ink),.025);margin-bottom:8px}
+.rlist>.rrow:last-child,.rblock>.rrow:last-child{margin-bottom:0}
+.rblock{display:flex;flex-direction:column;gap:8px;padding-bottom:6px}
+.rblock .rrow{margin-bottom:0}
+.rrow:hover{background:rgba(var(--ink),.055);border-color:rgba(var(--ink),.12)}
+.rrow:active{transform:scale(.995)}
+.rrow.sel{background:color-mix(in srgb,var(--accent) 12%,transparent);border-color:color-mix(in srgb,var(--accent) 28%,transparent)}
+.rrow.sel::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:2px;border-radius:2px;background:var(--accent)}
+.rrow.miss{background:color-mix(in srgb,var(--danger) 7%,transparent);border-color:color-mix(in srgb,var(--danger) 22%,transparent)}
+.rrow.miss:hover{background:color-mix(in srgb,var(--danger) 11%,transparent)}
+.rrow .mg{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#0b0a14;position:relative;flex:none}
+.rrow .nm{font-weight:750;font-size:13px;display:flex;align-items:center;gap:5px;letter-spacing:-.2px;line-height:1.2}
+.rrow .nm .star{width:12px;height:12px;stroke:var(--win);fill:var(--win)}
+.rrow .pt{font:11px/1.25 var(--mono);color:var(--lo);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.rrow.miss .pt{color:var(--danger)}
+.rrow .br{font-size:12px;color:var(--mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rrow .st{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.rrow .lc{font-size:12px;color:var(--mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25} .rrow .lc small{display:block;color:var(--lo);font-size:10.5px;margin-top:0}
+.rrow .acts{display:flex;align-items:center;justify-content:flex-end;gap:2px}
+.rrow .open{height:24px;padding:0 8px;border-radius:6px;font-size:11.5px;font-weight:700;color:var(--accent);opacity:0;background:color-mix(in srgb,var(--accent) 12%,transparent);transition:opacity .12s ease,background-color .12s ease,transform .12s ease}
+.rrow:hover .open,.rrow.sel .open,.rrow.miss .open{opacity:1}
+.rrow .open:hover{background:color-mix(in srgb,var(--accent) 20%,transparent)}
+.rrow .open:active{transform:scale(.96)}
+.rrow .more{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;opacity:0;transition:opacity .12s ease,background-color .12s ease} .rrow .more svg{width:14px;height:14px;stroke:var(--mid);fill:none;stroke-width:2}
+.rrow:hover .more,.rrow .more.open,.rrow.sel .more{opacity:1} .rrow .more:hover{background:rgba(var(--ink),.1)}
+.rgrp{font-size:11px;font-weight:800;color:var(--mid);padding:10px 6px 4px;display:flex;align-items:center;gap:6px;letter-spacing:.2px;cursor:pointer;user-select:none;border-radius:6px;min-height:22px}
+@media (prefers-reduced-motion:reduce){.rrow{animation:none;transition:background-color .12s ease,border-color .12s ease}.rrow:active,.rrow .open:active{transform:none}}
+.rgrp:hover{color:var(--hi);background:rgba(var(--ink),.03)}
+.rgrp i{width:9px;height:9px;border-radius:3px;flex:none}
+.rgrp .cnt{margin-left:auto;font:700 11px var(--mono);color:var(--lo);font-variant-numeric:tabular-nums}
+.rgrp .caret{margin-left:6px;font-size:10px;color:var(--lo);transition:transform .2s} .rgrp.fold .caret{transform:rotate(-90deg)}
+.rgrp.fold + .rblock{display:none}
+.pill.ok{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)} .pill.dn{background:color-mix(in srgb,var(--warn) 16%,transparent);color:var(--warn)}
+.pill.bad{background:color-mix(in srgb,var(--danger) 16%,transparent);color:var(--danger)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;padding:4px 6px 12px}
+.rgrid .repo{padding:14px;position:relative;transition:transform .2s var(--ease),box-shadow .2s ease}
+.rgrid .repo:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.22)}
+@media (prefers-reduced-motion:reduce){.rgrid .repo:hover{transform:none}}
+.rgrid .repo .ops{position:absolute;top:10px;right:10px;display:flex;gap:2px;opacity:0;transition:opacity .12s}
+.rgrid .repo:hover .ops{opacity:1}
+.rgrid .repo .ops button{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:rgba(var(--ink),.06);color:var(--mid)}
+.rgrid .repo .ops button:hover{background:rgba(var(--ink),.1);color:var(--hi)}
+.rgrid .repo.miss{outline:1px solid color-mix(in srgb,var(--danger) 35%,transparent)}
 /* 表单件 */
 .sel{height:38px;width:100%;display:flex;align-items:center;gap:8px;padding:0 12px;border-radius:var(--r-sm);border:.5px solid var(--line);background:var(--field);color:var(--hi);font-size:13.5px;text-align:left}
 .sel svg{width:15px;height:15px;stroke:var(--mid);fill:none;stroke-width:1.8} .sel .v{flex:1} .sel .cv2{transform:rotate(90deg);width:12px;height:12px}
@@ -189,7 +229,14 @@ document.addEventListener('contextmenu',e=>{
   const fr=e.target.closest('#fileList .f[data-f]');
   const cm=e.target.closest('.cm[data-h]');
   const rr=e.target.closest('.rrow[data-r],.repo[data-r]');
-  if(ti){let n=ti.firstChild.textContent.trim();if(ti.classList.contains('sub')&&n==='windows')n='feat/windows';items=/^v\d/.test(n)?M.tag(n):['dev','main','release','feat/windows'].includes(n)?M.branch(n):M.repo(RLIST.find(r=>r[0]===n))}
+  if(ti){
+    const nm=ti.querySelector('.nm')?.textContent.trim()||'';
+    const n=ti.dataset.branch||ti.dataset.tag||ti.dataset.repo||(ti.dataset.remote?ti.dataset.remote.replace(/^origin\//,''):'')||nm;
+    if(ti.dataset.stash!=null){items=[{ic:'stash',lb:'弹出暂存…',act:()=>DLG.stashSave?.()||moment({scene:'ok',title:'已弹出暂存',sub:nm})},{ic:'trash',lb:'删除暂存',danger:1},'-',{ic:'copy',lb:'复制说明'}]}
+    else if(ti.dataset.remote){items=[{ic:'branch',lb:`检出 ${n}…`,act:()=>go('files')},{ic:'pull',lb:'拉取到本地'},'-',{ic:'copy',lb:'复制远程名',act:()=>{}}]}
+    else if(ti.dataset.repo)items=M.repo(RLIST.find(x=>x[0]===n)||[n])
+    else items=/^v\d/.test(n)?M.tag(n):M.branch(n);
+  }
   else if(fr){const list=S.tone==='alert'?conflicts.concat(files):files;items=M.file(list[+fr.dataset.f])}
   else if(cm){hsel=+cm.dataset.h;hfile=0;renderHistory();items=M.commit()}
   else if(rr){items=M.repo(RLIST[+rr.dataset.r])}
@@ -213,68 +260,115 @@ document.addEventListener('click',e=>{
   if((el=t.closest('#hfBranch'))){e.stopPropagation();return menuAt(el,['所有分支','当前分支 dev','main','release','feat/windows'].map((l,i)=>({chk:el.textContent===l,lb:l,act:()=>{el.textContent=l;el.classList.toggle('on',i>0)}})),{search:'搜索分支…',minW:240})}
 },true);
 
-/* ── 仓库列表页 ── */
+/* ── 仓库列表页（结构：左筛选 + 右列表/卡片；补路径丢失与悬停打开） ── */
 const GROUPS=[['水獭家族','#FFC23D'],['工作','#6CC9FF'],['个人','#B8A8FF']];
-/* [名称, 路径, 分支, 分组, 颜色, 未提交, 领先, 落后, 最近提交, 时间, 最近打开, 置顶] */
+/* [名称, 路径, 分支, 分组, 颜色, 未提交, 领先, 落后, 最近提交, 时间, 最近打开, 置顶, 路径OK] */
 const RLIST=[
-  ['OtterGitApp','~/Desktop/code/OtterGit/OtterGitApp','dev','水獭家族','var(--accent)',12,1,0,'feat(home): 首页与继续工作卡片','刚刚','刚刚',1],
-  ['GameTime','~/Desktop/code/GameTime','feat/local-only','水獭家族','#5CD6E6',4,0,0,'fix(profile): 去掉重复头像','3 天前','1 小时前',1],
-  ['MacToolsApp','~/Desktop/code/MacToolsApp','dev','水獭家族','#FFB04A',0,0,0,'fix(macos): 菜单栏后台刷新','3 天前','昨天',0],
-  ['ottergit-site','~/Desktop/code/OtterGit/ottergit-site','main','水獭家族','#FFD66B',0,0,3,'docs: 下载页','1 周前','3 天前',0],
-  ['shawWeb','~/Desktop/code/shawWeb','main','个人','#4FD79A',0,0,0,'添加人格图片','2026-04-10','上周',0],
-  ['dotfiles','~/dotfiles','main','个人','#FF8AB8',2,0,0,'zsh: 换提示符','2 周前','2 周前',0],
-  ['otter_icons','~/Desktop/code/otter_icons','main','个人','#B8A8FF',0,0,0,'表情 v3','5 天前','5 天前',0],
-  ['ark-console','~/work/ark-console','release/3.2','工作','#6CC9FF',7,2,1,'feat(billing): 拆分账单','昨天','今天',0],
-  ['ark-sdk-go','~/work/ark-sdk-go','main','工作','#78C8FF',0,0,0,'chore: v1.8.0','4 天前','4 天前',0],
-  ['design-tokens','~/work/design-tokens','feat/amber','工作','#FFC23D',1,0,0,'tokens: 琥珀金','2 小时前','2 小时前',0]
+  ['OtterGitApp','~/Desktop/code/OtterGit/OtterGitApp','dev','水獭家族','var(--accent)',12,1,0,'feat(home): 首页与继续工作卡片','刚刚','刚刚',1,1],
+  ['GameTime','~/Desktop/code/GameTime','feat/local-only','水獭家族','#5CD6E6',4,0,0,'fix(profile): 去掉重复头像','3 天前','1 小时前',1,1],
+  ['MacToolsApp','~/Desktop/code/MacToolsApp','dev','水獭家族','#FFB04A',0,0,0,'fix(macos): 菜单栏后台刷新','3 天前','昨天',0,0],
+  ['ottergit-site','~/Desktop/code/OtterGit/ottergit-site','main','水獭家族','#FFD66B',0,0,3,'docs: 下载页','1 周前','3 天前',0,1],
+  ['shawWeb','~/Desktop/code/shawWeb','main','个人','#4FD79A',0,0,0,'添加人格图片','2026-04-10','上周',0,1],
+  ['dotfiles','~/dotfiles','main','个人','#FF8AB8',2,0,0,'zsh: 换提示符','2 周前','2 周前',0,1],
+  ['otter_icons','~/Desktop/code/otter_icons','main','个人','#B8A8FF',0,0,0,'表情 v3','5 天前','5 天前',0,1],
+  ['ark-console','~/work/ark-console','release/3.2','工作','#6CC9FF',7,2,1,'feat(billing): 拆分账单','昨天','今天',0,1],
+  ['ark-sdk-go','~/work/ark-sdk-go','main','工作','#78C8FF',0,0,0,'chore: v1.8.0','4 天前','4 天前',0,1],
+  ['design-tokens','~/work/design-tokens','feat/amber','工作','#FFC23D',1,0,0,'tokens: 琥珀金','2 小时前','2 小时前',0,1]
 ];
 let RV={nav:'all',q:'',view:'list',sort:'opened',sel:0};
-document.querySelector('.body').insertAdjacentHTML('beforeend',`<section class="page" id="p-repos"><div class="cardp rnav" id="rnav"></div><div class="cardp rmain"><div class="rhead"><h2>仓库</h2><span class="c" id="rcount"></span>
+const rFold={};
+(document.querySelector('.main')||document.querySelector('.body')).insertAdjacentHTML('beforeend',`<section class="page" id="p-repos"><div class="cardp rnav" id="rnav"></div><div class="cardp rmain"><div class="rhead"><h2>仓库</h2><span class="c" id="rcount"></span>
   <label class="rsearch">${svg('search')}<input id="rq" placeholder="搜索名称、路径或分支"></label>
   <button class="tbtn rp" id="rsort">${svg('sort')}<span id="rsortL">最近打开</span></button>
   <div class="vseg"><button data-v="list" title="列表">${svg('list')}</button><button data-v="grid" title="卡片">${svg('grid4')}</button></div>
   <button class="slab rp" id="radd" style="height:34px">＋ 添加</button></div><div class="rlist" id="rlist"></div></div></section>`);
 function rFilter(){
   let L=RLIST.map((r,i)=>[r,i]);const n=RV.nav,q=RV.q.toLowerCase();
-  if(n==='recent')L=L.filter(([r])=>/刚刚|小时|今天|昨天/.test(r[10]));else if(n==='dirty')L=L.filter(([r])=>r[5]||r[6]||r[7]);else if(n==='pin')L=L.filter(([r])=>r[11]);else if(n!=='all')L=L.filter(([r])=>r[3]===n);
+  if(n==='recent')L=L.filter(([r])=>/刚刚|小时|今天|昨天/.test(r[10]));
+  else if(n==='dirty')L=L.filter(([r])=>r[5]||r[6]||r[7]);
+  else if(n==='pin')L=L.filter(([r])=>r[11]);
+  else if(n==='miss')L=L.filter(([r])=>!r[12]);
+  else if(n!=='all')L=L.filter(([r])=>r[3]===n);
   if(q)L=L.filter(([r])=>(r[0]+r[1]+r[2]).toLowerCase().includes(q));
-  if(RV.sort==='name')L.sort((a,b)=>a[0][0].localeCompare(b[0][0]));else if(RV.sort==='status')L.sort((a,b)=>(b[0][5]+b[0][6]*5)-(a[0][5]+a[0][6]*5));
+  if(RV.sort==='name')L.sort((a,b)=>a[0][0].localeCompare(b[0][0]));
+  else if(RV.sort==='status')L.sort((a,b)=>((b[0][12]?0:100)+(b[0][5]+b[0][6]*5))-((a[0][12]?0:100)+(a[0][5]+a[0][6]*5)));
   return L;
 }
-function pills(r){return (r[5]?`<span class="pill w">${r[5]} 未提交</span>`:'')+(r[6]?`<span class="pill u">↑${r[6]}</span>`:'')+(r[7]?`<span class="pill dn">↓${r[7]}</span>`:'')||'<span class="pill ok">干净</span>'}
+function pills(r){
+  if(!r[12])return '<span class="pill bad">路径丢失</span>';
+  return (r[5]?`<span class="pill w">${r[5]} 未提交</span>`:'')+(r[6]?`<span class="pill u">↑${r[6]}</span>`:'')+(r[7]?`<span class="pill dn">↓${r[7]}</span>`:'')||'<span class="pill ok">干净</span>';
+}
 function renderRepos(){
-  const cnt=k=>k==='all'?RLIST.length:k==='recent'?RLIST.filter(r=>/刚刚|小时|今天|昨天/.test(r[10])).length:k==='dirty'?RLIST.filter(r=>r[5]||r[6]||r[7]).length:k==='pin'?RLIST.filter(r=>r[11]).length:RLIST.filter(r=>r[3]===k).length;
-  document.getElementById('rnav').innerHTML=[['all','folder','全部仓库'],['recent','clock','最近打开'],['dirty','edit','有改动'],['pin','star','置顶']].map(([k,ic,l])=>`<div class="it rp ${RV.nav===k?'on':''}" data-n="${k}">${svg(ic)}${l}<span class="n">${cnt(k)}</span></div>`).join('')
-    +`<h4>分组<button id="rnewg" title="新建分组">＋</button></h4>`+GROUPS.map(([g,c])=>`<div class="it rp ${RV.nav===g?'on':''}" data-n="${g}"><i class="gd" style="background:${c}"></i>${g}<span class="n">${cnt(g)}</span></div>`).join('')
+  const missN=RLIST.filter(r=>!r[12]).length;
+  const cnt=k=>k==='all'?RLIST.length:k==='recent'?RLIST.filter(r=>/刚刚|小时|今天|昨天/.test(r[10])).length:k==='dirty'?RLIST.filter(r=>r[5]||r[6]||r[7]).length:k==='pin'?RLIST.filter(r=>r[11]).length:k==='miss'?missN:RLIST.filter(r=>r[3]===k).length;
+  document.getElementById('rnav').innerHTML=
+    [['all','folder','全部仓库'],['recent','clock','最近打开'],['dirty','edit','有改动'],['pin','star','置顶'],...(missN?[['miss','lock','路径丢失']]:[])].map(([k,ic,l])=>`<div class="it rp ${RV.nav===k?'on':''}" data-n="${k}">${svg(ic)}<span class="lb">${l}</span><span class="n">${cnt(k)}</span></div>`).join('')
+    +`<h4>分组<button id="rnewg" title="新建分组">＋</button></h4>`
+    +GROUPS.map(([g,c])=>`<div class="it rp ${RV.nav===g?'on':''}" data-n="${g}"><i class="gd" style="background:${c}"></i><span class="lb">${g}</span><span class="n">${cnt(g)}</span></div>`).join('')
     +`<div class="scan rp" id="rscan"><b>扫描文件夹</b>选一个目录，把里面的 Git 仓库都找出来</div>`;
   const L=rFilter();document.getElementById('rcount').textContent=`${L.length} / ${RLIST.length}`;
-  document.querySelectorAll('.vseg button').forEach(b=>b.classList.toggle('on',b.dataset.v===RV.view));
+  document.querySelectorAll('#p-repos .vseg button').forEach(b=>b.classList.toggle('on',b.dataset.v===RV.view));
   const box=document.getElementById('rlist');
-  if(!L.length){box.innerHTML=`<div style="text-align:center;padding:70px 0;position:relative"><img src="${pick('emptySearch')}" style="width:110px"><p style="color:var(--mid);margin-top:8px">没有匹配「${esc(RV.q)}」的仓库</p></div>`;return}
-  if(RV.view==='grid'){box.innerHTML=`<div class="rgrid">${L.map(([r,i],j)=>`<div class="repo cardp rp" data-r="${i}" style="animation-delay:${j*.03}s"><div class="hd"><div class="mg" style="background:${r[4]}">${r[0][0]}</div><div style="min-width:0"><div class="nm">${r[0]}</div><div class="bra">⎇ ${r[2]}</div></div></div><div class="last" style="position:relative">${r[9]} · ${r[8]}</div><div style="position:relative">${pills(r)}</div></div>`).join('')}</div>`;return}
-  const row=([r,i],j)=>`<div class="rrow rcols ${RV.sel===i?'sel':''}" data-r="${i}" style="animation-delay:${j*.025}s"><div class="mg" style="background:${r[4]}">${r[0][0]}</div><div style="min-width:0"><div class="nm">${r[0]}${r[11]?`<svg class="star" viewBox="0 0 24 24">${IC.star}</svg>`:''}</div><div class="pt">${r[1]}</div></div><div class="br">⎇ ${r[2]}</div><div>${pills(r)}</div><div class="lc">${esc(r[8])}<small>${r[9]} · 打开于 ${r[10]}</small></div><button class="more" data-rm="${i}" title="更多">${svg('more')}</button></div>`;
-  const head=`<div class="rth rcols"><span></span><span>名称</span><span>当前分支</span><span>状态</span><span>最近提交</span><span></span></div>`;
-  if(RV.nav==='all'&&!RV.q&&RV.sort==='opened'){box.innerHTML=head+GROUPS.map(([g,c])=>{const sub=L.filter(([r])=>r[3]===g);return sub.length?`<div class="rgrp"><i style="background:${c}"></i>${g} · ${sub.length}</div>`+sub.map(row).join(''):''}).join('')}
-  else box.innerHTML=head+L.map(row).join('');
+  const ban=missN&&RV.nav!=='miss'?`<div class="rban"><div><b>${missN} 个仓库找不到本地路径</b><span>可能被移走或重命名了，点「改路径」重新关联，对话和记忆会跟着走。</span></div><span class="sp"></span><button class="ghost rp" data-n="miss">查看</button><button class="slab rp" data-relocate="${RLIST.find(r=>!r[12])[0]}">改路径</button></div>`:'';
+  if(!L.length){box.innerHTML=ban+`<div style="text-align:center;padding:70px 0;position:relative"><img src="${pick('emptySearch')}" style="width:110px"><p style="color:var(--mid);margin-top:8px">${RV.q?`没有匹配「${esc(RV.q)}」的仓库`:'这里还没有仓库'}</p><button class="slab rp" id="raddEmpty" style="margin-top:12px">＋ 添加仓库</button></div>`;return}
+  if(RV.view==='grid'){
+    box.innerHTML=ban+`<div class="rgrid">${L.map(([r,i],j)=>`<div class="repo cardp rp ${r[12]?'':'miss'}" data-r="${i}" style="animation-delay:${j*.03}s">
+      <div class="ops"><button data-ro="${i}" title="${r[12]?'打开':'改路径'}">${r[12]?'↗':'修复'}</button><button data-rm="${i}" title="更多">${svg('more')}</button></div>
+      <div class="hd"><div class="mg" style="background:${r[4]}">${r[0][0]}</div>
+      <div style="min-width:0"><div class="nm">${r[0]}${r[11]?' ★':''}</div><div class="bra">⎇ ${r[2]}</div></div></div>
+      <div class="last" style="position:relative">${r[12]?`${r[9]} · ${esc(r[8])}`:`路径丢失 · ${r[1]}`}</div>
+      <div style="position:relative;margin-top:8px">${pills(r)}</div></div>`).join('')}</div>`;
+    return;
+  }
+  const row=([r,i],j)=>`<div class="rrow rcols ${RV.sel===i?'sel':''} ${r[12]?'':'miss'}" data-r="${i}" style="animation-delay:${j*.025}s">
+    <div class="mg" style="background:${r[4]}">${r[0][0]}</div>
+    <div style="min-width:0"><div class="nm">${r[0]}${r[11]?`<svg class="star" viewBox="0 0 24 24">${IC.star}</svg>`:''}</div><div class="pt" title="${r[1]}">${r[1]}</div></div>
+    <div class="br">⎇ ${r[2]}</div>
+    <div class="st">${pills(r)}</div>
+    <div class="lc">${r[12]?esc(r[8]):'本地文件夹找不到了'}<small>${r[12]?`${r[9]} · 打开于 ${r[10]}`:'点右侧「改路径」重新关联'}</small></div>
+    <div class="acts">${r[12]?`<button class="open" data-ro="${i}">打开</button>`:`<button class="open" data-relocate="${r[0]}">改路径</button>`}<button class="more" data-rm="${i}" title="更多">${svg('more')}</button></div>
+  </div>`;
+  const head=`<div class="rth rcols"><span></span><span>名称 / 路径</span><span>分支</span><span>状态</span><span>最近活动</span><span></span></div>`;
+  if(RV.nav==='all'&&!RV.q&&RV.sort==='opened'){
+    box.innerHTML=ban+head+GROUPS.map(([g,c])=>{
+      const sub=L.filter(([r])=>r[3]===g);if(!sub.length)return '';
+      const fold=rFold[g]?' fold':'';
+      return `<div class="rgrp${fold}" data-rg="${g}"><i style="background:${c}"></i>${g}<span class="cnt">${sub.length}</span><span class="caret">▾</span></div><div class="rblock">${sub.map(row).join('')}</div>`;
+    }).join('');
+  }else box.innerHTML=ban+head+L.map(row).join('');
 }
 document.getElementById('p-repos').addEventListener('click',e=>{
+  const rg=e.target.closest('[data-rg]');if(rg){rFold[rg.dataset.rg]=!rFold[rg.dataset.rg];return renderRepos()}
   const n=e.target.closest('[data-n]');if(n){RV.nav=n.dataset.n;return renderRepos()}
-  const rm=e.target.closest('[data-rm]');if(rm){e.stopPropagation();RV.sel=+rm.dataset.rm;renderRepos();const b=document.querySelector(`[data-rm="${rm.dataset.rm}"]`);return menuAt(b,M.repo(RLIST[RV.sel]),{right:1})}
+  const ro=e.target.closest('[data-ro]');if(ro){e.stopPropagation();RV.sel=+ro.dataset.ro;const r=RLIST[RV.sel];if(!r[12])return DLG.relocate(r[0]);return go('files')}
+  const rm=e.target.closest('[data-rm]');if(rm){e.stopPropagation();RV.sel=+rm.dataset.rm;renderRepos();const b=document.querySelector(`[data-rm="${rm.dataset.rm}"]`);const items=M.repo(RLIST[RV.sel]);if(!RLIST[RV.sel][12])items.unshift({ic:'folder',lb:'改路径关联…',act:()=>DLG.relocate(RLIST[RV.sel][0])},'-');return menuAt(b,items,{right:1})}
   const v=e.target.closest('.vseg button');if(v){RV.view=v.dataset.v;return renderRepos()}
   if(e.target.closest('#rnewg'))return DLG.newGroup();
   if(e.target.closest('#rscan'))return DLG.scan();
-  if(e.target.closest('#radd'))return menuAt(document.getElementById('radd'),M.add(),{right:1});
+  if(e.target.closest('#radd,#raddEmpty'))return menuAt(document.getElementById('radd'),M.add(),{right:1});
   if(e.target.closest('#rsort')){const b=document.getElementById('rsort');return menuAt(b,[['opened','最近打开'],['name','名称'],['status','状态（有改动优先）']].map(([k,l])=>({chk:RV.sort===k,lb:l,act:()=>{RV.sort=k;document.getElementById('rsortL').textContent=l;renderRepos()}})))}
   const r=e.target.closest('[data-r]');if(r){RV.sel=+r.dataset.r;renderRepos()}
 });
-document.getElementById('p-repos').addEventListener('dblclick',e=>{if(e.target.closest('[data-r]'))go('files')});
+document.getElementById('p-repos').addEventListener('dblclick',e=>{
+  const row=e.target.closest('[data-r]');if(!row)return;
+  const r=RLIST[+row.dataset.r];if(!r[12])return DLG.relocate(r[0]);go('files');
+});
 document.getElementById('rq').oninput=e=>{RV.q=e.target.value;renderRepos()};
 const sbar=document.querySelector('.statusbar');sbar.insertAdjacentHTML('beforeend','<span id="sbRepos" style="display:none"></span>');
-const _go=go;go=p=>{closeMenus();_go(p);const rp=p==='repos';[...sbar.children].forEach(c=>c.style.display=c.id==='sbRepos'?(rp?'':'none'):(rp?'none':''));
-  if(rp)document.getElementById('sbRepos').innerHTML=`<b>${RLIST.length}</b> 个仓库 · <b>${RLIST.filter(r=>r[5]||r[6]||r[7]).length}</b> 个有改动 · 双击打开，右键更多操作`;
-  if(rp){['panes','acts'].forEach(id=>document.getElementById(id).style.display='none');document.querySelector('.sep.ws').style.display='none';renderRepos()}};
+const _go=go;go=p=>{closeMenus();_go(p);const rp=p==='repos';
+  document.getElementById('sbRepos').style.display=rp?'':'none';
+  if(rp){
+    document.getElementById('sbRepos').innerHTML=`<b>${RLIST.length}</b> 个仓库 · <b>${RLIST.filter(r=>r[5]||r[6]||r[7]).length}</b> 个有改动${RLIST.some(r=>!r[12])?` · <b style="color:var(--danger)">${RLIST.filter(r=>!r[12]).length}</b> 个路径丢失`:''} · 双击打开`;
+    ['panes','acts','panelToggles'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
+    document.querySelectorAll('.sep.ws').forEach(el=>el.style.display='none');
+    document.getElementById('workspace')?.classList.add('home-mode');
+    renderRepos();
+  }else if(typeof syncPanels==='function')syncPanels();
+};
 document.querySelector('#p-home .sec .sp').insertAdjacentHTML('afterend','<button class="ghost rp" data-go="repos" style="margin-right:8px">全部仓库 →</button>');
 document.querySelector('#console .opt[data-k=page] [data-v=home]').insertAdjacentHTML('afterend','<button data-v="repos">仓库列表</button>');
+/* 仓库右键：路径丢失时优先改路径 */
+const _repoMenu=M.repo;M.repo=r=>{const items=_repoMenu(r);if(r&&r[12]===0)items.splice(0,0,{ic:'folder',lb:'改路径关联…',act:()=>DLG.relocate(r[0])},'-');return items};
 
 /* ── 操作弹窗 ── */
 function form(icon,color,title,sub,body,acts,w=480){openDlg(`<div class="dh"><div class="blk" style="background:color-mix(in srgb,${color} 16%,transparent);color:color-mix(in srgb,${color} var(--tt),var(--hi))">${svg(icon)}</div><h3>${title}${sub?`<small>${sub}</small>`:''}</h3><button class="ib" data-close>${svg('x')}</button></div><div class="db" style="width:${w}px">${body}</div><div class="da">${acts}</div>`);wireForm()}
@@ -350,7 +444,7 @@ document.getElementById('console').addEventListener('click',e=>{
     if(['more','push','stash'].includes(k)){if(S.page==='home'||S.page==='repos')go('files');const a=document.querySelector(`.act[data-act=${k}]`);const m=menuAt(a,M[k]());const first=[...m.el.querySelectorAll('.mi')].find(mi=>M[k]()[+mi.dataset.i].sub);if(first){first.classList.add('hot');openSub(m,first)}}
     else if(k==='file'){go('files');const f=document.querySelector('#fileList .f');const r=rectOf(f);const m=openMenu(M.file(files[0]),r.l+120,r.t+r.h/2);const s=[...m.el.querySelectorAll('.mi')].find(mi=>m.items[+mi.dataset.i].sub);if(s){s.classList.add('hot');openSub(m,s)}}
     else if(k==='commit'){go('history');setTimeout(()=>{const c=document.querySelector('.cm[data-h="2"]');hsel=2;renderHistory();const r=rectOf(document.querySelector('.cm[data-h="2"]'));const m=openMenu(M.commit(),r.l+260,r.t+r.h/2);const s=[...m.el.querySelectorAll('.mi')].find(mi=>m.items[+mi.dataset.i].lb.startsWith('将 dev 重置'));if(s){s.classList.add('hot');openSub(m,s)}},80)}
-    else if(k==='branch'){if(S.page==='home'||S.page==='repos')go('files');const it=[...document.querySelectorAll('.page.on .tree .it')].find(x=>x.firstChild.textContent.trim()==='windows');const r=rectOf(it);const m=openMenu(M.branch('feat/windows'),r.l+r.w-20,r.t+r.h/2);const s=[...m.el.querySelectorAll('.mi')].find(mi=>m.items[+mi.dataset.i].sub);if(s){s.classList.add('hot');openSub(m,s)}}
+    else if(k==='branch'){if(S.page==='home'||S.page==='repos')go('files');const it=[...document.querySelectorAll('#sidebar .tree .it')].find(x=>x.textContent.includes('windows'));const r=rectOf(it);const m=openMenu(M.branch('feat/windows'),r.l+r.w-20,r.t+(r.h||0)/2);const s=[...m.el.querySelectorAll('.mi')].find(mi=>m.items[+mi.dataset.i].sub);if(s){s.classList.add('hot');openSub(m,s)}}
     else if(k==='switch'){if(S.page==='home'||S.page==='repos')go('files');sbB.click()}
     else if(k==='repo'){go('repos');setTimeout(()=>{const b=document.querySelector('[data-rm="1"]');RV.sel=1;const m=menuAt(b,M.repo(RLIST[1]),{right:1});const s=[...m.el.querySelectorAll('.mi')].find(mi=>m.items[+mi.dataset.i].sub);if(s){s.classList.add('hot');openSub(m,s)}},60)}
   },30);

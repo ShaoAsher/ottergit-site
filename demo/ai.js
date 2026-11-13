@@ -15,8 +15,9 @@ Object.assign(IC,{
 });
 
 document.head.insertAdjacentHTML('beforeend',`<style>
-.ai{width:0;flex:none;display:flex;flex-direction:column;opacity:0;margin-left:-8px;transition:width .42s var(--ease),opacity .26s,margin .42s var(--ease)}
-.ai.on{width:340px;opacity:1;margin-left:0}
+.ai{width:0;flex:none;display:flex;flex-direction:column;opacity:0;overflow:hidden;border-left:.5px solid transparent;transition:width .42s var(--ease),opacity .26s,border-color .26s}
+.ai.on{width:340px;opacity:1;border-left-color:var(--line)}
+#workspace.right-on .ai{width:340px;opacity:1;border-left-color:var(--line)}
 .ai .ah{display:flex;align-items:center;gap:10px;padding:12px 10px 10px 14px;border-bottom:.5px solid var(--line);min-width:340px}
 .ai .ah img{width:34px;height:34px}
 .ai .ah .tt{flex:1;min-width:0}
@@ -100,14 +101,12 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 .ai .cp .go[disabled]{filter:grayscale(1) opacity(.5)}
 .ai .cp .go svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .avatar-btn.on img{box-shadow:0 0 0 2px var(--accent)}
-.page.on.ai-open .detail{width:340px}
-.page.on.ai-open .files{width:300px}
 .ph button,.ph .ibs{flex:none;white-space:nowrap}
 .ph>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.page.on.ai-open #wcDiscard{display:none}
+.hide{display:none!important}
 </style>`);
 
-document.querySelector('#app .body').insertAdjacentHTML('beforeend',`<aside class="cardp ai" id="aiPanel" aria-label="小獭 AI 助手">
+document.getElementById('workspace').insertAdjacentHTML('beforeend',`<aside class="cardp ai" id="aiPanel" aria-label="小獭 AI 助手">
   <div class="ah"><img data-scene="greet" alt=""><div class="tt"><b id="aiTitle">新对话</b><small>按仓库隔离</small></div>
     <button class="gb" id="aiHist" title="历史对话">${svg('clock')}</button><button class="gb" id="aiNew" title="新对话">${svg('plus')}</button><button class="gb" id="aiMore" title="更多">${svg('dots')}</button><button class="gb" id="aiClose" title="收起">${svg('x')}</button></div>
   <div class="ml" id="aiList"></div>
@@ -162,9 +161,11 @@ async function stream(m,text){m.text='';for(let i=0;i<text.length;i+=3){m.text=t
 async function streamThink(m,text){for(let i=0;i<text.length;i+=4){m.thinking=text.slice(0,i+4);aiUpdate(m);await wait(22)}}
 
 function setOpen(v){
-  AI.open=v;if(v&&(S.page==='home'||S.page==='repos'))go('files');
+  AI.open=v;S.panel.right=v;
+  if(v&&(S.page==='home'||S.page==='repos'))go('files');
   aiEl.classList.toggle('on',v);document.getElementById('aiBtn').classList.toggle('on',v);
-  document.querySelectorAll('.page').forEach(p=>p.classList.toggle('ai-open',v));
+  document.getElementById('workspace')?.classList.toggle('right-on',v);
+  document.querySelectorAll('[data-panel=right]').forEach(b=>b.classList.toggle('on',v));
   if(v&&!AI.msgs.length&&!aiEl.querySelector('.empty'))aiReset();
   if(v)setTimeout(()=>aiInput.focus({preventScroll:true}),420);
   if(typeof markConsole==='function')markConsole();
@@ -174,7 +175,7 @@ document.getElementById('aiClose').onclick=()=>setOpen(false);
 document.getElementById('aiNew').onclick=()=>{if(AI.busy)return;aiReset(false)};
 document.getElementById('aiHist').onclick=e=>{const b=e.currentTarget;menuAt(b,[{lb:'看看改动',chk:AI.title==='看看改动',sm:'刚刚',act:()=>aiReset(true)},{lb:'提交并推送',sm:'今天 10:42'},{lb:'解释 merge 冲突',sm:'昨天'},'-',{lb:'清空本仓库的对话…',danger:true}],{right:1,minW:240})};
 document.getElementById('aiMore').onclick=e=>menuAt(e.currentTarget,[{lb:'复制整段对话'},{lb:'导出为 Markdown…'},'-',{lb:'模型与权限…',act:()=>{stab=1;DLG.settings()}}],{right:1,minW:220});
-const _go2=go;go=p=>{_go2(p);if((p==='home'||p==='repos')&&AI.open){aiEl.classList.remove('on');document.getElementById('aiBtn').classList.remove('on')}else if(AI.open){aiEl.classList.add('on');document.getElementById('aiBtn').classList.add('on')}};
+const _go2=go;go=p=>{_go2(p);if((p==='home'||p==='repos')&&AI.open){aiEl.classList.remove('on');document.getElementById('aiBtn').classList.remove('on');document.getElementById('workspace')?.classList.remove('right-on')}else if(AI.open){aiEl.classList.add('on');document.getElementById('aiBtn').classList.add('on');document.getElementById('workspace')?.classList.add('right-on')}};
 
 aiInput.addEventListener('input',()=>aiGo.disabled=!aiInput.value.trim()||AI.busy);
 aiInput.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();send(aiInput.value)}});
