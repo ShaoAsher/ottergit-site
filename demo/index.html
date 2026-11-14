@@ -665,15 +665,38 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 <script>
 /* ═══ 小獭表情：场景池，不连续重复（与 App 的 OtterScene 同表） ═══ */
 const EXPR='assets/otter/expr/';
+/* 水獭家族 120 表情：按 Git 动作语义挑——推送 = 拖箱出门、拉取 = 抵达、标签 = 纪念品、拣选 = 抽卡、变基整理 = 打扫 */
 const POOL={
-  greet:['happy','cheer','hi'],night:['sleepy','calm'],clean:['calm','proud','happy','relief'],dirty:['focus','think','cheer'],
-  alert:['shock','scared','please'],busy:['focus','queue','think'],commit:['proud','great','happy'],push:['cheer','great','love'],
-  resolved:['relief','great','hug'],ask:['think','please','ok'],askDanger:['scared','shock','please'],settings:['calm','proud','relief'],
-  pet:['laugh','love','shy','happy','great','hi'],memory:['hug','love','proud'],commitHint:['ok','think'],emptySearch:['think','study'],
-  emptyTerminal:['focus','calm'],milestone:['highlight','cheer','great'],pickCommit:['think','study','calm'],about:['happy','hi','love'],undo:['relief'],fail:['cry','shock']
+  greetNight:['night','sleepy','goodnight','overtime'],greetMorning:['morning','hi','cafe','stretch'],greetDay:['happy','smile','focus','cafe','tea'],
+  greetEvening:['hi','sunset','relax','milktea'],greetWeekend:['weekend','relax','music','milktea'],noRepo:['hi','welcome','map'],
+  clean:['clean','calm','relax','smile'],dirty:['focus','write','note','study'],dirtyMany:['busy','sweat','deadline'],
+  conflict:['scared','sweat','please'],conflictMany:['angry','shock','speechless'],inProgress:['focus','plan','loading'],
+  unpushed:['luggage','travel'],behind:['map','read','think'],busy:['loading','queue'],detached:['map','shock','speechless'],
+  aiIdle:['hi','smile','welcome','tea'],aiThinking:['think','idea'],aiError:['sorry','sad','cry'],aiNoModel:['please','bashful','shy'],aiDone:['ok','done','smile'],
+  settings:['outfit','plan','calm'],about:['love','hug','thanks','friends'],
+  pet:['laugh','shy','happy','love','hug','smile','bashful','pout','yum','lucky','wave'],
+  commit:['done','ok','proud','note'],commitNight:['overtime','night','goodnight'],commitNoon:['eat','rice','noodles'],
+  commitWeekend:['weekend','cafe','overtime'],commitFirstToday:['morning','start','cheer'],commitMilestone:['victory','celebrate','highlight'],
+  push:['travel','great','cheer'],pull:['arrive','relief'],merge:['coop','friends','hug'],resolved:['relief','clear','done'],
+  tag:['souvenir','photo','highlight'],stash:['luggage','nap'],undo:['retry','relief'],cherryPick:['gacha','lucky'],revert:['retry','review'],
+  rebaseDone:['clean','done'],clone:['welcome','arrive','hi'],branch:['map','hike','plan'],info:['ok','smile','hi'],
+  fail:['sad','defeat','cry'],failNetwork:['rain','wind','gg'],failAuth:['bashful','ask','sorry'],
+  ask:['ask','think','please'],askDanger:['pause','scared','shock'],emptySearch:['speechless','bashful','map'],
+  emptyHistory:['read','plan','calm'],pickCommit:['review','read','think'],emptyTerminal:['focus','write'],
+  /* 原型独有的位置 */
+  memory:['note','read','highlight'],commitHint:['idea','ok','think']
 };
+const ALIAS={alert:'conflict',milestone:'commitMilestone',night:'greetNight'};
+/* 与 App 的 greetSceneAt / commitSceneAt 同一裁决：时段 + 周末 */
+function dayPart(h){return h<5||h>=23?'night':h<11?'morning':h<13?'noon':h<18?'afternoon':'evening'}
+function resolveScene(scene){
+  const now=new Date(),part=dayPart(now.getHours()),weekend=now.getDay()===0||now.getDay()===6;
+  if(scene==='greet'){if(part==='night')return'greetNight';if(weekend)return'greetWeekend';return{morning:'greetMorning',noon:'greetDay',afternoon:'greetDay',evening:'greetEvening'}[part]}
+  if(scene==='commit'){if(part==='night')return'commitNight';if(typeof todayCount!=='undefined'&&todayCount===1)return'commitFirstToday';if(weekend)return'commitWeekend';if(part==='noon')return'commitNoon';return'commit'}
+  return ALIAS[scene]||scene;
+}
 const last={};
-function pick(scene){const p=POOL[scene]||POOL.pet;let k;do{k=p[Math.random()*p.length|0]}while(p.length>1&&k===last[scene]);last[scene]=k;return EXPR+k+'.webp'}
+function pick(scene){scene=resolveScene(scene);const p=POOL[scene]||POOL.pet;let k;do{k=p[Math.random()*p.length|0]}while(p.length>1&&k===last[scene]);last[scene]=k;return EXPR+k+'.webp'}
 function face(img,scene){img.src=pick(scene);img.dataset.scene=scene}
 document.addEventListener('click',e=>{const im=e.target.closest('.mood img,.hero .ot,.shead img,.banner img');if(!im)return;const el=im.tagName==='IMG'?im:im.querySelector('img');el.src=pick('pet');el.animate([{transform:'scale(.8) rotate(-8deg)'},{transform:'scale(1)'}],{duration:420,easing:'cubic-bezier(.3,1.5,.5,1)'})});
 
@@ -914,7 +937,7 @@ function doPush(){
 }
 
 /* ═══ 进度弹窗与结果页（App：showProgress → showProgressOutcome，4.8s 后自动关，悬停暂停） ═══ */
-const OC_LIFE=4800,MINOR=new Set(['ok','clean','pet']);
+const OC_LIFE=4800,MINOR=new Set(['info','pet']);
 let ocTimer=0,ocTick=0;
 function liveDlg(){return scrim.classList.contains('on')&&!scrim.classList.contains('out')?scrim.querySelector('.dlg'):null}
 function morph(d,cls,html){
@@ -1152,7 +1175,7 @@ document.addEventListener('click',e=>{
   const rel=e.target.closest('[data-relocate]');if(rel){e.stopPropagation();return DLG.relocate(rel.dataset.relocate)}
   const g=e.target.closest('[data-go]');if(g)return go(g.dataset.go);
   const d=e.target.closest('[data-dlg]');if(d)return DLG[d.dataset.dlg]();
-  const a=e.target.closest('[data-act]');if(a){const k=a.dataset.act;if(k==='commit')go('files');else if(k==='push'){ahead?doPush():moment({scene:'clean',title:'没有可推送的提交',sub:'本地分支与 origin/dev 一致'})}else if(k==='pull')DLG.ask();else if(k==='branch')DLG.branch();else if(k==='fetch'){S.tone='busy';syncTone();setTimeout(()=>{S.tone=files.length?'warm':'calm';syncTone();moment({scene:'clean',title:'获取完成',sub:'远程仓库没有新的提交'})},1400)}return}
+  const a=e.target.closest('[data-act]');if(a){const k=a.dataset.act;if(k==='commit')go('files');else if(k==='push'){ahead?doPush():moment({scene:'info',title:'没有可推送的提交',sub:'本地分支与 origin/dev 一致'})}else if(k==='pull')DLG.ask();else if(k==='branch')DLG.branch();else if(k==='fetch'){S.tone='busy';syncTone();setTimeout(()=>{S.tone=files.length?'warm':'calm';syncTone();moment({scene:'clean',title:'获取完成',sub:'远程仓库没有新的提交'})},1400)}return}
   const fold=e.target.closest('[data-fold]');if(fold&&!e.target.closest('.ha,button,i')){sideFold[fold.dataset.fold]=!sideFold[fold.dataset.fold];return renderSidebar()}
   if(e.target.closest('#commitBtn'))return doCommit();
   if(e.target.closest('#resolveBtn')){S.tone=files.length?'warm':'calm';syncTone();return moment({scene:'resolved',title:'冲突已解决',sub:'所有冲突文件已标记为已解决，可以继续提交'})}

@@ -107,7 +107,7 @@ document.head.insertAdjacentHTML('beforeend',`<style>
 </style>`);
 
 document.getElementById('workspace').insertAdjacentHTML('beforeend',`<aside class="cardp ai" id="aiPanel" aria-label="小獭 AI 助手">
-  <div class="ah"><img data-scene="greet" alt=""><div class="tt"><b id="aiTitle">新对话</b><small>按仓库隔离</small></div>
+  <div class="ah"><img data-scene="aiIdle" alt=""><div class="tt"><b id="aiTitle">新对话</b><small>按仓库隔离</small></div>
     <button class="gb" id="aiHist" title="历史对话">${svg('clock')}</button><button class="gb" id="aiNew" title="新对话">${svg('plus')}</button><button class="gb" id="aiMore" title="更多">${svg('dots')}</button><button class="gb" id="aiClose" title="收起">${svg('x')}</button></div>
   <div class="ml" id="aiList"></div>
   <div class="cp"><textarea id="aiInput" placeholder="问小獭…（回车发送，Shift+回车换行）"></textarea>

@@ -162,7 +162,7 @@ const eib=(ic,tip,cls='',attr='')=>`<button class="eib ${cls}" title="${tip}" ${
 const tint=c=>`background:color-mix(in srgb,${c} 16%,transparent);color:color-mix(in srgb,${c} var(--tt),var(--hi))`;
 function edShell(icon,color,title,sub,body,{wb=0,foot=''}={}){
   openDlg(`<div class="dh"><div class="blk" style="${tint(color)}">${svg(icon)}</div><h3>${title}${sub?`<small>${sub}</small>`:''}</h3><button class="ib" data-close>${svg('x')}</button></div>${wb?body:`<div class="ebody">${body}</div>`}<div class="efoot"><span class="est" id="edSt"><i></i><span>${foot}</span></span><button class="ghost rp" data-close>取消</button><button class="slab rp" id="edSave" disabled>保存</button></div>`,'ed'+(wb?' wb':''));
-  scrim.querySelector('#edSave').onclick=()=>{closeDlg();setTimeout(()=>moment({scene:'clean',title:'已保存',sub:title}),280)};
+  scrim.querySelector('#edSave').onclick=()=>{closeDlg();setTimeout(()=>moment({scene:'info',title:'已保存',sub:title}),280)};
 }
 function edDirty(on,msg){const st=document.getElementById('edSt');if(!st)return;st.classList.toggle('dirty',on);st.querySelector('span').textContent=on?(msg||'有未保存的更改'):st.dataset.idle||'';document.getElementById('edSave').disabled=!on}
 function selectEnd(inp){inp.focus();inp.select()}

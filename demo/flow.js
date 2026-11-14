@@ -172,7 +172,7 @@ function flowStart(type='feature'){
     nameIn.closest('.ein').querySelector('.pre').textContent=prefixOf(type);nameIn.placeholder=TYPES[type].ex;renderSug();renderBase();refresh();nameIn.focus()});
   document.querySelectorAll('[data-tg]').forEach(r=>r.onclick=()=>{const s=r.querySelector('.sw');s.classList.toggle('on');if(r.dataset.tg==='push')pushUp=s.classList.contains('on');else fetchFirst=s.classList.contains('on');refresh()});
   nameIn.oninput=refresh;nameIn.onkeydown=e=>{if(e.key==='Enter'&&!save.disabled)save.click()};
-  save.onclick=()=>{const full=prefixOf(type)+name;closeDlg();setTimeout(()=>moment({scene:'ok',title:`已开始 ${full}`,sub:`从 ${baseLabel()} 开出，已切换到新分支`}),280)};
+  save.onclick=()=>{const full=prefixOf(type)+name;closeDlg();setTimeout(()=>moment({scene:'branch',title:`已开始 ${full}`,sub:`从 ${baseLabel()} 开出，已切换到新分支`}),280)};
   renderSug();renderBase();refresh();setTimeout(()=>nameIn.focus(),60);
 }
 
@@ -222,7 +222,7 @@ function flowFinish(init=0){
     document.querySelectorAll('#ffOpts .fl-tg').forEach(r=>r.onclick=()=>{const k=r.dataset.k;
       if(k==='fetch')fetchFirst=!fetchFirst;if(k==='keep')keep=!keep;if(k==='push')push=!push;if(k==='squash')squash=!squash;if(k==='notag')noTag=!noTag;render()});
   };
-  save.onclick=()=>{const [type,n]=WIP[sel];closeDlg();setTimeout(()=>moment({scene:'clean',title:`已完成 ${prefixOf(type)}${n}`,sub:type==='feature'?'已合回 dev':'已合入 main 并打标签 v'+n}),280)};
+  save.onclick=()=>{const [type,n]=WIP[sel];closeDlg();setTimeout(()=>moment({scene:'merge',title:`已完成 ${prefixOf(type)}${n}`,sub:type==='feature'?'已合回 dev':'已合入 main 并打标签 v'+n}),280)};
   render();
 }
 

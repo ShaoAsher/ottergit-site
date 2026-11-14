@@ -110,7 +110,7 @@ function trAdvice(d){
   if(d.pending)return[`${d.pending} 个文件待提交，回到应用处理`,'--warn',null];
   return['都同步好了，安心写代码','--ok',null];
 }
-function trScene(d){return !d?'greet':TRS.busy?'busy':(d.pending||d.behind)?'dirty':'clean'}
+function trScene(d){return !d?'noRepo':TRS.busy?'busy':d.pending?'dirty':d.behind?'behind':'clean'}
 
 function trPanel(){
   const d=TRS.d,[adv,tone,sug]=trAdvice(d),busy=TRS.busy,win=TRS.os==='win';

@@ -85,7 +85,7 @@ function branch(){
       <div class="slabel">从哪里开出</div><div class="egroup" id="nbFrom">${opt('cur',1,'当前分支 dev 最新','<code>a1f3c9e</code> feat(home): 首页与继续工作卡片')}${opt('pick',0,'指定分支','比如从 main 开出修复分支')}
       <div class="op-fold off" id="nbPick" style="padding:0 14px 12px 44px">${selBtn('branch','main')}</div></div>
       <div class="slabel">创建后</div><div class="egroup" id="nbTg">${tg('sw',1,'切换到新分支','马上在新分支上工作 · <code>git switch</code>')}${tg('push',0,'推送并建立跟踪','同事可以看到这个分支 · <code>git push -u origin</code>')}</div>${cmdBar('nbCmd')}`,
-    done:()=>({scene:'ok',title:'已创建 '+name(),sub:S.sw?'已切换到新分支':'仍停在 dev'})});
+    done:()=>({scene:'branch',title:'已创建 '+name(),sub:S.sw?'已切换到新分支':'仍停在 dev'})});
   const inp=document.getElementById('nbName'),name=()=>inp.value.trim();
   const base=()=>from==='cur'?'dev':selVal('branch');
   const refresh=()=>{const v=name(),m=document.getElementById('nbMsg');let ok=false;
@@ -112,7 +112,7 @@ function tag(){
       <div class="slabel">类型</div><div class="egroup" id="tgKind">${opt('a',1,'附注标签（推荐）','带说明和打标签的人，发布版本用这个 · <code>-a</code>')}
       <div class="op-fold" id="tgNote" style="padding:0 14px 12px 44px">${ein('',{id:'tgMsgIn',mono:0,ph:'这一版改了什么，比如：琥珀金主题 + 全屏对比'})}</div>${opt('l',0,'轻量标签','只是一个名字指向这个提交')}</div>
       <div class="slabel">创建后</div><div class="egroup" id="tgTg">${tg('push',1,'推送到 origin','别人拉取后就能看到 · <code>git push origin &lt;标签&gt;</code>')}</div>${cmdBar('tgCmd')}`,
-    done:()=>({scene:'proud',title:'标签已创建',sub:name()+(S.push?' · 已推送到 origin':'')})});
+    done:()=>({scene:'tag',title:'标签已创建',sub:name()+(S.push?' · 已推送到 origin':'')})});
   const inp=document.getElementById('tgName'),note=document.getElementById('tgMsgIn'),name=()=>inp.value.trim();
   const refresh=()=>{const v=name(),m=document.getElementById('tgMsg');let ok=false;
     if(!v)msg(m,'','最近的标签是 <b>v2.0.1</b>，点上面的建议直接用');
@@ -135,7 +135,7 @@ function clone(){
     body:`<div class="slabel" style="margin-top:2px">仓库地址</div><div class="egroup pad">${efield('地址',ein('',{id:'clUrl',ph:'https://github.com/owner/repo.git'}))}<div class="op-msg" id="clMsg"></div></div>
       <div class="slabel">保存到</div><div class="egroup pad"><div class="erow2">${efield('位置',selBtn('path','~/Desktop/code','folder'))}${efield('文件夹名',ein('',{id:'clName',ph:'repo'}))}</div><div class="op-msg" id="clPath"></div></div>
       <div class="slabel">选项</div><div class="egroup" id="clTg">${tg('sub',1,'同时克隆子模块','仓库里引用的其它仓库一起拉下来 · <code>--recurse-submodules</code>')}${tg('shallow',0,'浅克隆','只取最近 1 个提交，大仓库更快 · <code>--depth 1</code>')}${tg('open',1,'克隆后立即打开','完成后直接进入这个仓库')}</div>${cmdBar('clCmd')}`,
-    done:()=>({scene:'great',title:'克隆完成',sub:(document.getElementById('clName').value||'repo')+' 已添加到「仓库」'})});
+    done:()=>({scene:'clone',title:'克隆完成',sub:(document.getElementById('clName').value||'repo')+' 已添加到「仓库」'})});
   const url=document.getElementById('clUrl'),nm=document.getElementById('clName');let touched=false;
   const parse=u=>{u=u.trim();let m=u.match(/^(?:https?:\/\/)(?:[^@/]+@)?([^/]+)\/(.+?)\/([^/]+?)(?:\.git)?\/?$/);if(m)return{proto:'HTTPS',host:m[1],owner:m[2],repo:m[3]};
     m=u.match(/^(?:ssh:\/\/)?git@([^:/]+)[:/](.+?)\/([^/]+?)(?:\.git)?$/);if(m)return{proto:'SSH',host:m[1],owner:m[2],repo:m[3]};return null};
@@ -159,7 +159,7 @@ function scan(){
   const api=opShell({icon:'scan',color:'var(--alt)',title:'扫描文件夹',sub:'找出目录里所有的 Git 仓库，一次加进来',go:'开始扫描',idle:'选好目录就能开始',
     body:`<div class="slabel" style="margin-top:2px">范围</div><div class="egroup pad">${efield('扫描目录',selBtn('path','~/Desktop/code','folder'))}${efield('最大深度',`<div class="tmode" id="scDepth">${['2','3','5'].map(d=>`<button class="${d===depth?'on':''}" data-d="${d}">${d} 层</button>`).join('')}</div>`,{small:'层数越多越慢'})}</div>
       <div class="egroup" id="scTg" style="margin-top:12px">${tg('skip',1,'跳过依赖和构建目录','node_modules、build、.dart_tool 里不会有你的仓库')}</div>`,
-    done:()=>({scene:'great',title:'已添加仓库',sub:'可以在「仓库」里给它们分组'})});
+    done:()=>({scene:'clone',title:'已添加仓库',sub:'可以在「仓库」里给它们分组'})});
   const upd=()=>api.set(true,`扫描 ${selVal('path')} · 最多 ${depth} 层${S.skip?' · 跳过依赖目录':''}`);
   document.querySelectorAll('#scDepth button').forEach(b=>b.onclick=()=>{depth=b.dataset.d;document.querySelectorAll('#scDepth button').forEach(x=>x.classList.toggle('on',x===b));upd()});
   wireTgs(document.getElementById('scTg'),S,upd);watchSel(upd);upd();
@@ -172,7 +172,7 @@ function scan(){
     const upd=()=>{api.set(cnt()>0,`将添加 ${cnt()} 个仓库`,{label:`添加 ${cnt()} 个仓库`})};
     wireTgs(document.getElementById('scF'),Sel,upd);
     document.getElementById('scAll').onclick=()=>{F.forEach(([n,,s])=>{if(s>=0)Sel[n]=true});document.querySelectorAll('#scF .fl-tg:not(.dis) .sw').forEach(x=>x.classList.add('on'));upd()};
-    api.save.onclick=()=>{const n=cnt();closeDlg();setTimeout(()=>moment({scene:'great',title:`已添加 ${n} 个仓库`,sub:'可以在「仓库」里给它们分组'}),280)};
+    api.save.onclick=()=>{const n=cnt();closeDlg();setTimeout(()=>moment({scene:'clone',title:`已添加 ${n} 个仓库`,sub:'可以在「仓库」里给它们分组'}),280)};
     upd();});
 }
 
@@ -185,7 +185,7 @@ function merge(){
       <div id="mgPre" style="margin-top:12px"></div>
       <div class="slabel">方式</div><div class="egroup" id="mgHow">${opt('ff',0,'能快进就快进','历史保持一条直线，不能快进时再创建合并提交 · <code>--ff</code>')}${opt('noff',1,'总是创建合并提交（推荐）','保留分支的完整形状，以后好追溯 · <code>--no-ff</code>')}${opt('squash',0,'压缩成一个提交','所有改动作为一次新提交，原分支历史不带过来 · <code>--squash</code>')}</div>
       <div class="egroup" id="mgTg" style="margin-top:12px"></div>${cmdBar('mgCmd')}`,
-    done:()=>{const b=selVal('branch');return{scene:'great',title:'合并完成',sub:`${b} → dev · ${PRE[b]?.[0]??1} 个提交`}}});
+    done:()=>{const b=selVal('branch');return{scene:'merge',title:'合并完成',sub:`${b} → dev · ${PRE[b]?.[0]??1} 个提交`}}});
   const refresh=()=>{const b=selVal('branch'),[n,f,cf]=PRE[b]||[1,1,0];
     document.getElementById('mgPre').innerHTML=b==='dev'?`<div class="fl-ok w">${svg('info')}<span>不能把分支合并到它自己，换一个来源分支</span></div>`:cf?`<div class="fl-ok w">${svg('info')}<span>预演发现 ${cf} 个文件会冲突（<code>theme.dart</code> 等），合并后需要先解决</span></div>`:`<div class="fl-ok">${svg('check')}<span>将合入 ${n} 个提交 · ${f} 个文件 · 已预演，没有冲突</span></div>`;
     document.getElementById('mgTg').innerHTML=tg('del',S.del,`合并后删除 ${esc(b)}`,'只删本地分支，远程的保留');wireTgs(document.getElementById('mgTg'),S,refresh);
@@ -201,7 +201,7 @@ function reset(mode='mixed'){
   const api=opShell({icon:'reset',color:'var(--warn)',title:'重置 dev 到此提交',sub:`<span class="chip">${h}</span> ${esc(c)}`,go:'重置',idle:'',w:600,
     body:`<div class="slabel" style="margin-top:2px">${after?`之后的 ${after} 个提交怎么处理`:'重置方式'}</div><div class="egroup" id="rsHow">${opt('soft',mode==='soft','软重置','提交撤掉，改动保留并且已暂存，适合重新整理提交 · <code>--soft</code>')}${opt('mixed',mode==='mixed','混合重置（默认）','提交撤掉，改动保留在工作区未暂存 · <code>--mixed</code>')}${opt('hard',mode==='hard','硬重置','提交和工作区里所有未提交的改动都丢掉 · <code>--hard</code>',{dz:1})}</div>
       <div id="rsWarn" style="margin-top:12px"></div>${cmdBar('rsCmd')}`,
-    done:()=>({scene:'relief',title:'已重置',sub:`dev → ${h}（可在 Reflog 中找回）`})});
+    done:()=>({scene:'undo',title:'已重置',sub:`dev → ${h}（可在 Reflog 中找回）`})});
   const refresh=()=>{const hard=mode==='hard';
     document.getElementById('rsWarn').innerHTML=hard?`<div class="fl-ok w" style="background:color-mix(in srgb,var(--danger) 12%,transparent);color:color-mix(in srgb,var(--danger) var(--tt),var(--hi))">${svg('shield')}<span>会丢掉 <b>12 个未提交的改动</b>，这部分无法找回；撤掉的提交还能在 Reflog 里找到</span></div>`:`<div class="fl-ok">${svg('check')}<span>${mode==='soft'?'改动都会留在暂存区，随时可以重新提交':'改动都会留在工作区，什么都不会丢'}</span></div>`;
     api.set(true,`dev → ${h} · ${{soft:'软',mixed:'混合',hard:'硬'}[mode]}重置`,{label:hard?'硬重置':'重置',danger:hard});
@@ -216,7 +216,7 @@ function stashSave(){
     body:`<div class="slabel" style="margin-top:2px">说明</div><div class="egroup pad">${efield('写一句，方便以后认出来',ein('',{id:'stMsg',mono:0,ph:'WIP on dev: 首页与继续工作卡片'}),{small:'可留空'})}</div>
       <div class="slabel">要收起的改动</div><div class="egroup"><div class="op-kv" id="stKv"></div></div>
       <div class="slabel">选项</div><div class="egroup" id="stTg">${tg('u',1,'包含未跟踪的文件','新建还没加入 Git 的 3 个文件也一起收起 · <code>-u</code>')}${tg('keep',0,'保留已暂存的内容','已经 add 的部分留在原地 · <code>--keep-index</code>')}</div>${cmdBar('stCmd')}`,
-    done:()=>({scene:'ok',title:'已暂存',sub:'stash@{0} · '+(document.getElementById('stMsg').value.trim()||'WIP on dev')})});
+    done:()=>({scene:'stash',title:'已暂存',sub:'stash@{0} · '+(document.getElementById('stMsg').value.trim()||'WIP on dev')})});
   const inp=document.getElementById('stMsg');
   const refresh=()=>{const n=8+(S.u?3:0)-(S.keep?2:0);
     document.getElementById('stKv').innerHTML=`<span>修改</span><b style="color:var(--mod,var(--memory))">6 个文件</b><span>删除</span><b style="color:var(--del)">2 个文件</b>${S.u?'<span>未跟踪</span><b style="color:var(--add)">3 个文件</b>':''}${S.keep?'<span>留在原地</span><b>2 个已暂存</b>':''}<span>暂存后</span><b style="font-family:inherit;color:var(--lo);font-weight:500">工作区${S.keep?'只剩已暂存的部分':'回到干净状态'}</b>`;
@@ -232,7 +232,7 @@ function pushOpts(){
     body:`<div class="slabel" style="margin-top:2px">推到哪里</div><div class="egroup pad"><div class="op-flow">${efield('本地分支',`<div class="op-fixed">${svg('branch')}dev</div>`)}<div class="ar" style="margin-bottom:12px"><svg viewBox="0 0 40 14"><path d="M2 7H34M28 2l6 5-6 5"/></svg></div>${efield('远端',selBtn('remote','origin','cloud'))}</div>${efield('远端分支',selBtn('branch','dev'),{small:'一般和本地同名'})}</div>
       <div id="psSum" style="margin-top:12px"></div>
       <div class="slabel">选项</div><div class="egroup" id="psTg">${tg('up',1,'设为上游分支','以后直接点「推送 / 拉取」就是这里 · <code>-u</code>')}${tg('tags',0,'同时推送标签','本地新打的 1 个标签 v2.0.2 一起推上去 · <code>--tags</code>')}${tg('force',0,'强制推送（安全模式）','改写过历史时用；远端有别人新提交会拒绝 · <code>--force-with-lease</code>')}</div>${cmdBar('psCmd')}`,
-    done:()=>({scene:'cheer',title:'推送完成',sub:`dev → ${selVal('remote')}/${selVal('branch')} · 3 个提交`})});
+    done:()=>({scene:'push',title:'推送完成',sub:`dev → ${selVal('remote')}/${selVal('branch')} · 3 个提交`})});
   const refresh=()=>{const r=selVal('remote'),b=selVal('branch');
     document.getElementById('psSum').innerHTML=S.force?`<div class="fl-ok w">${svg('shield')}<span>远端 ${r}/${b} 上有 1 个你本地没有的提交。安全模式下会被拒绝，先拉取再推更稳</span></div>`:`<div class="fl-ok">${svg('check')}<span>将推送 3 个提交到 <b>${r}/${b}</b>${b!=='dev'?' · 远端分支和本地不同名':''}</span></div>`;
     api.set(true,`dev → ${r}/${b}`,{label:S.force?'强制推送':'推送',danger:S.force});
@@ -248,7 +248,7 @@ function pullOpts(){
       <div id="plSum" style="margin-top:12px"></div>
       <div class="slabel">怎么合进来</div><div class="egroup" id="plHow">${opt('merge',1,'合并（默认）','两边都有新提交时生成一个合并提交')}${opt('rebase',0,'变基','把你的本地提交接到远端最新之后，历史是一条直线 · <code>--rebase</code>')}${opt('ff',0,'只允许快进','本地有新提交时直接停下，什么都不改 · <code>--ff-only</code>')}</div>
       <div class="egroup" id="plTg" style="margin-top:12px">${tg('auto',1,'自动暂存本地改动','拉之前把 12 个未提交改动收起来，拉完再放回 · <code>--autostash</code>')}</div>${cmdBar('plCmd')}`,
-    done:()=>({scene:'clean',title:'拉取完成',sub:`${selVal('remote')}/${selVal('branch')} · 取回 2 个提交`})});
+    done:()=>({scene:'pull',title:'拉取完成',sub:`${selVal('remote')}/${selVal('branch')} · 取回 2 个提交`})});
   const refresh=()=>{const r=selVal('remote'),b=selVal('branch');
     document.getElementById('plSum').innerHTML=how==='ff'?`<div class="fl-ok w">${svg('info')}<span>你本地有 3 个还没推送的提交，只允许快进时这次拉取会停下</span></div>`:`<div class="fl-ok">${svg('check')}<span>${r}/${b} 有 2 个新提交，你本地有 3 个未推送 · ${how==='rebase'?'你的 3 个会接到最后':'会生成一个合并提交'}</span></div>`;
     api.set(true,`${r}/${b} → dev`);
@@ -263,7 +263,7 @@ function rebaseI(){
   const L=src.slice(0,5).map((c,i)=>({h:(typeof HASH!=='undefined'?HASH[i]:'0000000'),s:c[0],op:'pick'})).reverse();
   const api=opShell({icon:'edit',color:'var(--alt)',title:'交互式变基',sub:'dev 上最近 5 个提交 · 从旧到新，拖动调整顺序',go:'开始变基',idle:'',w:640,
     body:`<div class="slabel" style="margin-top:2px">提交<span class="c">点操作名切换</span></div><div class="egroup" id="rbL"></div><div id="rbSum" style="margin-top:12px"></div>${cmdBar('rbCmd')}`,
-    done:()=>({scene:'great',title:'变基完成',sub:`${L.filter(r=>r.op!=='drop').length} 个提交 · ${L.filter(r=>/squash|fixup/.test(r.op)).length} 个已合并`})});
+    done:()=>({scene:'rebaseDone',title:'变基完成',sub:`${L.filter(r=>r.op!=='drop').length} 个提交 · ${L.filter(r=>/squash|fixup/.test(r.op)).length} 个已合并`})});
   const draw=()=>{const box=document.getElementById('rbL');
     box.innerHTML=L.map((r,i)=>`<div class="op-rb ${r.op==='drop'?'drop':''} ${/squash|fixup/.test(r.op)?'fold':''}" data-i="${i}" draggable="true"><svg class="gp" viewBox="0 0 24 24">${IC.grip||'<path d="M9 6h.01M15 6h.01M9 12h.01M15 12h.01M9 18h.01M15 18h.01"/>'}</svg><button class="op" data-op="${i}" style="--c:${OPS[r.op][1]}">${r.op}<span style="opacity:.5">▾</span></button><span class="h">${r.h}</span><span class="s">${esc(r.s)}</span></div>`).join('');
     box.querySelectorAll('[data-op]').forEach(b=>b.onclick=e=>{e.stopPropagation();const rr=rectOf(b),it=L[+b.dataset.op];openMenu(Object.entries(OPS).map(([o,[d]])=>({chk:o===it.op,lb:o,sm:d,danger:o==='drop',act:()=>{it.op=o;draw()}})),rr.l,rr.t+rr.h+4,{anchor:b})});
@@ -281,12 +281,12 @@ function rebaseI(){
 function rename(){const r=typeof RLIST!=='undefined'?RLIST[RV.sel]:['otter-notes','~/Desktop/code/otter-notes'];
   const api=opShell({icon:'edit',color:'var(--accent)',title:'重命名仓库',sub:'只改列表里显示的名字，不动文件夹',go:'保存',idle:'',w:480,
     body:`<div class="egroup pad" style="margin-top:4px">${efield('显示名称',ein(r[0],{id:'rnName',mono:0}))}${efield('文件夹',`<div class="op-fixed">${svg('folder')}${esc(r[1])}</div>`,{small:'不会改动'})}</div>`,
-    done:()=>({scene:'clean',title:'已重命名',sub:document.getElementById('rnName').value.trim()})});
+    done:()=>({scene:'info',title:'已重命名',sub:document.getElementById('rnName').value.trim()})});
   const inp=document.getElementById('rnName');const refresh=()=>{const v=inp.value.trim();api.set(!!v&&v!==r[0],v&&v!==r[0]?`${r[0]} → ${v}`:'')};inp.oninput=refresh;refresh();setTimeout(()=>selectEnd(inp),60)}
 function newGroup(){const C=['#FFC23D','#6CC9FF','#B8A8FF','#4FD79A','#FF8AB8','#FF8A3D'];let c=C[0];
   const api=opShell({icon:'group',color:'var(--accent)',title:'新建分组',sub:'把相关的仓库放在一起',go:'创建',idle:'起个名字',w:480,
     body:`<div class="egroup pad" style="margin-top:4px">${efield('分组名',ein('',{id:'ngName',mono:0,ph:'比如：开源、公司、练手'}))}${efield('颜色',`<div class="op-sw" id="ngSw">${C.map((x,i)=>`<span class="${i?'':'on'}" data-c="${x}" style="background:${x};--c:${x}"></span>`).join('')}</div>`)}</div>`,
-    done:()=>({scene:'ok',title:'分组已创建',sub:document.getElementById('ngName').value.trim()})});
+    done:()=>({scene:'info',title:'分组已创建',sub:document.getElementById('ngName').value.trim()})});
   const inp=document.getElementById('ngName');const refresh=()=>{const v=inp.value.trim();api.set(!!v,v?`「${v}」`:'');api.st.querySelector('i').style.background=c};
   document.querySelectorAll('#ngSw span').forEach(s=>s.onclick=()=>{c=s.dataset.c;document.querySelectorAll('#ngSw span').forEach(x=>x.classList.toggle('on',x===s));refresh()});
   inp.oninput=refresh;refresh();setTimeout(()=>inp.focus(),60)}
@@ -321,7 +321,7 @@ function addLocal(){
     body:`<div class="slabel" style="margin-top:2px">文件夹</div><div class="egroup pad"><div class="op-fixed" id="alPick" style="cursor:pointer;border-style:solid;background:var(--field)">${svg('folder')}<span id="alPath" style="flex:1">点这里选择文件夹</span><b style="font:600 12px -apple-system;color:var(--mid)">选择…</b></div><div id="alSt"></div></div>
       <div id="alInit" class="op-fold off"><div class="egroup" style="margin-top:12px" id="alTg">${tg('init',1,'初始化为 Git 仓库','在这里执行 git init，再加到列表')}</div></div>
       <div class="slabel">分组</div><div class="egroup pad"><div class="op-chips" style="margin:0" id="alG">${['','工作','开源','练手'].map(x=>`<span class="op-chip" data-g="${x}" style="font-family:-apple-system">${x||'不分组'}</span>`).join('')}</div></div>${cmdBar('alCmd')}`,
-    done:()=>({scene:'ok',title:'已添加',sub:PICK[i]})});
+    done:()=>({scene:'info',title:'已添加',sub:PICK[i]})});
   const refresh=()=>{const p=PICK[i],st=document.getElementById('alSt');let ok=false,go='添加',cmd=[];
     document.querySelectorAll('#alG .op-chip').forEach(c=>c.classList.toggle('on',c.dataset.g===g));
     document.getElementById('alInit').classList.toggle('off',i!==2);
@@ -346,7 +346,7 @@ function createRemote(){
       <div style="display:flex;align-items:center;gap:10px"><button class="ghost rp" id="crOpen">在 GitHub 上创建 ↗</button><div class="op-msg" id="crOpenMsg" style="margin:0">会打开网页并填好名字，建好后把地址粘贴到下面</div></div></div>
       <div class="slabel">建好之后</div><div class="egroup pad">${efield('新仓库地址',ein('',{id:'crUrl',ph:'https://github.com/you/repo.git'}))}<div class="op-msg" id="crMsg"></div></div>
       <div class="egroup" id="crA" style="margin-top:12px">${opt('link',1,'关联当前仓库 OtterGitApp','已经有 origin 了，将以 github 添加并推送 dev')}${opt('clone',0,'克隆到本地','空仓库也能克隆，之后在里面开始写')}</div>${cmdBar('crCmd')}`,
-    done:()=>after==='link'?{scene:'push',title:'已关联并推送',sub:'github → dev'}:{scene:'great',title:'去克隆',sub:document.getElementById('crUrl').value}});
+    done:()=>after==='link'?{scene:'push',title:'已关联并推送',sub:'github → dev'}:{scene:'clone',title:'去克隆',sub:document.getElementById('crUrl').value}});
   const url=document.getElementById('crUrl');
   const refresh=()=>{const u=url.value.trim(),m=document.getElementById('crMsg'),ok=/^(https?:\/\/|git@)/.test(u);
     document.querySelectorAll('#crH .op-chip').forEach(c=>c.classList.toggle('on',c.dataset.h===host));
@@ -366,7 +366,7 @@ function patch(){
   const api=opShell({icon:'patch',color:'var(--alt)',title:'应用补丁',sub:'把 .patch / .diff 里的改动放进当前工作区',go:'应用',idle:'选一个补丁文件',
     body:`<div class="slabel" style="margin-top:2px">补丁文件</div><div class="egroup pad"><div class="op-fixed" id="paPick" style="cursor:pointer;border-style:solid;background:var(--field)">${svg('patch')}<span id="paName" style="flex:1">点这里选择文件</span><b style="font:600 12px -apple-system;color:var(--mid)">选择…</b></div><div id="paSt"></div></div>
       <div class="slabel">怎么应用</div><div class="egroup" id="paTg">${tg('three',1,'冲突时三方合并','对不上的地方写成冲突标记，而不是直接失败 · <code>--3way</code>')}${tg('index',0,'同时加入暂存区','应用完直接是已暂存状态 · <code>--index</code>')}${tg('rev',0,'反向应用','撤销这个补丁带来的改动 · <code>-R</code>')}</div>${cmdBar('paCmd')}`,
-    done:()=>({scene:'ok',title:S.rev?'已撤销补丁':'补丁已应用',sub:F[i][0]+' · '+F[i][1]})});
+    done:()=>({scene:'info',title:S.rev?'已撤销补丁':'补丁已应用',sub:F[i][0]+' · '+F[i][1]})});
   const refresh=()=>{const f=F[i],st=document.getElementById('paSt');
     if(!f)st.innerHTML='<div class="op-msg" style="margin:10px 0 0">支持 git format-patch 和 git diff 导出的文件</div>';
     else{document.getElementById('paName').textContent='~/Downloads/'+f[0];st.innerHTML=`<div class="fl-ok" style="margin-top:12px">${svg('check')}<span>${f[1]} · <b style="color:var(--add)">${f[2].split(' ')[0]}</b> <b style="color:var(--del)">${f[2].split(' ')[1]}</b> · 已试应用，可以干净地放进来</span></div>`}
@@ -401,7 +401,7 @@ function bisect(){
       <div class="op-chips" id="bsG" style="margin:2px 0 0">${['v2.0.0','v1.9.3','main'].map(x=>`<span class="op-chip" data-g="${x}">${x}</span>`).join('')}</div></div>
       <div id="bsSum" style="margin-top:12px"></div>
       <div class="slabel">之后怎么做</div><div class="egroup pad"><div class="op-kv" style="padding:0">${['小獭会检出中间的一个提交','你试一下，点「正常」或「有问题」','重复几次就能找到第一个出问题的提交','随时可以结束，回到 dev'].map((t,k)=>`<span>${k+1}</span><b style="font-family:inherit;font-weight:500">${t}</b>`).join('')}</div></div>${cmdBar('bsCmd')}`,
-    done:()=>({scene:'think',title:'开始二分查错',sub:'已检出中间的提交，试一下吧'})});
+    done:()=>({scene:'pickCommit',title:'开始二分查错',sub:'已检出中间的提交，试一下吧'})});
   const N={'v2.0.0':38,'v1.9.3':96,'main':6};
   const refresh=()=>{const g=selVal('good'),n=N[g]||20,steps=Math.ceil(Math.log2(n+1));
     document.querySelectorAll('#bsG .op-chip').forEach(c=>c.classList.toggle('on',c.dataset.g===g));
@@ -416,7 +416,7 @@ function submodule(){
   let touched=false;
   const api=opShell({icon:'plus',color:'var(--alt)',title:'添加子模块',sub:'把另一个仓库放进这个仓库的子目录',go:'添加子模块',idle:'粘贴子模块的仓库地址',
     body:`<div class="egroup pad" style="margin-top:4px">${efield('仓库地址',ein('',{id:'smUrl',ph:'https://github.com/owner/lib.git'}))}<div class="op-msg" id="smMsg"></div>${efield('放在哪个目录',ein('',{id:'smDir',ph:'libs/name'}),{small:'默认用仓库名'})}<div class="op-msg" id="smDirMsg"></div></div>${cmdBar('smCmd')}`,
-    done:()=>({scene:'ok',title:'子模块已添加',sub:document.getElementById('smDir').value.trim()})});
+    done:()=>({scene:'info',title:'子模块已添加',sub:document.getElementById('smDir').value.trim()})});
   const url=document.getElementById('smUrl'),dir=document.getElementById('smDir');
   const refresh=()=>{const u=url.value.trim(),ok=/^(https?:\/\/|git@)/.test(u),name=u.replace(/\.git$/,'').split(/[/:]/).pop();
     if(!touched)dir.value=ok?name:'';

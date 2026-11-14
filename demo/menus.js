@@ -174,7 +174,7 @@ function openMenu(items,x,y,opt={}){
   return m;
 }
 function openSub(m,mi){const it=m.items[+mi.dataset.i],r=rectOf(mi),pr=rectOf(m.el);openMenu(it.sub,pr.l+pr.w-4,r.t-6,{level:m.level+1,flipX:pr.l+4})}
-function run(it){closeMenus();if(it.act)return it.act();if(it.dlg)return DLG[it.dlg]();moment({scene:'ok',title:it.lb.replace(/…$/,''),sub:it.toast||'原型演示：这里会执行对应的 Git 操作'})}
+function run(it){closeMenus();if(it.act)return it.act();if(it.dlg)return DLG[it.dlg]();moment({scene:'info',title:it.lb.replace(/…$/,''),sub:it.toast||'原型演示：这里会执行对应的 Git 操作'})}
 function menuAt(el,items,opt={}){const r=rectOf(el);return openMenu(items,opt.right?r.l+r.w-(opt.minW||228):r.l,r.t+r.h+6,Object.assign({anchor:el},opt))}
 document.addEventListener('pointerdown',e=>{if(MENUS.length&&!e.target.closest('.menu')&&!(MENUS[0].anchor&&MENUS[0].anchor.contains(e.target)))closeMenus()},true);
 document.addEventListener('keydown',e=>{
@@ -232,7 +232,7 @@ document.addEventListener('contextmenu',e=>{
   if(ti){
     const nm=ti.querySelector('.nm')?.textContent.trim()||'';
     const n=ti.dataset.branch||ti.dataset.tag||ti.dataset.repo||(ti.dataset.remote?ti.dataset.remote.replace(/^origin\//,''):'')||nm;
-    if(ti.dataset.stash!=null){items=[{ic:'stash',lb:'弹出暂存…',act:()=>DLG.stashSave?.()||moment({scene:'ok',title:'已弹出暂存',sub:nm})},{ic:'trash',lb:'删除暂存',danger:1},'-',{ic:'copy',lb:'复制说明'}]}
+    if(ti.dataset.stash!=null){items=[{ic:'stash',lb:'弹出暂存…',act:()=>DLG.stashSave?.()||moment({scene:'stash',title:'已弹出暂存',sub:nm})},{ic:'trash',lb:'删除暂存',danger:1},'-',{ic:'copy',lb:'复制说明'}]}
     else if(ti.dataset.remote){items=[{ic:'branch',lb:`检出 ${n}…`,act:()=>go('files')},{ic:'pull',lb:'拉取到本地'},'-',{ic:'copy',lb:'复制远程名',act:()=>{}}]}
     else if(ti.dataset.repo)items=M.repo(RLIST.find(x=>x[0]===n)||[n])
     else items=/^v\d/.test(n)?M.tag(n):M.branch(n);
@@ -254,7 +254,7 @@ document.addEventListener('click',e=>{
   if((el=t.closest('[data-fm]'))){e.stopPropagation();const list=S.tone==='alert'?conflicts.concat(files):files;return menuAt(el,M.file(list[+el.dataset.fm]),{right:1})}
   if((el=t.closest('#commitOpts'))){e.stopPropagation();return menuAt(el,[{chk:false,lb:'修改上次提交',sm:'--amend'},{chk:false,lb:'提交后推送',sm:'origin/dev'},{chk:false,lb:'添加 Signed-off-by'},{chk:false,lb:'跳过钩子',sm:'--no-verify'},'-',{ic:'user',lb:'提交身份…',act:()=>{stab=3;openSettings()}}],{right:1})}
   if(t.closest('#wcDiscard')){e.stopPropagation();return DLG.danger()}
-  if(t.closest('#wcStage')){e.stopPropagation();return moment({scene:'ok',title:'已暂存',sub:'home_view.dart'})}
+  if(t.closest('#wcStage')){e.stopPropagation();return moment({scene:'info',title:'已暂存',sub:'home_view.dart'})}
   if((el=t.closest('#hfScope'))){e.stopPropagation();return menuAt(el,['所有提交','只看我的','合并提交','非合并提交'].map((l,i)=>({chk:el.textContent===l,lb:l,act:()=>{el.textContent=l;el.classList.toggle('on',i>0)}})))}
   if((el=t.closest('#hfSort'))){e.stopPropagation();return menuAt(el,['日期排序','拓扑排序','作者日期'].map(l=>({chk:el.textContent===l,lb:l,act:()=>{el.textContent=l}})))}
   if((el=t.closest('#hfBranch'))){e.stopPropagation();return menuAt(el,['所有分支','当前分支 dev','main','release','feat/windows'].map((l,i)=>({chk:el.textContent===l,lb:l,act:()=>{el.textContent=l;el.classList.toggle('on',i>0)}})),{search:'搜索分支…',minW:240})}
